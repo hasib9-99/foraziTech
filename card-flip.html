@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+
+
+
+
+
+
+
+    <div class="result-container">
+        <div class="result-hedding">
+            <h3>YOUR ORDER</h3>
+        </div>
+        <div class="result-001">
+            <h4>Real Estate Photo Editing</h4>
+            <div class="result-item">
+                <p><b>Order Flat Fee:</b></p>
+                <p>$<span class="order-flat-fee">9.95</span></p>
+            </div>
+            <div class="result-item">
+                <p><b>Delivery Type:</b> <span class="delivery-type">Regular - 48 Hrs - 0 x $2.95</span> </p>
+                <p>$<span class="tottal">0.00</span></p>
+            </div>
+            <div class="result-item">
+                <p><b>Items Total:</b></p>
+                <p>$<span class="items-total">9.95</span></p>
+            </div>
+            <div class="result-item">
+                <p>Tax:</p>
+                <p>$<span class="tax">0.00</span></p>
+            </div>
+            <div class="result-item">
+                <p>Order Total:</p>
+                <p>$<span class="order-total">9.95</span></p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <ol>
+        <li>Are you a returning customer? If your last project with us was not longer than 3 months ago, apply the
+            REPEATCLIENT promo code for a 5% price reduction.</li>
+        <li>Are you one of our frequent buyers? If it's been no more than 30 days since your last project, use the
+            FREQUENTBUYER promo code for a 10% discount.</li>
+    </ol>
+
+    <script>
+        const getGal = document.querySelectorAll('.image-cerosol-001 .swiper-slide');
+
+        for (let singCart of getGal) {
+            singCart.addEventListener('click', function () {
+                setTimeout(htFun, 0);
+
+
+            })
+        }
+
+
+        function htFun() {
+            const getFootCon = document.querySelector('.elementor-slideshow__description');
+            function mkHTml(ele) {
+                let text = ele.innerHTML.replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+                ele.innerHTML = text ? text : ' ';
+                needChange = false;
+            }
+
+            // Select the target node
+            const targetNode = document.querySelector('.elementor-slideshow__title');
+            // Options for the observer (which mutations to observe)
+            var config = { childList: true, subtree: true };
+
+            // Callback function to execute when mutations are observed
+            var callback = function (mutationsList, observer) {
+                for (var mutation of mutationsList) {
+                    if (mutation.type === 'childList') {
+                        setTimeout(function () {
+                            mkHTml(getFootCon);
+                        }, 0);
+                    }
+                }
+            };
+
+            // Create an observer instance linked to the callback function
+            var observer = new MutationObserver(callback);
+
+            // Start observing the target node for configured mutations
+            observer.observe(targetNode, config);
+        }
+    </script>
+
+
+    <ul>
+        <ol>
+
+        </ol>
+    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="result-001">
+        <p class="frist-number">1</p>
+        <p class="secend-number">2</p>
+        <input class="get-input" type="number">
+        <button class="submit-btn">submit</button>
+    </div>
+
+    <div class="result-001">
+        <p><b>Order Flat Fee:</b> $<span class="order-flat-fee">9.95</span></p>
+        <p><b>Delivery Type:</b><span class="delivery-type">Regular - 0 x $2.95</span> tottal $:<span
+                class="tottal">0.00</span></p>
+        <p>Items Total: $<span class="items-total">9.95</span></p>
+        <p>Tax: $<span class="tax">0.00</span></p>
+        <p>Order Total: $<span class="order-total">9.95</span></p>
+    </div>
+
+    <div class="result-001">
+        <div class="result-item">
+            <p><b>Order Flat Fee:</b></p>
+            <p>$<span class="order-flat-fee">9.95</span></p>
+        </div>
+        <div class="result-item">
+            <p><b>Delivery Type:</b><span class="delivery-type">Regular - 0 x $2.95</span> </p>
+            <p>$<span class="tottal">0.00</span></p>
+        </div>
+        <div class="result-item">
+            <p><b>Items Total:</b></p>
+            <p><span class="items-total">9.95</span></p>
+        </div>
+        <div class="result-item">
+            <p>Tax:</p>
+            <p><span class="tax">0.00</span></p>
+        </div>
+        <div class="result-item">
+            <p>Order Total:</p>
+            <p><span class="order-total">9.95</span></p>
+        </div>
+    </div>
+
+
+    <input type="file" accept="image/*" onchange="loadFile(event)">
+    <img id="output" />
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+    </script>
+
+
+    <script>
+        const fristNumber = document.querySelector('.frist-number')
+        const secendNumber = document.querySelector('.secend-number')
+        const submitBtn = document.querySelector('.submit-btn')
+        const getInput = document.querySelector('.get-input')
+
+        //rendom manth sum value
+        let randomNumOne = Math.floor(Math.random() * 9) + 1;
+        let randomNumtwo = Math.floor(Math.random() * 9) + 1;
+
+        // sum the value
+        let sum = randomNumOne + randomNumtwo
+        console.log(randomNumOne, randomNumtwo);
+
+        fristNumber.innerHTML = randomNumOne
+        secendNumber.innerHTML = randomNumtwo
+
+    </script>
+
+
+    <script>
+        function updateFileName() {
+            const fileInput = document.getElementById('fileInput');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+            if (fileInput.files.length > 0) {
+                const fileName = fileInput.files[0].name;
+                let fileChangeName = 'hello world'
+                fileNameDisplay.textContent = `Selected File: ${fileChangeName}`;
+            } else {
+                fileNameDisplay.textContent = 'Selected File: None';
+            }
+        }
+
+        function resetFileInput() {
+            const fileInput = document.getElementById('fileInput');
+            const fileNameDisplay = document.getElementById('fileNameDisplay');
+
+            // Reset the file input
+            fileInput.value = null;
+
+            // Update the file name display
+            fileNameDisplay.textContent = 'Selected File: None';
+        }
+    </script>
+    </div>
+</body>
+
+</html>

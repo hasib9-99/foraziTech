@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vertical Slider with Counter</title>
+  <style>
+    .slider_container {
+      position: relative;
+      width: 300px;
+      height: 200px;
+      overflow: hidden;
+    }
+
+    .custom_slider {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      bottom: -100%;
+      opacity: 0;
+      transition: bottom 1s, opacity 1s;
+      z-index: 0;
+    }
+
+    .custom_slider.active {
+      bottom: 0;
+      opacity: 1;
+      z-index: 2;
+    }
+
+    .custom_slider.next {
+      bottom: 100%;
+      z-index: 1;
+    }
+
+    .prev_arrow,
+    .next_arrow {
+      margin: 10px;
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .counter {
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="slider_container">
+    <div class="custom_slider">Slide 1</div>
+    <div class="custom_slider">Slide 2</div>
+    <div class="custom_slider">Slide 3</div>
+  </div>
+  <button class="prev_arrow">Previous</button>
+  <button class="next_arrow">Next</button>
+
+  <div class="counter">1/3</div>
+
+  <script>
+    const slides = document.querySelectorAll('.custom_slider');
+    const nextButton = document.querySelector('.next_arrow');
+    const prevButton = document.querySelector('.prev_arrow');
+    const counter = document.querySelector('.counter h2');
+    let currentIndex = 0;
+    let autoSlideInterval;
+
+    function updateSlides() {
+      slides.forEach((slide, index) => {
+        slide.classList.remove('active', 'next');
+        if (index === currentIndex) {
+          slide.classList.add('active');
+        } else if (index === (currentIndex + 1) % slides.length) {
+          slide.classList.add('next');
+        }
+      });
+      updateCounter();
+    }
+
+    function updateCounter() {
+      counter.textContent = `${currentIndex + 1}/${slides.length}`;
+    }
+
+    function showNextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateSlides();
+    }
+
+    function showPreviousSlide() {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateSlides();
+    }
+
+    function startAutoSlide() {
+      autoSlideInterval = setInterval(showNextSlide, 30000);
+    }
+
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      startAutoSlide();
+    }
+
+    nextButton.addEventListener('click', () => {
+      showNextSlide();
+      resetAutoSlide();
+    });
+
+    prevButton.addEventListener('click', () => {
+      showPreviousSlide();
+      resetAutoSlide();
+    });
+
+    updateSlides();
+    startAutoSlide();
+  </script>
+
+</body>
+
+</html> 

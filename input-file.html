@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vertical Image Slider with Navigation</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .slider_container {
+            width: 300px;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+            border: 2px solid #ddd;
+            margin: 20px auto;
+        }
+
+        .slider {
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .active {
+            transform: translateY(0);
+            z-index: 1;
+        }
+
+        .next_slide {
+            transform: translateY(-100%);
+            z-index: 0;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .buttons button {
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .buttons button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slider_container">
+        <div class="slider active" style="background: url('image1.jpg') no-repeat center/cover;"> 1</div>
+        <div class="slider" style="background: url('image2.jpg') no-repeat center/cover;"> 2</div>
+        <div class="slider" style="background: url('image3.jpg') no-repeat center/cover;"> 3</div>
+
+        <div class="buttons">
+            <button id="prevButton">Previous</button>
+            <button id="nextButton">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slider');
+        let currentIndex = 0;
+
+        function updateSlides(newIndex) {
+            slides[currentIndex].classList.remove('active');
+            slides[currentIndex].classList.add('next_slide');
+
+            currentIndex = newIndex;
+
+            slides[currentIndex].classList.remove('next_slide');
+            slides[currentIndex].classList.add('active');
+        }
+
+        function showNextSlide() {
+            const nextIndex = (currentIndex + 1) % slides.length;
+            updateSlides(nextIndex);
+        }
+
+        function showPreviousSlide() {
+            const prevIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlides(prevIndex);
+        }
+
+        document.getElementById('nextButton').addEventListener('click', showNextSlide);
+        document.getElementById('prevButton').addEventListener('click', showPreviousSlide);
+    </script>
+</body>
+
+</html>
