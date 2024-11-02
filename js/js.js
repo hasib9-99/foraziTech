@@ -3163,13 +3163,24 @@ const menuContent = document.querySelectorAll(".menu_contant");
 
 menuItems.forEach((menu, i) => {
     menu.addEventListener("mouseover", () => {
-        if (menuContent[i] || menuItems[i]) { 
+        if (menuContent[i] || menuItems[i]) {
             menuContent[i].classList.add("active");
         }
     });
     menu.addEventListener("mouseout", () => {
-        if (menuContent[i] || menuItems[i]) { 
+        if (menuContent[i] || menuItems[i]) {
             menuContent[i].classList.remove("active");
         }
     });
 });
+
+
+
+const mideaSection = document.querySelector('.midea_section');
+const sectionImage = document.querySelector('.featured_image');
+
+if (mideaSection.querySelectorAll('.media_video').length > 0) {
+    sectionImage.style.display = 'none';
+} else {
+    sectionImage.style.display = 'block';
+};
