@@ -3175,7 +3175,7 @@ menuItems.forEach((menu, i) => {
 });
 
 
-
+// image show
 const mideaSection = document.querySelector('.midea_section');
 const sectionImage = document.querySelector('.featured_image');
 
@@ -3184,3 +3184,142 @@ if (mideaSection.querySelectorAll('.media_video').length > 0) {
 } else {
     sectionImage.style.display = 'block';
 };
+
+
+
+
+
+
+
+
+
+
+
+
+// Query selectors for the card buttons and the circle element.
+const featureBtns = document.querySelectorAll('.single_card');
+const circleElement = document.querySelector('.drawline');
+const nextBtn = document.querySelector('.next_btn');
+const prevBtn = document.querySelector('.prev_btn');
+
+// set data veriabol
+const cardName = document.querySelector('.custom_name h2');
+const cardTitle = document.querySelector('.custom_title h2');
+const cardDescription = document.querySelector('.custom_desc h2');
+const navigitor = document.querySelector('.custom_navigitor h2');
+
+// Stroke offsets for the circle animation.
+const strokeOffsets = [300, 228, 152, 76];
+
+// Initial counter value for the countdown.
+let counter = strokeOffsets[0] + 5;
+let countdown;
+
+// Convert NodeList to an array for easy manipulation.
+const featureBtnsArray = Array.from(featureBtns);
+
+// Feature data array.
+const data = [
+    {
+        id: 1,
+        name: 'Meer bereik',
+        title: 'Wil jij meer online bereik?', // Corrected typo from 'tilte' to 'title'
+        description: 'Hoe meer jij online zichtbaar bent, hoe vaker mensen naar jouw producten zoeken en ook bij jou bestellen. Je merkt dat men je bedrijf ook sneller weet te vinden. Zo werken wij aan je online bereik!'
+    },
+    {
+        id: 2,
+        name: 'Meer verkeer',
+        title: 'Boost je websiteverkeer',
+        description: 'Voel jij je soms overweldigd door de talloze opties die er zijn om meer verkeer naar je website te genereren? Wij helpen je graag met het vinden en uitvoeren van een goed uitgedachte online marketing strategie! Benieuwd hoe we te werk gaan?'
+    },
+    {
+        id: 3,
+        name: 'Meer leads',
+        title: 'Verhoog het aantal leads via je website',
+        description: 'Leuk al dat verkeer naar je website, maar je hebt behoefte aan meer leads en uiteindelijk meer klanten. Wil je weten hoe wij je aan meer leads helpen?'
+    },
+    {
+        id: 4,
+        name: 'Meer klanten',
+        title: 'Wil jij meer klanten?',
+        description: 'Trek meer kwalitatief verkeer naar je website en vergroot je klantenbestand. Zorg dat jouw bezoekers vloeiend alle stappen naar een conversie doorlopen. Zo gaan wij te werk!'
+    }
+];
+
+// Function to set the active button and update the stroke-dashoffset.
+function setActiveButton(index) {
+    featureBtns.forEach(item => item.classList.remove('active'));
+    featureBtns[index].classList.add('active');
+
+    navigitor.textContent = ` 0${data[index].id} / 0${data.length}`
+    cardName.textContent = data[index].name
+    cardTitle.textContent = data[index].title
+    cardDescription.textContent = data[index].description
+
+    if (strokeOffsets[index] !== undefined) {
+        circleElement.setAttribute('stroke-dashoffset', strokeOffsets[index]);
+    }
+}
+
+// Add click event listeners to each feature button.
+featureBtns.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+        stopCountdown();
+        setActiveButton(index);
+    });
+});
+
+// Starts the countdown timer.
+function startCountdown() {
+    if (!countdown) {
+        countdown = setInterval(() => {
+            circleElement.setAttribute('stroke-dashoffset', counter);
+            counter--;
+
+            // Trigger the click event at specific counter values.
+            strokeOffsets.forEach((offset, index) => {
+                if (counter === offset) {
+                    setActiveButton(index);
+                }
+            });
+
+            // Stop the countdown if the counter goes below the last offset.
+            if (counter < 0) {
+                stopCountdown();
+                console.log("Countdown finished");
+                restartCountdown();
+            }
+        }, 100);
+    }
+}
+
+// Function to change active feature based on direction (1 for next, -1 for previous).
+function changeActiveFeature(direction) {
+    let activeIndex = featureBtnsArray.findIndex(item => item.classList.contains('active'));
+    let nextIndex = (activeIndex + direction + featureBtnsArray.length) % featureBtnsArray.length;
+    stopCountdown();
+    setActiveButton(nextIndex);
+}
+
+// Add event listeners for next and previous buttons.
+nextBtn.addEventListener('click', () => changeActiveFeature(1));
+prevBtn.addEventListener('click', () => changeActiveFeature(-1));
+
+// Stops the countdown timer.
+function stopCountdown() {
+    if (countdown) {
+        clearInterval(countdown);
+        countdown = null;
+        console.log("Countdown stopped");
+    }
+}
+
+// Restarts the countdown timer from the beginning.
+function restartCountdown() {
+    stopCountdown();
+    counter = strokeOffsets[0] + 5; // Reset to the initial offset
+    startCountdown();
+}
+
+// Start the countdown initially.
+startCountdown();
