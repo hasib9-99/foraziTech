@@ -3434,3 +3434,57 @@ tabs.forEach((tab, index) => {
 
 activateTab(currentIndex);
 startAutoSwitch();
+
+
+
+// menu style css 
+
+
+
+const popupBtn = document.querySelector('.menu_btn');
+const popupMenuContainer = document.querySelector('.popup_menu');
+const menuItems = document.querySelectorAll(".custom_menu .elementor-nav-menu--main li");
+const popupMenu = document.querySelectorAll(".custop_popup_menu .elementor-nav-menu--main .menu-item");
+console.log(popupMenu);
+
+const menuContent = document.querySelectorAll(".menu_contant");
+const menuBacks = document.querySelectorAll(".menu_back");
+
+
+popupBtn.addEventListener('click', () => {
+    popupMenuContainer.classList.toggle('active');
+});
+
+menuBacks.forEach((menuBack) => {
+    menuBack.addEventListener('click', () => {
+        menuContent.forEach((menu) => {
+            menu.classList.remove('active');
+        })
+    })
+})
+
+function setMenuListeners() {
+    const width = window.innerWidth;
+
+    if (width < 1024) {
+        popupMenu.forEach((menu, i) => {
+            menu.addEventListener("click", () => {
+                menuContent[i]?.classList.add("active");
+            });
+            
+        });
+    } else {
+        menuItems.forEach((menu, i) => {
+            menu.addEventListener("mouseover", () => {
+                menuContent[i]?.classList.add("active");
+            });
+            menu.addEventListener("mouseout", () => {
+                menuContent[i]?.classList.remove("active");
+            });
+        });
+    }
+}
+
+
+setMenuListeners();
+window.addEventListener('resize', setMenuListeners);
