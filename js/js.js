@@ -3208,14 +3208,11 @@ const cardTitle = document.querySelector('.custom_title h2');
 const cardDescription = document.querySelector('.custom_desc h2');
 const navigitor = document.querySelector('.custom_navigitor h2');
 
-// Stroke offsets for the circle animation.
 const strokeOffsets = [300, 228, 152, 76];
 
-// Initial counter value for the countdown.
 let counter = strokeOffsets[0] + 5;
 let countdown;
 
-// Convert NodeList to an array for easy manipulation.
 const featureBtnsArray = Array.from(featureBtns);
 
 // Feature data array.
@@ -3246,7 +3243,6 @@ const data = [
     }
 ];
 
-// Function to set the active button and update the stroke-dashoffset.
 function setActiveButton(index) {
     featureBtns.forEach(item => item.classList.remove('active'));
     featureBtns[index].classList.add('active');
@@ -3261,7 +3257,6 @@ function setActiveButton(index) {
     }
 }
 
-// Add click event listeners to each feature button.
 featureBtns.forEach((btn, index) => {
     btn.addEventListener('click', () => {
         stopCountdown();
@@ -3269,21 +3264,18 @@ featureBtns.forEach((btn, index) => {
     });
 });
 
-// Starts the countdown timer.
 function startCountdown() {
     if (!countdown) {
         countdown = setInterval(() => {
             circleElement.setAttribute('stroke-dashoffset', counter);
             counter--;
 
-            // Trigger the click event at specific counter values.
             strokeOffsets.forEach((offset, index) => {
                 if (counter === offset) {
                     setActiveButton(index);
                 }
             });
 
-            // Stop the countdown if the counter goes below the last offset.
             if (counter < 0) {
                 stopCountdown();
                 console.log("Countdown finished");
@@ -3293,7 +3285,6 @@ function startCountdown() {
     }
 }
 
-// Function to change active feature based on direction (1 for next, -1 for previous).
 function changeActiveFeature(direction) {
     let activeIndex = featureBtnsArray.findIndex(item => item.classList.contains('active'));
     let nextIndex = (activeIndex + direction + featureBtnsArray.length) % featureBtnsArray.length;
@@ -3301,11 +3292,9 @@ function changeActiveFeature(direction) {
     setActiveButton(nextIndex);
 }
 
-// Add event listeners for next and previous buttons.
 nextBtn.addEventListener('click', () => changeActiveFeature(1));
 prevBtn.addEventListener('click', () => changeActiveFeature(-1));
 
-// Stops the countdown timer.
 function stopCountdown() {
     if (countdown) {
         clearInterval(countdown);
@@ -3314,12 +3303,134 @@ function stopCountdown() {
     }
 }
 
-// Restarts the countdown timer from the beginning.
 function restartCountdown() {
     stopCountdown();
     counter = strokeOffsets[0] + 5; // Reset to the initial offset
     startCountdown();
 }
 
-// Start the countdown initially.
 startCountdown();
+
+
+// tab animation 
+document.addEventListener('DOMContentLoaded', () => {
+
+    const tabs = document.querySelectorAll('.ft-tab-button');
+    const images = document.querySelectorAll('.ft-image-content');
+    const texts = document.querySelectorAll('.ft-text-content');
+    let currentIndex = 0;
+
+    function activateTab(index) {
+        let nextIndex = (index + 1) % tabs.length;
+
+        tabs.forEach((btn, i) => {
+            btn.classList.toggle('active', i === index);
+            images[i].classList.toggle('active', i === index);
+            texts[i].classList.toggle('active', i === index);
+
+            if (i === nextIndex) {
+                btn.classList.add('animated');
+                images[i].classList.add('animated');
+                texts[i].classList.add('animated');
+            } else {
+                btn.classList.remove('animated');
+                images[i].classList.remove('animated');
+                texts[i].classList.remove('animated');
+            }
+        });
+    }
+
+    function startAutoSwitch() {
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % tabs.length;
+            activateTab(currentIndex);
+        }, 3000);
+    }
+
+    tabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            currentIndex = index;
+            activateTab(currentIndex);
+        });
+    });
+
+    activateTab(currentIndex);
+    startAutoSwitch();
+
+})
+
+
+
+
+
+
+
+const style = document.createElement('style');
+style.textContent = `
+    .ft-tab-button.animated .featuretabs_line rect {
+        animation: outerline 3s linear infinite;
+    }
+    .ft-tab-button.active .custom_btn {
+        color: #fff !important;
+    }
+    @keyframes outerline {
+        0% {
+            stroke-dashoffset: 367.091;
+        }
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+
+const tabs = document.querySelectorAll('.ft-tab-button');
+const images = document.querySelectorAll('.ft-image-content');
+const texts = document.querySelectorAll('.ft-text-content');
+const tabsContainer = document.querySelector('.tabs-container');
+let currentIndex = 0;
+let autoSwitchInterval;
+
+function activateTab(index) {
+    let nextIndex = (index + 1) % tabs.length;
+
+    tabs.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+        images[i].classList.toggle('active', i === index);
+        texts[i].classList.toggle('active', i === index);
+
+        if (i === nextIndex) {
+            btn.classList.add('animated');
+            images[i].classList.add('animated');
+            texts[i].classList.add('animated');
+        } else {
+            btn.classList.remove('animated');
+            images[i].classList.remove('animated');
+            texts[i].classList.remove('animated');
+        }
+    });
+}
+
+function startAutoSwitch() {
+    autoSwitchInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % tabs.length;
+        activateTab(currentIndex);
+    }, 3000);
+}
+
+function pauseAutoSwitch() {
+    clearInterval(autoSwitchInterval);
+}
+
+tabsContainer.addEventListener('mouseover', pauseAutoSwitch);
+tabsContainer.addEventListener('mouseout', startAutoSwitch);
+
+tabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => {
+        currentIndex = index;
+        activateTab(currentIndex);
+    });
+});
+
+activateTab(currentIndex);
+startAutoSwitch();
