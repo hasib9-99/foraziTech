@@ -3314,11 +3314,12 @@ startCountdown();
 
 // tab animation 
 document.addEventListener('DOMContentLoaded', () => {
-
+    const tabsContainer = document.querySelectorAll('.tabs-container');
     const tabs = document.querySelectorAll('.ft-tab-button');
     const images = document.querySelectorAll('.ft-image-content');
     const texts = document.querySelectorAll('.ft-text-content');
     let currentIndex = 0;
+    let autoSwitchInterval;
 
     function activateTab(index) {
         let nextIndex = (index + 1) % tabs.length;
@@ -3341,7 +3342,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function startAutoSwitch() {
-        setInterval(() => {
+        // Clear any existing interval before setting a new one
+        clearInterval(autoSwitchInterval);
+
+        autoSwitchInterval = setInterval(() => {
             currentIndex = (currentIndex + 1) % tabs.length;
             activateTab(currentIndex);
         }, 3000);
@@ -3351,11 +3355,13 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             currentIndex = index;
             activateTab(currentIndex);
+            startAutoSwitch();  // Restart auto-switch after tab click
         });
     });
 
     activateTab(currentIndex);
     startAutoSwitch();
+
 
 })
 
@@ -3471,7 +3477,7 @@ function setMenuListeners() {
             menu.addEventListener("click", () => {
                 menuContent[i]?.classList.add("active");
             });
-            
+
         });
     } else {
         menuItems.forEach((menu, i) => {
@@ -3488,3 +3494,192 @@ function setMenuListeners() {
 
 setMenuListeners();
 window.addEventListener('resize', setMenuListeners);
+
+
+
+
+//
+
+
+// const sliderSection = document.querySelector('.slider_conteiner');
+// const sliderWraper = document.querySelector('.slider_wraper');
+// let current = 0;
+
+// document.addEventListener('scroll', () => {
+//     const rcet = sliderSection.getBoundingClientRect();
+//     console.log(rcet.top);
+
+//     if (rcet.top <= 0) {
+//         sliderSection.classList.add('fixed')
+
+//     }  
+// })
+
+// sliderSection.addEventListener('wheel', (event) => {
+
+//     if (event.deltaY > 0) {
+//         current += event.deltaY
+//         sliderWraper.style.transform = `translateX(${-(current)}px)`
+
+//         current
+//     } else if (event.deltaY < 0) {
+//         current += event.deltaY
+//         sliderWraper.style.transform = `translateX(${-(current)}px)`
+//     }
+
+//     checkThreshold(current)
+// });
+
+// function checkThreshold(current) {
+//     if (current = -1000 || sliderSection.classList.contains('fixed')) {
+//         sliderSection.classList.remove('fixed');
+//         sliderSection.classList.add('end');
+//     }
+// }
+
+
+
+
+
+// const sliderSection = document.querySelector('.slider_conteiner');
+// const sliderWraper = document.querySelector('.slider_wraper');
+// let current = 0;
+// const maxScroll = -2828; // Adjust according to your slider width and container size
+
+// // Fix the slider when it reaches the viewport top
+// document.addEventListener('scroll', () => {
+//     const rect = sliderSection.getBoundingClientRect();
+//     console.log(rect.top);
+
+//     if (rect.top <= 0) {
+//         sliderSection.classList.add('fixed');
+//     }
+
+//     // Remove fixed position when reaching maxScroll
+//     if (current <= maxScroll) {
+//         sliderSection.classList.remove('fixed');
+//         sliderSection.classList.add('end');
+//     }
+
+//     if (current > 0) {
+//         sliderSection.classList.remove('end');
+//     }
+// });
+
+// // Handle horizontal scroll with wheel event
+// sliderSection.addEventListener('wheel', (event) => {
+//     // Adjust the current position based on scroll direction and limit within bounds
+//     if (event.deltaY > 0 && current > maxScroll) {
+//         current -= 20; // Adjust increment to control speed
+//     } else if (event.deltaY < 0 && current < 0) {
+//         current += 20;
+//     }
+
+//     // Apply transformation
+//     sliderWraper.style.transform = `translateX(${current}px)`;
+// });
+
+
+
+
+
+// const sliderSection = document.querySelector('.slider_conteiner');
+// const sliderWraper = document.querySelector('.slider_wraper');
+// let current = 0;
+// const threshold = 1000; // Set your desired threshold value here
+
+// document.addEventListener('scroll', () => {
+//     const rcet = sliderSection.getBoundingClientRect();
+
+//     if (rcet.top <= 0 && current === 0) {
+//         sliderSection.classList.remove('end');
+//         sliderSection.classList.add('fixed');
+//         console.log('last col');
+
+//     }
+//     // else if (rcet.top >= 0 && sliderSection.classList.contains('end') && current !== 0) {
+//     //     sliderSection.classList.remove('end');
+//     //     sliderSection.classList.add('fixed');
+//     //     revarsCheckThreshold(current)
+//     // } else {
+
+//     // }
+// });
+
+// sliderSection.addEventListener('wheel', (event) => {
+//     if (current === threshold) {
+//         checkThreshold()
+//     }
+//     if (current === 0 && !sliderSection.classList.contains('fixed')) {
+//         revarsCheckThreshold()
+//     }
+//     current += event.deltaY;
+//     sliderWraper.style.transform = `translateX(${-current}px)`;
+// });
+
+// function checkThreshold() {
+//     sliderSection.classList.remove('fixed');
+//     sliderSection.classList.add('end');
+//     console.log('checkThreshold');
+
+
+// }
+
+// function revarsCheckThreshold() {
+//         sliderSection.classList.remove('fixed');
+// }
+
+
+
+
+
+
+
+
+
+const sliderSection = document.querySelector('.slider_conteiner');
+const sliderWraper = document.querySelector('.slider_wraper');
+let current = 0;
+const threshold = 1000; // Set your desired threshold value here
+
+document.addEventListener('scroll', () => {
+    const rcet = sliderSection.getBoundingClientRect();
+
+    if (rcet.top <= 0 && !sliderSection.classList.contains('fixed') && !sliderSection.classList.contains('end') && current === 0) {
+        sliderSection.classList.add('fixed');
+        console.log('last col');
+
+    } 
+    // else if (rcet.top >= 0 && sliderSection.classList.contains('end') && current !== 0 ) {
+    //     sliderSection.classList.remove('end');
+    //     sliderSection.classList.add('fixed');
+    //     revarsCheckThreshold(current)
+    // }
+});
+
+sliderSection.addEventListener('wheel', (event) => {
+    if (sliderSection.classList.contains('fixed')) {
+        current += event.deltaY;
+        sliderWraper.style.transform = `translateX(${-current}px)`;
+
+        checkThreshold(current);
+    }
+});
+
+function checkThreshold(current) {
+    if (current >= threshold) { 
+        sliderSection.classList.add('end');
+        sliderSection.classList.remove('fixed');
+        console.log('checkThreshold');
+
+    }
+}
+
+function revarsCheckThreshold(current) {
+    if (current === 0) {
+        sliderSection.classList.remove('fixed');
+        console.log('revarsCheckThreshold');
+
+    }
+}
+

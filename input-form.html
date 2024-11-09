@@ -1,33 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smooth Gradient Transition on Hover</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Animation Example</title>
     <style>
-      .element {
-        background: linear-gradient(to right, #000000 50%, #86a8e7 50%);
-        background-size: 200% 100%;
-        background-position: 0 0;
-        transition: background-position 0.5s ease; 
-      }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-      .element:hover {
-        background-position: -100% 0; /* Shift background on hover */
-      }
+        .section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateX(-100px); /* Start off-screen to the left */
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
 
+        .section.visible {
+            opacity: 1;
+            transform: translateX(0); /* Move to original position */
+        }
 
-      .custom_btn{
-        background: linear-gradient(to right #fff 50%, #cec 50%);
-        background-size: 100% 200%;
-        background-position: 0 0;
-      }
-      .custom_btn:hover{
-        background-position: -100% 0;
-      }
+        #first-section {
+            background-color: #f0f0f0;
+        }
+
+        #second-section {
+            background-color: #e0e0e0;
+        }
     </style>
-  </head>
-  <body>
-    <div class="element">Hover Me</div>
-  </body>
+</head>
+<body>
+    <div class="section" id="first-section">
+        <h1>Welcome to Our Group Tours</h1>
+        <p>Explore iconic landmarks with like-minded individuals.</p>
+    </div>
+    <div class="section" id="second-section">
+        <h2>Travel Experience</h2>
+        <p>No-Hassle Travel: Sit back and relax while the tour is expertly organized.</p>
+        <p>Local Expertise: Benefit from knowledgeable tour guides.</p>
+    </div>
+    <script>
+        window.addEventListener('scroll', () => {
+            const secondSection = document.getElementById('second-section');
+            const sectionPosition = secondSection.getBoundingClientRect().top;
+            const screenPosition = window.innerHeight / 1.2; // Trigger animation when section is near the viewport
+
+            if (sectionPosition < screenPosition) {
+                secondSection.classList.add('visible');
+            }
+        });
+    </script>
+</body>
 </html>
