@@ -3498,136 +3498,136 @@ window.addEventListener('resize', setMenuListeners);
 
 
 
-//
-
-
-// const sliderSection = document.querySelector('.slider_conteiner');
-// const sliderWraper = document.querySelector('.slider_wraper');
-// let current = 0;
-
-// document.addEventListener('scroll', () => {
-//     const rcet = sliderSection.getBoundingClientRect();
-//     console.log(rcet.top);
-
-//     if (rcet.top <= 0) {
-//         sliderSection.classList.add('fixed')
-
-//     }  
-// })
-
-// sliderSection.addEventListener('wheel', (event) => {
-
-//     if (event.deltaY > 0) {
-//         current += event.deltaY
-//         sliderWraper.style.transform = `translateX(${-(current)}px)`
-
-//         current
-//     } else if (event.deltaY < 0) {
-//         current += event.deltaY
-//         sliderWraper.style.transform = `translateX(${-(current)}px)`
-//     }
-
-//     checkThreshold(current)
-// });
-
-// function checkThreshold(current) {
-//     if (current = -1000 || sliderSection.classList.contains('fixed')) {
-//         sliderSection.classList.remove('fixed');
-//         sliderSection.classList.add('end');
-//     }
-// }
 
 
 
+const sliderSection = document.querySelector('.slider_conteiner');
+const sliderWraper = document.querySelector('.slider_wraper');
+let current = 0;
 
+document.addEventListener('scroll', () => {
+    const rcet = sliderSection.getBoundingClientRect();
+    console.log(rcet.top);
 
-// const sliderSection = document.querySelector('.slider_conteiner');
-// const sliderWraper = document.querySelector('.slider_wraper');
-// let current = 0;
-// const maxScroll = -2828; // Adjust according to your slider width and container size
+    if (rcet.top <= 0) {
+        sliderSection.classList.add('fixed')
 
-// // Fix the slider when it reaches the viewport top
-// document.addEventListener('scroll', () => {
-//     const rect = sliderSection.getBoundingClientRect();
-//     console.log(rect.top);
+    }
+})
 
-//     if (rect.top <= 0) {
-//         sliderSection.classList.add('fixed');
-//     }
+sliderSection.addEventListener('wheel', (event) => {
 
-//     // Remove fixed position when reaching maxScroll
-//     if (current <= maxScroll) {
-//         sliderSection.classList.remove('fixed');
-//         sliderSection.classList.add('end');
-//     }
+    if (event.deltaY > 0) {
+        current += event.deltaY
+        sliderWraper.style.transform = `translateX(${-(current)}px)`
 
-//     if (current > 0) {
-//         sliderSection.classList.remove('end');
-//     }
-// });
+        current
+    } else if (event.deltaY < 0) {
+        current += event.deltaY
+        sliderWraper.style.transform = `translateX(${-(current)}px)`
+    }
 
-// // Handle horizontal scroll with wheel event
-// sliderSection.addEventListener('wheel', (event) => {
-//     // Adjust the current position based on scroll direction and limit within bounds
-//     if (event.deltaY > 0 && current > maxScroll) {
-//         current -= 20; // Adjust increment to control speed
-//     } else if (event.deltaY < 0 && current < 0) {
-//         current += 20;
-//     }
+    checkThreshold(current)
+});
 
-//     // Apply transformation
-//     sliderWraper.style.transform = `translateX(${current}px)`;
-// });
+function checkThreshold(current) {
+    if (current = -1000 || sliderSection.classList.contains('fixed')) {
+        sliderSection.classList.remove('fixed');
+        sliderSection.classList.add('end');
+    }
+}
 
 
 
 
 
-// const sliderSection = document.querySelector('.slider_conteiner');
-// const sliderWraper = document.querySelector('.slider_wraper');
-// let current = 0;
-// const threshold = 1000; // Set your desired threshold value here
+const sliderSection = document.querySelector('.slider_conteiner');
+const sliderWraper = document.querySelector('.slider_wraper');
+let current = 0;
+const maxScroll = -2828; // Adjust according to your slider width and container size
 
-// document.addEventListener('scroll', () => {
-//     const rcet = sliderSection.getBoundingClientRect();
+// Fix the slider when it reaches the viewport top
+document.addEventListener('scroll', () => {
+    const rect = sliderSection.getBoundingClientRect();
+    console.log(rect.top);
 
-//     if (rcet.top <= 0 && current === 0) {
-//         sliderSection.classList.remove('end');
-//         sliderSection.classList.add('fixed');
-//         console.log('last col');
+    if (rect.top <= 0) {
+        sliderSection.classList.add('fixed');
+    }
 
-//     }
-//     // else if (rcet.top >= 0 && sliderSection.classList.contains('end') && current !== 0) {
-//     //     sliderSection.classList.remove('end');
-//     //     sliderSection.classList.add('fixed');
-//     //     revarsCheckThreshold(current)
-//     // } else {
+    // Remove fixed position when reaching maxScroll
+    if (current <= maxScroll) {
+        sliderSection.classList.remove('fixed');
+        sliderSection.classList.add('end');
+    }
 
-//     // }
-// });
+    if (current > 0) {
+        sliderSection.classList.remove('end');
+    }
+});
 
-// sliderSection.addEventListener('wheel', (event) => {
-//     if (current === threshold) {
-//         checkThreshold()
-//     }
-//     if (current === 0 && !sliderSection.classList.contains('fixed')) {
-//         revarsCheckThreshold()
-//     }
-//     current += event.deltaY;
-//     sliderWraper.style.transform = `translateX(${-current}px)`;
-// });
+// Handle horizontal scroll with wheel event
+sliderSection.addEventListener('wheel', (event) => {
+    // Adjust the current position based on scroll direction and limit within bounds
+    if (event.deltaY > 0 && current > maxScroll) {
+        current -= 20; // Adjust increment to control speed
+    } else if (event.deltaY < 0 && current < 0) {
+        current += 20;
+    }
 
-// function checkThreshold() {
-//     sliderSection.classList.remove('fixed');
-//     sliderSection.classList.add('end');
-//     console.log('checkThreshold');
+    // Apply transformation
+    sliderWraper.style.transform = `translateX(${current}px)`;
+});
 
 
-// }
 
-// function revarsCheckThreshold() {
-//         sliderSection.classList.remove('fixed');
-// }
+
+
+const sliderSection = document.querySelector('.slider_conteiner');
+const sliderWraper = document.querySelector('.slider_wraper');
+let current = 0;
+const threshold = 1000; // Set your desired threshold value here
+
+document.addEventListener('scroll', () => {
+    const rcet = sliderSection.getBoundingClientRect();
+
+    if (rcet.top <= 0 && current === 0) {
+        sliderSection.classList.remove('end');
+        sliderSection.classList.add('fixed');
+        console.log('last col');
+
+    }
+    // else if (rcet.top >= 0 && sliderSection.classList.contains('end') && current !== 0) {
+    //     sliderSection.classList.remove('end');
+    //     sliderSection.classList.add('fixed');
+    //     revarsCheckThreshold(current)
+    // } else {
+
+    // }
+});
+
+sliderSection.addEventListener('wheel', (event) => {
+    if (current === threshold) {
+        checkThreshold()
+    }
+    if (current === 0 && !sliderSection.classList.contains('fixed')) {
+        revarsCheckThreshold()
+    }
+    current += event.deltaY;
+    sliderWraper.style.transform = `translateX(${-current}px)`;
+});
+
+function checkThreshold() {
+    sliderSection.classList.remove('fixed');
+    sliderSection.classList.add('end');
+    console.log('checkThreshold');
+
+
+}
+
+function revarsCheckThreshold() {
+    sliderSection.classList.remove('fixed');
+}
 
 
 
@@ -3649,7 +3649,7 @@ document.addEventListener('scroll', () => {
         sliderSection.classList.add('fixed');
         console.log('last col');
 
-    } 
+    }
     // else if (rcet.top >= 0 && sliderSection.classList.contains('end') && current !== 0 ) {
     //     sliderSection.classList.remove('end');
     //     sliderSection.classList.add('fixed');
@@ -3667,7 +3667,7 @@ sliderSection.addEventListener('wheel', (event) => {
 });
 
 function checkThreshold(current) {
-    if (current >= threshold) { 
+    if (current >= threshold) {
         sliderSection.classList.add('end');
         sliderSection.classList.remove('fixed');
         console.log('checkThreshold');
@@ -3682,4 +3682,153 @@ function revarsCheckThreshold(current) {
 
     }
 }
+
+
+
+
+
+const stickySection = [...document.querySelectorAll('.cs_sticky')];
+
+document.addEventListener('scroll', (e) => {
+    for (let i = 0; i < stickySection.length; i++) {
+        transform(stickySection[i])
+    }
+})
+
+function transform(section) {
+    const offsetTop = section.parentElement.offsetTop;
+    console.log(offsetTop);
+    const scrollSection = section.querySelector('.cu_scroll_section');
+    console.log(scrollSection);
+    let percentage = ((document.scrollY = offsetTop) / window.innerHeight) * 100;
+    percentage = percentage < 0 ? 0 : percentage > 400 ? 400 : percentage;
+    console.log(percentage);
+    scrollSection.style.transform = `translate3d(${-(percentage)}vh, 0, 0)`
+}
+
+//
+
+
+
+
+
+
+
+const title = document.querySelector('.feature_title h2');
+const description = document.querySelector('.feature_description h2');
+const btns = document.querySelectorAll('.feature_btns .feature_btn');
+const featureImage = document.querySelector('.feature_img img');
+const Images = document.querySelectorAll('.feature_btn_img img');
+const imageScroll = document.querySelector('.image_scroll')
+const featureData = [
+    {
+        id: 1,
+        title: "Hillsborough Castle",
+        description: "Explore one of Northern Ireland’s must-see attractions, a stunning royal residence surrounded by 100 acres of picturesque gardens. Hillsborough Castle, the Royal Family's residence in Northern Ireland, is where pivotal events like the signing of the Anglo-Irish Agreement and crucial peace process meetings took place.",
+        image: "wp-content/uploads/2024/11/Hillsborough-Castle-and-Gardens.png"
+
+    },
+    {
+        id: 2,
+        title: "The Rock of Cashel",
+        description: "The Rock of Cashel is also known as Cashel of the Kings. The Rock is a spectacular group of medieval buildings set on a rocky outcrop of limestone, looming above the town of Cashel, County Tipperary. There is a 12th century round tower.",
+        image: "/wp-content/uploads/2024/11/MAs_v4Fj7P0-1.png"
+    },
+    {
+        id: 3,
+        title: "Giant’s Causeway",
+        description: "Giant’s Causeway is as iconic as it gets. The UNESCO world heritage site consists of over 40,000 basalt columns, creating a truly unique natural spectacle",
+        image: "/wp-content/uploads/2024/11/Giants-Causeway-1.jpg"
+    },
+    {
+        id: 4,
+        title: "Clonmacnoise",
+        description: "Dating from 545AD, Clonmacnoise contains over 1,500 years of Irish history. Its imposing ruins include a cathedral, round tower, high crosses and seven churches. A visit is a must.",
+        image: "/wp-content/uploads/2024/11/Clocmacnoise.jpg"
+
+    },
+    {
+        id: 5,
+        title: "Giant’s Causeway",
+        description: "Giant’s Causeway is as iconic as it gets. The UNESCO world heritage site consists of over 40,000 basalt columns, creating a truly unique natural spectacle",
+        image: "/wp-content/uploads/2024/11/Cliffs-of-Moher.jpg"
+    },
+    {
+        id: 6,
+        title: "Kylemore Abbey & Gardens",
+        description: "Home to the Benedictine nuns since 1920, Kylemore Abbey is characterised by its grand design and beautiful 6-acre Victorian garden. Explore its hallowed lands and learn more about its rich history of religion and education.",
+        image: "/wp-content/uploads/2024/11/Kylemore-Abbey.jpg"
+    },
+    {
+        id: 7,
+        title: "Bunratty Castle and Folk Park",
+        description: "Ireland’s most complete medieval fortress transports visitors to times of old. Discover the castle’s ancient tapestries and artworks and wander round the adjacent Folk Park to explore the reconstruction of a rural village from over a century ago.",
+        image: "/wp-content/uploads/2024/11/Bunratty.jpg"
+    },
+    {
+        id: 8,
+        title: "The Jameson Distillery Midleton",
+        description: "Discover the process behind creating Ireland's most famous whiskey. Tours include an unforgettable whiskey tasting experience and a behind the scenes journey through Jameson’s past.",
+        image: "/wp-content/uploads/2024/11/Jameson-1.jpg"
+    }
+
+]
+
+
+function updateFeatureContent(i) {
+    btns[i].classList.add('active')
+    title.textContent = featureData[i].title
+    description.textContent = featureData[i].description
+    // featureImage.src = featureData[i].image
+    // featureImage.srcset = featureData[i].image
+    featureImage.src = Images[i].sre
+    featureImage.srcset = Images[i].src
+
+    let rcet = Images[i].getBoundingClientRect()
+    let offset = i >= 2 ? (i - 2) * rcet.height : 0;
+    imageScroll.style.transform = `translateY(${-offset}px)`;
+
+}
+
+btns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        btns.forEach((item) => item.classList.remove('active'))
+        updateFeatureContent(i)
+    })
+})
+
+Images.forEach((img, i) => {
+    img.addEventListener('click', () => {
+        btns.forEach((item) => item.classList.remove('active'))
+        updateFeatureContent(i)
+    })
+})
+
+
+
+
+
+//
+const tabHeader = document.querySelector('.custom_tab .e-n-tabs-heading')
+const btn = tabHeader.querySelectorAll('button')
+
+const div = document.createElement('div')
+div.classList.add('btn_background')
+
+tabHeader.appendChild(div)
+
+btn.forEach((item, i) => {
+    item.addEventListener('click', () => {
+        if (i === 0) {
+            div.style.left = 0;
+            div.style.transform = 'translateX(0)';
+        } else if (i === 1) {
+            div.style.left = 'calc(50% - 15px)'
+            div.style.transform = 'translateX(-50%)';
+        } else if (i === 2) {
+            div.style.left = '100%'
+            div.style.transform = 'translateX(calc(-100% - 20px))';
+        }
+    })
+})
 
