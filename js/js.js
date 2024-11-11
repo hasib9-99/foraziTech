@@ -3147,5 +3147,6 @@ prevButton.addEventListener('click', () => {
     resetAutoSlide();
 });
 
+
 updateSlides();
 startAutoSlide();
