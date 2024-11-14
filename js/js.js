@@ -3915,3 +3915,60 @@ const rect = tabeContant.getBoundingClientRect()
 tabeHeader.style.height = rect.height
 
 //
+
+
+const tab = document.querySelector('.custom-tab');
+const tabBtnsContant = document.querySelectorAll('.custom-tab .e-n-tabs-heading .e-n-tab-title-text');
+const tabBtns = document.querySelectorAll('.custom-tab .e-n-tabs-heading button');
+
+const tabImmegesData = [
+    {
+        id: 1,
+        image: 'https://imoconsultoria.pt/wp-content/uploads/2024/11/programa_mvp-1.webp',
+    },
+    {
+        id: 2,
+        image: 'https://imoconsultoria.pt/wp-content/uploads/2024/11/programa_semente-1.webp',
+    },
+    {
+        id: 3,
+        image: 'https://imoconsultoria.pt/wp-content/uploads/2024/11/programa_idealizacao.webp',
+    },
+    {
+        id: 4,
+        image: 'https://imoconsultoria.pt/wp-content/uploads/2024/11/programa_start.webp',
+    },
+    {
+        id: 5,
+        image: 'https://imoconsultoria.pt/wp-content/uploads/2024/11/programa_lacamento.webp',
+    },
+    {
+        id: 6,
+        image: 'https://imoconsultoria.pt/wp-content/uploads/2024/11/programa_aceleracao.webp',
+    }
+]
+
+tabBtns.forEach((item) => {
+    item.addEventListener('click', () => {
+        tabBtns.forEach(btn => {
+            btn.querySelector('.tab_btn_img').style.filter = 'saturate(0%)';
+            btn.setAttribute('aria-selected', 'false');
+        });
+
+        item.querySelector('.tab_btn_img').style.filter = 'saturate(100%)';
+        item.setAttribute('aria-selected', 'true');
+    });
+});
+
+
+tabBtns.forEach((item) => {
+    item.addEventListener('click', () => {
+        tabBtns.forEach(btn => {
+            btn.querySelector('.tab_btn_img').style.filter = 'saturate(0%)';
+            btn.setAttribute('aria-selected', 'false');
+        });
+
+        item.querySelector('.tab_btn_img').style.filter = 'saturate(100%)';
+        item.setAttribute('aria-selected', 'true');
+    });
+});
