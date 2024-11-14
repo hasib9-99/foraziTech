@@ -1,94 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Upload Preview</title>
-    <style>
-        .container div {
-            width: 100px;
-            height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            gap: 20px;
-        }
-
-        .red {
-            background-color: red;
-        }
-
-        .blue {
-            background-color: blue;
-        }
-
-        .green {
-            background-color: green;
-        }
-
-        .red:hover .blue {
-            background-color: green;
-        }
-
-        /* .red:hover .green {
-            background-color: yellow;
-        } */
-    </style>
+    <title>Document</title>
 </head>
-
 <body>
-    <!-- <input type="file" id="imageInput" accept="image/*">
-    <img id="imagePreview" src="#" alt="Image Preview"> -->
-
-
-    <div class="container">
-        <div class="red">
-            red
+    <div id="animation-container">
+        <div class="expert">
+            <img width="396" height="466" decoding="async"
+                src="https://decola.company/wp-content/uploads/2024/08/Yuri385.webp" alt="Expert 1" class="no-lazy">
+            <div class="notifications">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/1497.webp"
+                    alt="Notification 1" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/897.webp"
+                    alt="Notification 2" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/597.webp"
+                    alt="Notification 3" class="no-lazy">
+            </div>
         </div>
-        <div class="blue">
-            blue
+        <div class="expert">7
+            <img width="397" height="467" decoding="async" src="/wp-content/uploads/2024/08/daniNew.webp" alt="Expert 2">
+            <div class="notifications">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/397.webp"
+                    alt="Notification 1" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/1497.webp"
+                    alt="Notification 2" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/997.webp"
+                    alt="Notification 3" class="no-lazy">
+            </div>
         </div>
-        <div class="green">
-            green
+        <div class="expert">
+            <img width="396" height="467" decoding="async" src="/wp-content/uploads/2024/08/janaNew.webp" alt="Expert 3">
+            <div class="notifications">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/597.webp"
+                    alt="Notification 1" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/897.webp"
+                    alt="Notification 2" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/397.webp"
+                    alt="Notification 3" class="no-lazy">
+            </div>
         </div>
+    
+        <div class="expert active">
+            <img width="396" height="467" decoding="async" src="/wp-content/uploads/2024/08/marianaNew.webp" alt="Expert 1">
+            <div class="notifications">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/997.webp"
+                    alt="Notification 1" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/597.webp"
+                    alt="Notification 2" class="no-lazy">
+                <img width="404" height="66" decoding="async" src="/wp-content/uploads/2024/07/notify2.webp"
+                    alt="Notification 3" class="no-lazy">
+            </div>
+        </div>
+    
+        <div class="expert">
+            <img width="398" height="467" decoding="async" src="/wp-content/uploads/2024/08/patricNew.webp" alt="Expert 1">
+            <div class="notifications">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/897.webp"
+                    alt="Notification 1" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/1497.webp"
+                    alt="Notification 2" class="no-lazy">
+                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/397.webp"
+                    alt="Notification 3" class="no-lazy">
+            </div>
+        </div>
+    
     </div>
-
-
-
-
-
-    <!-- <script>
-        const imageInput = document.getElementById('imageInput');
-        const imagePreview = document.getElementById('imagePreview');
-
-        imageInput.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            const fileLists = []
-            const fileList = e.target.files;
-            fileLists.push(fileList)
-            console.log(fileLists);
-            // console.log(fileList);
-
-            if (file) {
-                const reader = new FileReader();
-
-                reader.onload = (readerEvent) => {
-                    imagePreview.src = readerEvent.target.result;
-                };
-
-                reader.readAsDataURL(file);
-            }
-        });
-
-    </script> -->
 </body>
-
 </html>

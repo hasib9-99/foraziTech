@@ -3718,7 +3718,7 @@ const title = document.querySelector('.feature_title h2');
 const description = document.querySelector('.feature_description h2');
 const btns = document.querySelectorAll('.feature_btns .feature_btn');
 const featureImage = document.querySelector('.feature_img img');
-const Images = document.querySelectorAll('.feature_btn_img img');
+const Images = document.querySelectorAll('.feature_btn_img');
 const imageScroll = document.querySelector('.image_scroll')
 const featureData = [
     {
@@ -3779,14 +3779,16 @@ function updateFeatureContent(i) {
     btns[i].classList.add('active')
     title.textContent = featureData[i].title
     description.textContent = featureData[i].description
-    // featureImage.src = featureData[i].image
-    // featureImage.srcset = featureData[i].image
-    featureImage.src = Images[i].sre
-    featureImage.srcset = Images[i].src
+    featureImage.src = Images[i].querySelector('img').sre
+    featureImage.srcset = Images[i].querySelector('img').src
 
     let rcet = Images[i].getBoundingClientRect()
-    let offset = i >= 2 ? (i - 2) * rcet.height : 0;
-    imageScroll.style.transform = `translateY(${-offset}px)`;
+    let offset = i >= 2 ? (i - 2) * (rcet.height + 20) : 0;
+    if (window.innerWidth <= 1024) {
+        imageScroll.style.transform = `translateX(${-offset}px)`;
+    }else{
+        imageScroll.style.transform = `translateY(${-offset}px)`;
+    }
 
 }
 
@@ -3808,7 +3810,7 @@ Images.forEach((img, i) => {
 
 
 
-//
+// tab Header
 const tabHeader = document.querySelector('.custom_tab .e-n-tabs-heading')
 const btn = tabHeader.querySelectorAll('button')
 
@@ -3832,3 +3834,84 @@ btn.forEach((item, i) => {
     })
 })
 
+
+
+//
+
+const sliders = document.querySelectorAll('.custom_slider .swiper-wrapper .swiper-slide:not(.swiper-slide-duplicate)');
+const wraper = document.querySelector('.custom_slider .swiper-wrapper');
+const sliderBtn = document.querySelectorAll('.elementor-swiper-button');
+const ariaLabel = document.querySelector('.custom_aria-label h2');
+const slideInner = document.querySelector('.slider_inner');
+
+function updateData() {
+    let activeItem = document.querySelector('.custom_slider .swiper-wrapper .swiper-slide.swiper-slide-active');
+    const activeIndex = Array.from(sliders).indexOf(activeItem);
+    ariaLabel.textContent = activeItem.getAttribute('aria-label');
+    
+    const totalSlides = sliders.length;
+    const widthPercentage = ((activeIndex + 1) / totalSlides) * 100;
+    if (activeIndex !== -1) {
+        slideInner.style.width = `${widthPercentage}%`;
+    }else{
+        slideInner.style.width = `${(1 / totalSlides) * 100}%`;
+    }
+    console.log(activeIndex);
+}
+
+sliderBtn.forEach((btn) => {
+    btn.addEventListener('click', updateData);
+});
+
+
+    wraper.addEventListener('mousemove', updateData);
+
+
+
+
+//
+const checkbox = document.querySelector('#form-field-field_b86a53a-11')
+const input = document.querySelector('#form-field-field_0c5602c')
+
+input.disabled = true;
+input.style.opacity = 0.5;
+checkbox.addEventListener("change", function() {
+    if (checkbox.checked) {
+        input.disabled = false;
+        input.style.opacity = 1;
+    } else {
+        input.disabled = true;
+        input.style.opacity = 0.5;
+
+    }
+});   
+
+
+//
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+const experts = document.querySelectorAll('.expert');
+let currentIndex = 0;
+
+function showNextExpert() {
+    experts[currentIndex].classList.remove('active');
+    currentIndex = (currentIndex + 1) % experts.length;
+    experts[currentIndex].classList.add('active');
+}
+
+experts[currentIndex].classList.add('active');
+setInterval(showNextExpert, 5000);
+})
+
+
+
+//
+const tabe = document.querySelector('.tab-box-09')
+const tabeContant = tabe.querySelector('.tab-box-09 .e-n-tabs-content');
+const tabeHeader = tabe.querySelector('.tab-box-09 .e-n-tabs-heading')
+const rect = tabeContant.getBoundingClientRect()
+tabeHeader.style.height = rect.height
+
+//
