@@ -3786,7 +3786,7 @@ function updateFeatureContent(i) {
     let offset = i >= 2 ? (i - 2) * (rcet.height + 20) : 0;
     if (window.innerWidth <= 1024) {
         imageScroll.style.transform = `translateX(${-offset}px)`;
-    }else{
+    } else {
         imageScroll.style.transform = `translateY(${-offset}px)`;
     }
 
@@ -3848,12 +3848,12 @@ function updateData() {
     let activeItem = document.querySelector('.custom_slider .swiper-wrapper .swiper-slide.swiper-slide-active');
     const activeIndex = Array.from(sliders).indexOf(activeItem);
     ariaLabel.textContent = activeItem.getAttribute('aria-label');
-    
+
     const totalSlides = sliders.length;
     const widthPercentage = ((activeIndex + 1) / totalSlides) * 100;
     if (activeIndex !== -1) {
         slideInner.style.width = `${widthPercentage}%`;
-    }else{
+    } else {
         slideInner.style.width = `${(1 / totalSlides) * 100}%`;
     }
     console.log(activeIndex);
@@ -3864,7 +3864,7 @@ sliderBtn.forEach((btn) => {
 });
 
 
-    wraper.addEventListener('mousemove', updateData);
+wraper.addEventListener('mousemove', updateData);
 
 
 
@@ -3875,7 +3875,7 @@ const input = document.querySelector('#form-field-field_0c5602c')
 
 input.disabled = true;
 input.style.opacity = 0.5;
-checkbox.addEventListener("change", function() {
+checkbox.addEventListener("change", function () {
     if (checkbox.checked) {
         input.disabled = false;
         input.style.opacity = 1;
@@ -3884,7 +3884,7 @@ checkbox.addEventListener("change", function() {
         input.style.opacity = 0.5;
 
     }
-});   
+});
 
 
 //
@@ -3892,17 +3892,17 @@ checkbox.addEventListener("change", function() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-const experts = document.querySelectorAll('.expert');
-let currentIndex = 0;
+    const experts = document.querySelectorAll('.expert');
+    let currentIndex = 0;
 
-function showNextExpert() {
-    experts[currentIndex].classList.remove('active');
-    currentIndex = (currentIndex + 1) % experts.length;
+    function showNextExpert() {
+        experts[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % experts.length;
+        experts[currentIndex].classList.add('active');
+    }
+
     experts[currentIndex].classList.add('active');
-}
-
-experts[currentIndex].classList.add('active');
-setInterval(showNextExpert, 5000);
+    setInterval(showNextExpert, 5000);
 })
 
 
@@ -3948,27 +3948,61 @@ const tabImmegesData = [
     }
 ]
 
-tabBtns.forEach((item) => {
-    item.addEventListener('click', () => {
-        tabBtns.forEach(btn => {
-            btn.querySelector('.tab_btn_img').style.filter = 'saturate(0%)';
-            btn.setAttribute('aria-selected', 'false');
-        });
-
-        item.querySelector('.tab_btn_img').style.filter = 'saturate(100%)';
-        item.setAttribute('aria-selected', 'true');
-    });
+tabBtnsContant.forEach((item, index) => {
+    item.textContent = '';
+    let img = document.createElement('img');
+    img.classList.add('tab_btn_img');
+    img.src = tabImmegesData[index].image;
+    item.appendChild(img);
 });
-
 
 tabBtns.forEach((item) => {
     item.addEventListener('click', () => {
-        tabBtns.forEach(btn => {
-            btn.querySelector('.tab_btn_img').style.filter = 'saturate(0%)';
-            btn.setAttribute('aria-selected', 'false');
-        });
-
-        item.querySelector('.tab_btn_img').style.filter = 'saturate(100%)';
-        item.setAttribute('aria-selected', 'true');
+        if (getAttribute('aria-selected')) {
+            item.querySelector('.tab_btn_img').style.filter = 'saturate(100%)';
+        }
     });
-});
+})
+
+//
+
+
+const mq = window.matchMedia("(min-width: 1025px)");
+if (mq.matches) {
+
+    const cardsContainer = document.getElementById("cards");
+    const cardsContents = document.querySelectorAll(".fe_card");
+
+    cardsContainer.addEventListener("mousemove", e => {
+        cardsContents.forEach(card => {
+            const rect = card.getBoundingClientRect()
+                , x = e.clientX - rect.left
+                , y = e.clientY - rect.top;
+            card.style.setProperty("--mouse-x", `${x}px`);
+            card.style.setProperty("--mouse-y", `${y}px`);
+        }
+        );
+    }
+    );
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const brandContainer = document.querySelector('.brand_images');
+    const brandImgs = brandContainer.querySelectorAll('.brand_image');
+
+    brandImgs.forEach((item, i) => {
+        item.addEventListener('mouseover', () => {
+            brandImgs.forEach((img) => {
+                if (img !== item) {
+                    img.classList.add('deactive')
+                }
+            })
+            item.classList.add('active')
+        })
+        item.addEventListener('mouseout', () => {
+            brandImgs.forEach((img) => img.classList.remove('deactive'))
+            item.classList.remove('active')
+        })
+    })
+})
