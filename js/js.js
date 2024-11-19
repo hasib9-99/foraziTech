@@ -4079,3 +4079,25 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+
+// feature slider navigetor and nevigetor line
+const sliderNav = document.querySelector('.feature_slider_nevigetor h2');
+const sliderLine = document.querySelector('.feuter_slider_line');
+const featureSlider = document.querySelector('.feature_slider .swiper-wrapper');
+
+featureSlider.addEventListener('transitionend', () => {
+    const activeSlide = featureSlider.querySelector('.swiper-slide-active');
+    const ariaLabel = activeSlide.getAttribute('aria-label');
+    console.log(ariaLabel);
+    sliderNav.textContent = ariaLabel;
+    sliderLine.width
+    if (ariaLabel == '1 / 3') {
+        sliderLine.style = 'transform: translateX(0%); left: 0%;';
+    } else if (ariaLabel == '2 / 3') {
+        sliderLine.style = 'transform: translateX(-50%); left: 50%;';
+    } else if (ariaLabel == '3 / 3') {
+        sliderLine.style = 'transform: translateX(-100%); left: 100%;';
+    }
+})
+
+
