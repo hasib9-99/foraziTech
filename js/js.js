@@ -4006,3 +4006,76 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 })
+
+function parallax() {
+    var parallax = document.querySelectorAll(".parallax");
+    var speed = 0.1; // The speed of the parallax effect
+    for (var i = 0; i < parallax.length; i++) {
+        var windowHalfY = window.innerHeight / 7;
+        var parallaxY = parallax[i].getBoundingClientRect().top + windowHalfY;
+        var pos = parallaxY * -speed;
+        parallax[i].style.backgroundPosition = "50% " + pos + "px";
+
+
+    }
+}
+window.addEventListener("scroll", parallax);
+
+
+//
+
+
+
+
+const allFilde = document.querySelectorAll('.wapf-checkable');
+const showPricing = document.querySelector('.single_add_to_cart_button.button.alt');
+const defaultPrice = document.querySelector('.elementor-widget-woocommerce-product-price .woocommerce-Price-amount.amount bdi');
+const priceCurrency = defaultPrice.querySelector('.woocommerce-Price-currencySymbol').textContent;
+console.log(defaultPrice.textContent);
+
+
+const bdiText = Array.from(defaultPrice.childNodes)
+    .filter(node => node.nodeType === Node.TEXT_NODE) // Only text nodes
+    .map(node => node.textContent.trim()) // Get text content
+    .join(''); // Combine text nodes (if multiple)
+console.log(bdiText);
+
+function calculateTotalPrice() {
+    setTimeout(() => {
+        const chekedFlides = document.querySelectorAll('.wapf-checkable.has-pricing.wapf-checked');
+
+        let totalPrice = 0;
+
+        chekedFlides.forEach((chekedFilde) => {
+            const inputElement = chekedFilde.querySelector('input');
+            if (inputElement) {
+                const priceValue = parseFloat(inputElement.getAttribute('data-wapf-price'));
+                if (!isNaN(priceValue)) {
+                    totalPrice += priceValue;
+                }
+            }
+        });
+
+        showPricing.textContent = `Add to cart (${priceCurrency} ${((parseFloat(bdiText) + totalPrice).toFixed(2))})`;
+        console.log(`Add to cart (${priceCurrency} ${((parseFloat(bdiText) + totalPrice).toFixed(2))})`);
+    }, 300);
+}
+
+
+
+allFilde.forEach((filde) => {
+    filde.addEventListener('click', calculateTotalPrice);
+});
+
+window.addEventListener('DOMContentLoaded', calculateTotalPrice);
+
+//
+
+document.addEventListener("DOMContentLoaded", function () {
+    const newText = document.querySelector(".cr-ajax-reviews-review-form .cr-review-form-res .cr-review-form-result");
+    if (newText && window.getComputedStyle(newText).display === "flex") {
+        newText.querySelector("span").innerText = "Thank You! Your review has successfully been submitted. All reviews are subject to review before posting.";
+    }
+});
+
+
