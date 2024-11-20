@@ -4087,17 +4087,66 @@ const featureSlider = document.querySelector('.feature_slider .swiper-wrapper');
 
 featureSlider.addEventListener('transitionend', () => {
     const activeSlide = featureSlider.querySelector('.swiper-slide-active');
-    const ariaLabel = activeSlide.getAttribute('aria-label');
+    const featureAriaLabel = activeSlide.getAttribute('aria-label');
     console.log(ariaLabel);
-    sliderNav.textContent = ariaLabel;
-    sliderLine.width
-    if (ariaLabel == '1 / 3') {
+    sliderNav.textContent = featureAriaLabel;
+    // sliderLine.width
+    if (featureAriaLabel == '1 / 3') {
         sliderLine.style = 'transform: translateX(0%); left: 0%;';
-    } else if (ariaLabel == '2 / 3') {
+    } else if (featureAriaLabel == '2 / 3') {
         sliderLine.style = 'transform: translateX(-50%); left: 50%;';
-    } else if (ariaLabel == '3 / 3') {
+    } else if (featureAriaLabel == '3 / 3') {
         sliderLine.style = 'transform: translateX(-100%); left: 100%;';
     }
 })
 
 
+const gallerySlider = document.querySelector('.custom_gallery .swiper-wrapper');
+const galleryNav = document.querySelector('.gallery_slider_navigetor h2')
+const galleryLine = document.querySelector('.gallery_line');
+
+gallerySlider.addEventListener('transitionend', () => {
+    let galleryActive = gallerySlider.querySelector('.swiper-slide-active');
+    let galleryAriaLabel = galleryActive.getAttribute('aria-label');
+    console.log(galleryAriaLabel);
+    galleryNav.textContent = galleryAriaLabel;
+    if (galleryAriaLabel == '1 / 4') {
+        galleryLine.style = 'transform: translateX(0%); left: 0%;';
+    } else if (galleryAriaLabel == '2 / 4') {
+        galleryLine.style = 'transform: translateX(0%); left: 25%;';
+    } else if (galleryAriaLabel == '3 / 4') {
+        galleryLine.style = 'transform: translateX(0%); left: 50%;';
+    } else if (galleryAriaLabel == '4 / 4') {
+        galleryLine.style = 'transform: translateX(0%); left: 75%;';
+    }
+})
+
+
+// this is update and daynamic  navigetor
+function updateSliderNav(sliderWrapper, navElement, lineElement, positions) {
+    sliderWrapper.addEventListener('transitionend', () => {
+        const activeSlide = sliderWrapper.querySelector('.swiper-slide-active');
+        const SliderAriaLabel = activeSlide.getAttribute('aria-label');
+        navElement.textContent = SliderAriaLabel;
+
+        const [current, total] = SliderAriaLabel.split(' / ').map(Number);
+        const leftPercentage = ((current - 1) / (total - 1)) * 100;
+
+        lineElement.style.width = `${100 / total}%`;
+        lineElement.style.transform = `translateX(-${leftPercentage}%)`;
+        lineElement.style.left = `${leftPercentage}%`;
+    });
+}
+
+const featureSlider = document.querySelector('.feature_slider .swiper-wrapper');
+const sliderNav = document.querySelector('.feature_slider_nevigetor h2');
+const sliderLine = document.querySelector('.feuter_slider_line');
+updateSliderNav(featureSlider, sliderNav, sliderLine);
+
+const gallerySlider = document.querySelector('.custom_gallery .swiper-wrapper');
+const galleryNav = document.querySelector('.gallery_slider_navigetor h2');
+const galleryLine = document.querySelector('.gallery_line');
+updateSliderNav(gallerySlider, galleryNav, galleryLine);
+
+
+//

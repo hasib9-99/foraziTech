@@ -1,71 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grab and Drag Slider</title>
+  <style>
+    /* CSS for the slider */
+    .grab-slider {
+      overflow: hidden;
+      width: 100%;
+      height: 200px; /* Adjust as needed */
+      position: relative;
+      cursor: grab;
+    }
+
+    .slider-track {
+      display: flex;
+      transition: transform 0.3s ease;
+    }
+
+    .slide {
+      min-width: 300px; /* Adjust as needed */
+      height: 100%;
+      margin-right: 10px;
+      background: lightgray;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5em;
+      user-select: none;
+    }
+.next + .slide {
+  background-color: red;
+}
+
+.slide:has(+ .prev) {
+  background-color: blue;
+}
+
+
+
+  </style>
 </head>
 <body>
-    <div id="animation-container">
-        <div class="expert">
-            <img width="396" height="466" decoding="async"
-                src="https://decola.company/wp-content/uploads/2024/08/Yuri385.webp" alt="Expert 1" class="no-lazy">
-            <div class="notifications">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/1497.webp"
-                    alt="Notification 1" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/897.webp"
-                    alt="Notification 2" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/597.webp"
-                    alt="Notification 3" class="no-lazy">
-            </div>
-        </div>
-        <div class="expert">7
-            <img width="397" height="467" decoding="async" src="/wp-content/uploads/2024/08/daniNew.webp" alt="Expert 2">
-            <div class="notifications">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/397.webp"
-                    alt="Notification 1" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/1497.webp"
-                    alt="Notification 2" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/997.webp"
-                    alt="Notification 3" class="no-lazy">
-            </div>
-        </div>
-        <div class="expert">
-            <img width="396" height="467" decoding="async" src="/wp-content/uploads/2024/08/janaNew.webp" alt="Expert 3">
-            <div class="notifications">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/597.webp"
-                    alt="Notification 1" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/897.webp"
-                    alt="Notification 2" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/397.webp"
-                    alt="Notification 3" class="no-lazy">
-            </div>
-        </div>
-    
-        <div class="expert active">
-            <img width="396" height="467" decoding="async" src="/wp-content/uploads/2024/08/marianaNew.webp" alt="Expert 1">
-            <div class="notifications">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/997.webp"
-                    alt="Notification 1" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/597.webp"
-                    alt="Notification 2" class="no-lazy">
-                <img width="404" height="66" decoding="async" src="/wp-content/uploads/2024/07/notify2.webp"
-                    alt="Notification 3" class="no-lazy">
-            </div>
-        </div>
-    
-        <div class="expert">
-            <img width="398" height="467" decoding="async" src="/wp-content/uploads/2024/08/patricNew.webp" alt="Expert 1">
-            <div class="notifications">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/897.webp"
-                    alt="Notification 1" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/1497.webp"
-                    alt="Notification 2" class="no-lazy">
-                <img width="269" height="44" decoding="async" src="/wp-content/uploads/2024/08/397.webp"
-                    alt="Notification 3" class="no-lazy">
-            </div>
-        </div>
-    
+  <div class="grab-slider">
+    <div class="slider-track">
+      <div class="slide">Slide 1</div>
+      <div class="slide prev">Slide 2</div>
+      <div class="slide active">Slide 3</div>
+      <div class="slide next">Slide 4</div>
+      <div class="slide">Slide ~</div>
+      <div class="slide">Slide 6</div>
+      <div class="slide">Slide 7</div>
+      <div class="slide">Slide 8</div>
     </div>
+  </div>
+
+  <script>
+    // JavaScript for the slider
+    const slider = document.querySelector('.grab-slider');
+    const sliderTrack = document.querySelector('.slider-track');
+
+    let isDragging = false;
+    let startX;
+    let currentX = 0;
+
+    slider.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      slider.classList.add('active');
+      startX = e.pageX - slider.offsetLeft;
+      currentX = parseInt(
+        getComputedStyle(sliderTrack).transform.split(",")[4]
+      ) || 0;
+    });
+
+    slider.addEventListener('mouseleave', () => {
+      isDragging = false;
+      slider.classList.remove('active');
+    });
+
+    slider.addEventListener('mouseup', () => {
+      isDragging = false;
+      slider.classList.remove('active');
+    });
+
+    slider.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = x - startX; // Distance dragged
+      sliderTrack.style.transform = `translateX(${currentX + walk}px)`;
+    });
+  </script>
 </body>
 </html>
