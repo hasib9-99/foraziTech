@@ -4149,4 +4149,79 @@ const galleryLine = document.querySelector('.gallery_line');
 updateSliderNav(gallerySlider, galleryNav, galleryLine);
 
 
-//
+
+
+
+//hover chnage background image for a section 
+const sectionWrapper = document.querySelector('.main_section') // main section
+const cardContainer = sectionWrapper.querySelector('.card_container');
+const cards = cardContainer.querySelectorAll('.custom_card'); // all cards
+const bgImages = sectionWrapper.querySelectorAll('.bg_images .gallery-item img') // all image 
+// console.log(bgImages[1].currentSrc);
+
+
+cards[0].querySelector('.card_footer').style.display = "flex";
+cards[0].querySelector('.card_body').classList.add('active');
+cards[0].style.padding = 0;
+cards[0].classList.add('active');
+
+
+cards.forEach((card, index) => {
+    card.addEventListener('mouseover', () => {
+        cards.forEach((outherCard) => { // peveas cards style defolsd
+            outherCard.querySelector('.card_footer').style.display = "none"
+            outherCard.querySelector('.card_body').classList.remove('active');
+            outherCard.style.padding = "0px 62px 0px 40px"
+            outherCard.classList.remove('active');
+        })
+        // here all hover action
+        card.querySelector('.card_footer').style.display = "flex";
+        card.querySelector('.card_body').classList.add('active');
+        card.style.padding = 0;
+        card.classList.add('active');
+        sectionWrapper.style.backgroundImage = `url(${bgImages[index].src})`
+        // console.log(bgImages[index].currentSrc);
+
+    })
+})
+
+//hover chnage background image for multipua section 
+document.querySelectorAll('.main_section').forEach((sectionWrapper) => {
+    const cardContainer = sectionWrapper.querySelector('.card_container');
+    const cards = cardContainer.querySelectorAll('.custom_card'); // All cards
+    const bgImages = sectionWrapper.querySelectorAll('.bg_images .gallery-item img'); // All images
+
+    // Initial state
+    let activeIndex = 0;
+    const setActiveCard = (card, index) => {
+        card.querySelector('.card_footer').style.display = "flex";
+        card.querySelector('.card_body').classList.add('active');
+        card.style.padding = 0;
+        card.classList.add('active');
+        sectionWrapper.style.backgroundImage = `url(${bgImages[index].src})`;
+    };
+
+    const resetCard = (card) => {
+        card.querySelector('.card_footer').style.display = "none";
+        card.querySelector('.card_body').classList.remove('active');
+        card.style.padding = "0px 62px 0px 40px";
+        card.classList.remove('active');
+    };
+
+    // Set initial card
+    if (cards.length > 0) {
+        setActiveCard(cards[0], 0);
+    }
+
+    cards.forEach((card, index) => {
+        card.addEventListener('mouseover', () => {
+            if (index !== activeIndex) {
+                // Reset previous active card
+                resetCard(cards[activeIndex]);
+                // Set new active card
+                setActiveCard(card, index);
+                activeIndex = index;
+            }
+        });
+    });
+});
