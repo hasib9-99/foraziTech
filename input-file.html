@@ -5,47 +5,181 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Horizontal Scroll with Mouse Wheel</title>
   <style>
-    /* Basic reset and styling */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    .wapf-field-container{
+    padding: 0 0 16px 0;
+}
+@media (max-width: 767px){
+    .wapf-field-container{
+    padding: 0 0 12px 0;
+}
+}
 
-    body, html {
-      overflow: hidden; /* Prevent default vertical scrolling */
-      font-family: Arial, sans-serif;
-    }
 
-    /* Scroll Section Styling */
-    .scroll-section {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      height: 100vh;
-      scroll-behavior: smooth; /* Smooth scrolling */
-    }
 
-    /* Individual Card Styling */
-    .card {
-      min-width: 100vw;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2em;
-      color: #fff;
-      scroll-snap-align: start;
-    }
+.wapf-pricing-hint{
+    display: none;
+}
 
-    /* Alternating card colors */
-    .card:nth-child(odd) {
-      background-color: #3498db;
-    }
 
-    .card:nth-child(even) {
-      background-color: #2ecc71;
-    }
+
+
+.wapf-field-label{
+    font-family: "Black Han Sans";
+    font-size: 20px;
+    line-height: 28px;
+    margin-bottom: 8px !important;
+}
+.wapf-field-label .required{
+    text-decoration: none;
+    color: #FF0000;
+}
+.wapf-field-input .wapf-radios{
+    display: flex;
+    gap: 16px;
+}
+@media (max-width: 767px){
+    .wapf-field-input .wapf-radios{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+}
+
+
+
+
+
+.wapf-field-input .wapf-radios > .wapf-checkable{
+    width: 50%;
+    background: #F5F5F5;
+    padding: 16px 2px 16px 16px;
+    border: 2px solid #171717;
+    border-radius: 8px;
+    position: relative;
+}
+@media (max-width: 767px){
+    .wapf-field-input .wapf-radios > .wapf-checkable{
+    width: 100%;
+}
+}
+.wapf-field-input .wapf-radios > .wapf-checkable.wapf-checked{
+    background-color: #171717;
+}
+.wapf-field-input .wapf-radios > .wapf-checkable .wapf-input-label{
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+.wapf-field-input .wapf-radios > .wapf-checkable input{
+    margin-top: 0;
+    width: 16px;
+    height: 16px;
+}
+.wapf-field-input .wapf-radios > .wapf-checkable .wapf-label-text{
+    font-family: "Syne";
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #171717;
+    padding-left: 8;
+}
+.wapf-field-input .wapf-radios > .wapf-checkable.wapf-checked .wapf-label-text{
+    color: #FFF;
+}
+.wapf-field-input .wapf-radios > .wapf-checkable .wapf-label-text::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border-radius: 6px
+}
+.wapf-field-input .wapf-radios > .wapf-checkable.wapf-checked input{
+    accent-color: #F5F5F5;
+}
+
+
+
+.wapf-field-description{
+    font-family: "Syne" !important;
+    font-size: 20px !important;
+    line-height: 28px !important;
+    font-weight: 500 !important;
+    color: #171717 !important;
+    padding: 8px 0 0 0 !important;
+    opacity: 1 !important;
+}
+@media (max-width: 767px){
+    .wapf-field-description{
+    font-size: 16px !important;
+    line-height: 20px !important;
+}
+}
+
+
+
+.wapf-field-textarea textarea{
+    border: 2px solid #171717;
+    border-radius: 8px;
+    padding: 16px;
+    height: 140px;
+    font-family: "Syne";
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #171717;
+    background-color: #F5F5F5;
+}
+.wapf-field-text input{
+    border: 2px solid #171717;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: "Syne";
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #171717;
+    background-color: #F5F5F5;
+}
+.wapf-field-email input{
+    border: 2px solid #171717;
+    border-radius: 8px;
+    padding: 16px;
+    font-family: "Syne";
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #171717;
+    background-color: #F5F5F5;
+}
+.wapf-field-file input{
+    background: #F5F5F5;
+    width: 100%;
+    height: 150px;
+    padding: 20px;
+    border: 2px solid #171717;
+    border-radius: 8px;
+    font-family: "Syne";
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 500;
+    color: #171717;
+}
+
+
+
+
+.wapf-product-totals{
+    display: none !important;
+}
+
+
+.single_add_to_cart_button{
+    box-shadow: 2px 2px 0px 1px #000000 !important;
+    max-width: calc(100% - 5px) !important;
+}
   </style>
 </head>
 <body>

@@ -3,93 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Grab and Drag Slider</title>
+  <title>Dynamic File Input Fix</title>
   <style>
-    /* CSS for the slider */
-    .grab-slider {
-      overflow: hidden;
-      width: 100%;
-      height: 200px; /* Adjust as needed */
-      position: relative;
-      cursor: grab;
+    /* Custom file upload button */
+    .custom-file-label {
+      display: inline-block;
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
     }
 
-    .slider-track {
-      display: flex;
-      transition: transform 0.3s ease;
+    .custom-file-label:hover {
+      background-color: #0056b3;
     }
 
-    .slide {
-      min-width: 300px; /* Adjust as needed */
-      height: 100%;
-      margin-right: 10px;
-      background: lightgray;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5em;
-      user-select: none;
+    /* Display selected file names */
+    .selected-files {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #555;
     }
-.next + .slide {
-  background-color: red;
-}
-
-.slide:has(+ .prev) {
-  background-color: blue;
-}
-
-
-
   </style>
 </head>
 <body>
-  <div class="grab-slider">
-    <div class="slider-track">
-      <div class="slide">Slide 1</div>
-      <div class="slide prev">Slide 2</div>
-      <div class="slide active">Slide 3</div>
-      <div class="slide next">Slide 4</div>
-      <div class="slide">Slide ~</div>
-      <div class="slide">Slide 6</div>
-      <div class="slide">Slide 7</div>
-      <div class="slide">Slide 8</div>
+  <div class="wapf-field-container wapf-field-file" style="width:100%;" for="67394a46cba69">
+    <div class="wapf-field-label wapf--above">
+      <label>
+        <span>No, I want a new logo</span> 
+        <abbr class="required" title="required">*</abbr>
+      </label>
+    </div>
+    <div class="wapf-field-input">
+      <input type="file" data-is-required="1" data-field-id="67394a46cba69" required="" 
+             name="wapf[field_67394a46cba69][]" class="wapf-input" accept="." multiple>
+    </div>
+    <div class="wapf-field-description">
+      To upload multiple files, please select multiple files from your device at once and upload them in one go.
     </div>
   </div>
 
   <script>
-    // JavaScript for the slider
-    const slider = document.querySelector('.grab-slider');
-    const sliderTrack = document.querySelector('.slider-track');
+    // Get the file input element
+    const fileInput = document.querySelector('.wapf-input');
 
-    let isDragging = false;
-    let startX;
-    let currentX = 0;
+    // Create the custom label
+    const customLabel = document.createElement('label');
+    customLabel.textContent = 'Upload Files';
+    customLabel.className = 'custom-file-label';
 
-    slider.addEventListener('mousedown', (e) => {
-      isDragging = true;
-      slider.classList.add('active');
-      startX = e.pageX - slider.offsetLeft;
-      currentX = parseInt(
-        getComputedStyle(sliderTrack).transform.split(",")[4]
-      ) || 0;
-    });
+    // Associate the label with the input programmatically
+    const uniqueId = 'custom-file-input'; // Generate or use an ID
+    fileInput.id = uniqueId; // Assign the ID to the input
+    customLabel.setAttribute('for', uniqueId); // Link the label to the input
 
-    slider.addEventListener('mouseleave', () => {
-      isDragging = false;
-      slider.classList.remove('active');
-    });
+    // Create the file name display container
+    const fileList = document.createElement('div');
+    fileList.textContent = 'No files selected';
+    fileList.className = 'selected-files';
 
-    slider.addEventListener('mouseup', () => {
-      isDragging = false;
-      slider.classList.remove('active');
-    });
+    // Append the custom label and file name display after the input
+    const inputContainer = fileInput.parentNode;
+    inputContainer.appendChild(customLabel);
+    inputContainer.appendChild(fileList);
 
-    slider.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = x - startX; // Distance dragged
-      sliderTrack.style.transform = `translateX(${currentX + walk}px)`;
+    // Update file name display dynamically
+    fileInput.addEventListener('change', () => {
+      const files = fileInput.files;
+      if (files.length > 0) {
+        const fileNames = Array.from(files).map(file => file.name).join(', ');
+        fileList.textContent = `Selected files: ${fileNames}`;
+      } else {
+        fileList.textContent = 'No files selected';
+      }
     });
   </script>
 </body>
