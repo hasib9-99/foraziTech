@@ -3,83 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dynamic File Input Fix</title>
-  <style>
-    /* Custom file upload button */
-    .custom-file-label {
-      display: inline-block;
-      background-color: #007BFF;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
-    }
-
-    .custom-file-label:hover {
-      background-color: #0056b3;
-    }
-
-    /* Display selected file names */
-    .selected-files {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #555;
-    }
-  </style>
+  <title>Document</title>
 </head>
 <body>
-  <div class="wapf-field-container wapf-field-file" style="width:100%;" for="67394a46cba69">
-    <div class="wapf-field-label wapf--above">
-      <label>
-        <span>No, I want a new logo</span> 
-        <abbr class="required" title="required">*</abbr>
-      </label>
-    </div>
-    <div class="wapf-field-input">
-      <input type="file" data-is-required="1" data-field-id="67394a46cba69" required="" 
-             name="wapf[field_67394a46cba69][]" class="wapf-input" accept="." multiple>
-    </div>
-    <div class="wapf-field-description">
-      To upload multiple files, please select multiple files from your device at once and upload them in one go.
-    </div>
-  </div>
+  <button id="demoButton"> Lorem ipsum dolor sit amet.</button>
 
   <script>
-    // Get the file input element
-    const fileInput = document.querySelector('.wapf-input');
+const button = document.getElementById('demoButton');
 
-    // Create the custom label
-    const customLabel = document.createElement('label');
-    customLabel.textContent = 'Upload Files';
-    customLabel.className = 'custom-file-label';
+// Action for pressing the button
+button.addEventListener('mousedown', () => {
+    console.log('Button pressed (mousedown): Action 1 triggered!');
+    button.style.backgroundColor = 'lightblue'; // Example visual feedback
+});
 
-    // Associate the label with the input programmatically
-    const uniqueId = 'custom-file-input'; // Generate or use an ID
-    fileInput.id = uniqueId; // Assign the ID to the input
-    customLabel.setAttribute('for', uniqueId); // Link the label to the input
+// Action for releasing the button
+button.addEventListener('mouseup', () => {
+    console.log('Button released (mouseup): Action 2 triggered!');
+    button.style.backgroundColor = 'red'; // Reset visual feedback
+});
 
-    // Create the file name display container
-    const fileList = document.createElement('div');
-    fileList.textContent = 'No files selected';
-    fileList.className = 'selected-files';
+button.addEventListener('mousemove', () => {
+    console.log('Button released (mouseup): Action 3 triggered!');
+    button.style.backgroundColor = 'blue'; // Reset visual feedback
+});
 
-    // Append the custom label and file name display after the input
-    const inputContainer = fileInput.parentNode;
-    inputContainer.appendChild(customLabel);
-    inputContainer.appendChild(fileList);
 
-    // Update file name display dynamically
-    fileInput.addEventListener('change', () => {
-      const files = fileInput.files;
-      if (files.length > 0) {
-        const fileNames = Array.from(files).map(file => file.name).join(', ');
-        fileList.textContent = `Selected files: ${fileNames}`;
-      } else {
-        fileList.textContent = 'No files selected';
-      }
-    });
   </script>
-</body>
+</body>                                                                                     
 </html>

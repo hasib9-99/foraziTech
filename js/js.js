@@ -4225,3 +4225,223 @@ document.querySelectorAll('.main_section').forEach((sectionWrapper) => {
         });
     });
 });
+
+
+
+//
+// const sliderBtnsWraper = document.querySelector('.slider_button-wraper');
+// const sliderBtns = sliderBtnsWraper.querySelectorAll('.slider_btn');
+// const contantWraper = document.querySelector('.contant_wraper');
+
+// sliderBtns.forEach((btn, i) => {
+//     btn.addEventListener('click', () => {
+//         const rect = contantWraper.getBoundingClientRect();
+//         contantWraper.style.transform = `translateX(-${i * rect.width}px)`;
+//     })
+// })
+
+
+
+// const sliderBtnsWraper = document.querySelector('.slider_button-wraper');
+// const sliderBtns = sliderBtnsWraper.querySelectorAll('.slider_btn');
+// const contantWraper = document.querySelector('.contant_wraper');
+
+// let isDragging = false; // Tracks if the slider is being dragged
+// let startX = 0; // Stores the initial X position of the mouse
+// let currentTranslate = 0; // Tracks the current translate value
+// let prevTranslate = 0; // Stores the previous translate value
+
+// // Button functionality
+// sliderBtns.forEach((btn, i) => {
+//     btn.addEventListener('click', () => {
+//         const rect = contantWraper.getBoundingClientRect();
+//         currentTranslate = -i * rect.width;
+//         prevTranslate = currentTranslate;
+//         contantWraper.style.transform = `translateX(${currentTranslate}px)`;
+//     });
+// });
+
+// // Drag functionality
+// contantWraper.addEventListener('mousedown', (e) => {
+//     isDragging = true;
+//     startX = e.clientX;
+//     contantWraper.style.cursor = 'grabbing'; // Change cursor to grabbing
+// });
+
+// window.addEventListener('mousemove', (e) => {
+//     if (!isDragging) return;
+
+//     const currentX = e.clientX;
+//     const deltaX = currentX - startX; // Calculate distance moved
+//     currentTranslate = prevTranslate + deltaX;
+
+//     contantWraper.style.transform = `translateX(${currentTranslate}px)`;
+// });
+
+// window.addEventListener('mouseup', () => {
+//     if (!isDragging) return;
+
+//     isDragging = false;
+//     prevTranslate = currentTranslate; // Update previous translate
+//     contantWraper.style.cursor = 'grab'; // Reset cursor
+// });
+
+// // Add grab cursor styling
+// contantWraper.style.cursor = 'grab';
+
+
+
+
+
+
+// const sliderBtnsWraper = document.querySelector('.slider_button-wraper');
+// const sliderBtns = sliderBtnsWraper.querySelectorAll('.slider_btn');
+// const contantWraper = document.querySelector('.contant_wraper');
+
+// let isDragging = false;
+// let startX = 0;
+// let currentTranslate = 0; 
+// let prevTranslate = 0;
+
+
+// sliderBtns.forEach((btn, i) => {
+//     btn.addEventListener('click', () => {
+//         const rect = contantWraper.getBoundingClientRect();
+//         currentTranslate = -i * rect.width;
+//         prevTranslate = currentTranslate;
+//         contantWraper.style.transform = `translateX(${currentTranslate}px)`;
+//     });
+// });
+
+// // Drag functionality
+// contantWraper.addEventListener('mousedown', (e) => {
+//     isDragging = true;
+//     startX = e.clientX;
+//     contantWraper.style.cursor = 'grabbing'; 
+// });
+
+// window.addEventListener('mousemove', (e) => {
+//     if (!isDragging) return;
+
+//     const currentX = e.clientX;
+//     const deltaX = currentX - startX;
+//     currentTranslate = prevTranslate + deltaX;
+
+//     contantWraper.style.transform = `translateX(${currentTranslate}px)`;
+// });
+
+// window.addEventListener('mouseup', () => {
+//     if (!isDragging) return;
+
+//     isDragging = false;
+//     prevTranslate = currentTranslate; 
+//     contantWraper.style.cursor = 'grab'
+// });
+
+
+// contantWraper.style.cursor = 'grab';
+
+
+
+
+
+const sliderBtnsWraper = document.querySelector('.slider_button-wraper');
+const sliderBtns = sliderBtnsWraper.querySelectorAll('.slider_btn');
+const contantWraper = document.querySelector('.contant_wraper');
+const images = contantWraper.querySelectorAll('img');
+
+let isDragging = false; // Tracks if the slider is being dragged
+let startX = 0; // Stores the initial X position of the mouse/touch
+let currentTranslate = 0; // Tracks the current translate value
+let prevTranslate = 0; // Stores the previous translate value
+let animationID; // For canceling the animation frame
+const slideWidth = contantWraper.getBoundingClientRect().width;
+
+// Button functionality
+sliderBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        setSlide(i);
+    });
+});
+
+// Disable image dragging in the slider
+
+images.forEach(img => img.setAttribute('draggable', 'false'));
+contantWraper.addEventListener('dragstart', (e) => {
+    if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+    }
+});
+
+// Drag functionality
+contantWraper.addEventListener('mousedown', startDrag);
+contantWraper.addEventListener('touchstart', startDrag);
+
+window.addEventListener('mousemove', drag);
+window.addEventListener('touchmove', drag);
+
+window.addEventListener('mouseup', endDrag);
+window.addEventListener('touchend', endDrag);
+
+// Helper functions
+function startDrag(e) {
+    isDragging = true;
+    startX = getPositionX(e);
+    animationID = requestAnimationFrame(animate);
+    contantWraper.style.cursor = 'grabbing';
+    contantWraper.style.transition = 'none'; // Disable transition for dragging
+
+    // Prevent text selection during drag
+    document.body.style.userSelect = 'none';
+}
+
+function drag(e) {
+    if (!isDragging) return;
+    const currentX = getPositionX(e);
+    const deltaX = currentX - startX;
+    currentTranslate = prevTranslate + deltaX;
+}
+
+function endDrag() {
+    if (!isDragging) return;
+
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+
+    // Snap to the nearest slide
+    const slidesCount = sliderBtns.length;
+    const slideIndex = Math.round(-currentTranslate / slideWidth);
+
+    // Ensure the slideIndex stays within bounds
+    const clampedIndex = Math.max(0, Math.min(slidesCount - 1, slideIndex));
+    setSlide(clampedIndex);
+
+    contantWraper.style.cursor = 'grab'; // Reset cursor
+
+    // Re-enable text selection
+    document.body.style.userSelect = '';
+}
+
+function setSlide(index) {
+    currentTranslate = -index * slideWidth;
+    prevTranslate = currentTranslate;
+    contantWraper.style.transform = `translateX(${currentTranslate}px)`;
+    contantWraper.style.transition = 'transform 0.3s ease-in-out';
+
+    // Update active button state
+    sliderBtns.forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+    });
+}
+
+function getPositionX(e) {
+    return e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+}
+
+function animate() {
+    contantWraper.style.transform = `translateX(${currentTranslate}px)`;
+    if (isDragging) requestAnimationFrame(animate);
+}
+
+// Initial styles
+contantWraper.style.cursor = 'grab';
