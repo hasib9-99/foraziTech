@@ -4300,7 +4300,7 @@ document.querySelectorAll('.main_section').forEach((sectionWrapper) => {
 
 // let isDragging = false;
 // let startX = 0;
-// let currentTranslate = 0; 
+// let currentTranslate = 0;
 // let prevTranslate = 0;
 
 
@@ -4317,7 +4317,7 @@ document.querySelectorAll('.main_section').forEach((sectionWrapper) => {
 // contantWraper.addEventListener('mousedown', (e) => {
 //     isDragging = true;
 //     startX = e.clientX;
-//     contantWraper.style.cursor = 'grabbing'; 
+//     contantWraper.style.cursor = 'grabbing';
 // });
 
 // window.addEventListener('mousemove', (e) => {
@@ -4334,7 +4334,7 @@ document.querySelectorAll('.main_section').forEach((sectionWrapper) => {
 //     if (!isDragging) return;
 
 //     isDragging = false;
-//     prevTranslate = currentTranslate; 
+//     prevTranslate = currentTranslate;
 //     contantWraper.style.cursor = 'grab'
 // });
 
@@ -4344,6 +4344,7 @@ document.querySelectorAll('.main_section').forEach((sectionWrapper) => {
 
 
 
+// make a translet slider with grab 
 
 const sliderBtnsWraper = document.querySelector('.slider_button-wraper');
 const sliderBtns = sliderBtnsWraper.querySelectorAll('.slider_btn');
@@ -4445,3 +4446,36 @@ function animate() {
 
 // Initial styles
 contantWraper.style.cursor = 'grab';
+
+
+
+
+// input type file name modify
+const fileContainer = document.querySelector('.wapf-field-file');
+const fileInput = fileContainer.querySelector('.wapf-input');
+
+const customLabel = document.createElement('label');
+customLabel.textContent = 'JPG, PNG, PSD and AI are accepted';
+customLabel.className = 'custom-file-label';
+
+const uniqueId = 'custom-file-input';
+fileInput.id = uniqueId;
+customLabel.setAttribute('for', uniqueId);
+
+const fileList = document.createElement('div');
+fileList.textContent = 'No files selected';
+fileList.className = 'selected-files';
+
+const inputContainer = fileInput.parentNode;
+inputContainer.appendChild(customLabel);
+customLabel.appendChild(fileList);
+
+fileInput.addEventListener('change', () => {
+    const files = fileInput.files;
+    if (files.length > 0) {
+        const fileNames = Array.from(files).map(file => file.name).join(', ');
+        fileList.textContent = `${fileNames}`;
+    } else {
+        fileList.textContent = 'No files selected';
+    }
+});
