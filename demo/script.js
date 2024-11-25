@@ -16,7 +16,7 @@ function transform(section) {
   scrollSection.style.transform = `translate3d(${-percentage}vw, 0, 0)`;
 }
 
-//Form step nevigetor
+//Form step nevigator
 setTimeout(() => {
   const Steps = document.querySelectorAll('.e-form__indicators__indicator');
   const stepBtns = document.querySelectorAll('.e-form__buttons__wrapper');
