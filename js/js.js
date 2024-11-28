@@ -4479,3 +4479,32 @@ fileInput.addEventListener('change', () => {
         fileList.textContent = 'No files selected';
     }
 });
+
+
+// product card featuer desigen;
+const productCards = document.querySelector('.product_cards');
+const getCards = productCards.querySelectorAll('.product_card');
+const productClose = productCards.querySelectorAll('.product_close');
+
+getCards.forEach((card, i) => {
+    // Card click event
+    card.addEventListener('click', () => {
+        // Remove classes from all cards
+        getCards.forEach((item) => item.classList.remove('active', 'reset'));
+
+        // Add active class to clicked card
+        card.classList.add('active');
+
+        // Remove active and add reset after 500ms
+        setTimeout(() => {
+            card.classList.remove('active');
+            card.classList.add('reset');
+        }, 300);
+    });
+
+    // Close button click event
+    productClose[i]?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        card.classList.remove('active', 'reset');
+    });
+});
