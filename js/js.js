@@ -4499,7 +4499,7 @@ getCards.forEach((card, i) => {
         setTimeout(() => {
             card.classList.remove('active');
             card.classList.add('reset');
-        }, 300);
+        }, 500);
     });
 
     // Close button click event
@@ -4508,3 +4508,29 @@ getCards.forEach((card, i) => {
         card.classList.remove('active', 'reset');
     });
 });
+
+// scroll animation
+const leftHand = document.querySelector('.left_hand img');
+const rightHand = document.querySelector('.right_hand img');
+
+function hadAnimation() {
+    const width = window.innerWidth;
+    if (window.scrollY <= 400) {
+        if (width < 768) {
+            console.log('Scroll value:', window.scrollY);
+            leftHand.style.transform = `translateX(${window.scrollY / 80}vw) translateY(${window.scrollY / 35}vw)`;
+            rightHand.style.transform = `translateX(${-window.scrollY / 80}vw) translateY(${-window.scrollY / 35}vw)`;
+        } else if (width < 1024) {
+            console.log('Scroll value:', window.scrollY);
+            leftHand.style.transform = `translateX(${window.scrollY / 20}%) translateY(${window.scrollY / 130}%)`;
+            rightHand.style.transform = `translateX(${-window.scrollY / 20}%) translateY(${-window.scrollY / 130}%)`;
+        } else {
+            console.log('Scroll value:', window.scrollY);
+            leftHand.style.transform = `translateX(${window.scrollY / 20}vw) translateY(${window.scrollY / 130}vw)`;
+            rightHand.style.transform = `translateX(${-window.scrollY / 20}vw) translateY(${-window.scrollY / 130}vw)`;
+        }
+    }
+}
+
+window.addEventListener('scroll', hadAnimation);
+window.addEventListener('resize', hadAnimation);
