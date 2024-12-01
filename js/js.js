@@ -4518,19 +4518,35 @@ function hadAnimation() {
     if (window.scrollY <= 400) {
         if (width < 768) {
             console.log('Scroll value:', window.scrollY);
-            leftHand.style.transform = `translateX(${window.scrollY / 80}vw) translateY(${window.scrollY / 35}vw)`;
-            rightHand.style.transform = `translateX(${-window.scrollY / 80}vw) translateY(${-window.scrollY / 35}vw)`;
+            leftHand.style.transform = `translateX(${-window.scrollY / 80}vw) translateY(${-window.scrollY / 35}vw)`;
+            rightHand.style.transform = `translateX(${window.scrollY / 80}vw) translateY(${window.scrollY / 35}vw)`;
         } else if (width < 1024) {
             console.log('Scroll value:', window.scrollY);
-            leftHand.style.transform = `translateX(${window.scrollY / 20}%) translateY(${window.scrollY / 130}%)`;
-            rightHand.style.transform = `translateX(${-window.scrollY / 20}%) translateY(${-window.scrollY / 130}%)`;
+            leftHand.style.transform = `translateX(${-window.scrollY / 20}%) translateY(${-window.scrollY / 130}%)`;
+            rightHand.style.transform = `translateX(${window.scrollY / 20}%) translateY(${window.scrollY / 130}%)`;
         } else {
             console.log('Scroll value:', window.scrollY);
-            leftHand.style.transform = `translateX(${window.scrollY / 20}vw) translateY(${window.scrollY / 130}vw)`;
-            rightHand.style.transform = `translateX(${-window.scrollY / 20}vw) translateY(${-window.scrollY / 130}vw)`;
+            leftHand.style.transform = `translateX(${-window.scrollY / 20}vw) translateY(${-window.scrollY / 130}vw)`;
+            rightHand.style.transform = `translateX(${window.scrollY / 20}vw) translateY(${window.scrollY / 130}vw)`;
         }
     }
 }
 
 window.addEventListener('scroll', hadAnimation);
 window.addEventListener('resize', hadAnimation);
+
+
+// side menu popup 
+const popupContainer = document.querySelector('.container_popup')
+const popupActiveBtn = document.querySelector('.active_popup')
+const popupClose = document.querySelector('.popup_close_btn')
+
+popupActiveBtn.addEventListener('click', () => {
+    popupContainer.classList.add('active')
+})
+
+function closePopup() {
+    popupContainer.classList.remove('active')
+}
+
+popupClose.addEventListener('click', closePopup)
