@@ -4557,3 +4557,28 @@ popupMenu.forEach((item) => {
 })
 
 popupClose.addEventListener('click', closePopup);
+
+
+
+// observe any section and see any appand note 
+const section = document.querySelector('.custom_form form');
+
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === 1) {
+                    const result = yourFunction(node);
+                    console.log('Function result:', result);
+                }
+            });
+        }
+    });
+});
+
+observer.observe(section, { childList: true });
+
+function yourFunction(newElement) {
+    const isDiv = newElement.tagName === 'DIV';
+    return isDiv;
+}
