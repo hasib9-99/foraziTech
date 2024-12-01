@@ -4562,6 +4562,7 @@ popupClose.addEventListener('click', closePopup);
 
 // observe any section and see any appand note 
 const section = document.querySelector('.custom_form form');
+const formMessage = document.querySelector('.form_popup')
 
 const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
@@ -4569,7 +4570,13 @@ const observer = new MutationObserver((mutations) => {
             mutation.addedNodes.forEach((node) => {
                 if (node.nodeType === 1) {
                     const result = yourFunction(node);
-                    console.log('Function result:', result);
+                    if (result) {
+                        formMessage.classList.add('active');
+                        setTimeout(() => {
+                            formMessage.classList.remove('active');
+                        }, 3000);
+                    }
+                    // console.log('Function result:', result);
                 }
             });
         }
