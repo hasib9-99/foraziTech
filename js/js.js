@@ -4537,16 +4537,23 @@ window.addEventListener('resize', hadAnimation);
 
 
 // side menu popup 
-const popupContainer = document.querySelector('.container_popup')
-const popupActiveBtn = document.querySelector('.active_popup')
-const popupClose = document.querySelector('.popup_close_btn')
+const popupContainer = document.querySelector('.container_popup');
+const popupActiveBtn = document.querySelector('.active_popup');
+const popupClose = document.querySelector('.popup_close_btn');
+const popupMenu = document.querySelectorAll('.popup_menu ul li');
 
 popupActiveBtn.addEventListener('click', () => {
-    popupContainer.classList.add('active')
-})
+    popupContainer.classList.add('active');
+});
 
 function closePopup() {
-    popupContainer.classList.remove('active')
-}
+    popupContainer.classList.remove('active');
+};
 
-popupClose.addEventListener('click', closePopup)
+popupMenu.forEach((item) => {
+    item.addEventListener('click', () => {
+        closePopup();
+    })
+})
+
+popupClose.addEventListener('click', closePopup);
