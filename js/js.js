@@ -4653,3 +4653,45 @@ listsContainer.addEventListener('mouseout', startAnimation);
 
 // Start the animation initially
 startAnimation();
+
+
+
+// clone slider
+const sliderContainer = document.querySelector('.Custom_slider');
+const listsContainer = sliderContainer.querySelector('.custom_lists');
+const sliders = [...listsContainer.children]; // Spread operator to get an array of children
+
+// Clone the sliders to create an infinite loop effect
+sliders.forEach((slider) => {
+    const clone = slider.cloneNode(true); // Deep clone the element
+    listsContainer.appendChild(clone);   // Append the clone to the container
+});
+
+let currentTranslateX = 0;
+const totalWidth = sliders.reduce((acc, slider) => acc + slider.offsetWidth + 20, 0) * 2; // Account for original + cloned elements
+
+// Start the infinite animation
+function startAnimation() {
+    currentTranslateX -= 1; // Adjust speed
+    if (Math.abs(currentTranslateX) >= totalWidth / 2) {
+        currentTranslateX = 0; // Reset to the starting position
+    }
+    listsContainer.style.transform = `translateX(${currentTranslateX}px)`;
+    requestAnimationFrame(startAnimation); // Use requestAnimationFrame for smooth animation
+}
+
+// Stop animation on hover
+function stopAnimation() {
+    cancelAnimationFrame(animationFrame);
+}
+
+// Resume animation on mouse out
+function resumeAnimation() {
+    animationFrame = requestAnimationFrame(startAnimation);
+}
+
+let animationFrame = requestAnimationFrame(startAnimation); // Initialize the animation
+
+// Attach hover event listeners
+listsContainer.addEventListener('mouseover', stopAnimation);
+listsContainer.addEventListener('mouseout', resumeAnimation);
