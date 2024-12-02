@@ -4589,3 +4589,67 @@ function yourFunction(newElement) {
     const isDiv = newElement.tagName === 'DIV';
     return isDiv;
 }
+
+
+// custom slider
+
+const sliderContainer = document.querySelector('.Custom_slider');
+const listsContainer = sliderContainer.querySelector('.custom_lists');
+const sliders = listsContainer.querySelectorAll('.custom_item');
+
+let sliderWidth = 0
+
+console.log(listsContainer.offsetWidth); // Use offsetWidth for the element's width.
+
+sliders.forEach((item) => {
+    sliderWidth += (item.offsetWidth + 20);
+})
+listsContainer.style.transition = 'all 0.5s linear'
+listsContainer.transform = `translateX(${(sliderWidth - 20) - listsContainer.offsetWidth})`
+console.log(sliderWidth - 20);
+
+
+
+// custom slider
+const sliderContainer = document.querySelector('.Custom_slider');
+const listsContainer = sliderContainer.querySelector('.custom_lists');
+const sliders = listsContainer.querySelectorAll('.custom_item');
+
+let sliderWidth = 0;
+
+// Calculate the total width of all sliders, including 20px spacing
+sliders.forEach((item) => {
+    sliderWidth += (item.offsetWidth + 20);
+});
+
+// Log the total calculated slider width
+console.log('Total Slider Width:', sliderWidth - 20);
+
+// Initialize animation
+let currentTranslateX = 0;
+let animationInterval;
+
+function startAnimation() {
+    // Clear any existing interval to avoid duplication
+    clearInterval(animationInterval);
+
+    // Start a new interval for continuous movement
+    animationInterval = setInterval(() => {
+        currentTranslateX -= 2; // Adjust the speed of the movement
+        if (Math.abs(currentTranslateX) >= sliderWidth - listsContainer.offsetWidth) {
+            currentTranslateX = 0; // Reset the position when reaching the end
+        }
+        listsContainer.style.transform = `translateX(${currentTranslateX}px)`;
+    }, 16); // Runs approximately at 60fps
+}
+
+function stopAnimation() {
+    clearInterval(animationInterval);
+}
+
+// Apply hover effects
+listsContainer.addEventListener('mouseover', stopAnimation);
+listsContainer.addEventListener('mouseout', startAnimation);
+
+// Start the animation initially
+startAnimation();
