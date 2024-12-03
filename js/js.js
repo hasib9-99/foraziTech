@@ -4695,3 +4695,115 @@ let animationFrame = requestAnimationFrame(startAnimation); // Initialize the an
 // Attach hover event listeners
 listsContainer.addEventListener('mouseover', stopAnimation);
 listsContainer.addEventListener('mouseout', resumeAnimation);
+
+
+//
+
+const sliderContainer = document.querySelector('.Custom_slider');
+const listsContainer = sliderContainer.querySelector('.custom_lists');
+const sliders = [...listsContainer.children];
+
+const sliderWidth = sliders.reduce((total, item) => total + item.offsetWidth + 20, 0);
+const speed = 10;
+const step = 2;
+let offset = 0;
+
+const slideTranslet = sliderWidth - listsContainer.offsetWidth;
+
+
+const cloneItem = function () {
+    sliders.forEach((slider, i) => {
+        if (i < sliders.length) {
+            const clone = slider.cloneNode(true);
+            return clone
+        }
+    });
+}
+
+function animateSlider() {
+
+    for (let i = 0; i <= sliderWidth; i += step) {
+        setTimeout(() => {
+            offset = i;
+            listsContainer.style.transform = `translateX(-${offset}px)`;
+
+            // if (i >= sliderWidth - listsContainer.offsetWidth) {
+            //     setTimeout(() => {
+            //         listsContainer.style.transform = `translateX(0px)`;
+            //         animateSlider();
+            //     }, 2000);
+            // }
+
+        }, i * speed);
+        if (offset >= -slideTranslet) {
+            listsContainer.appendChild(cloneItem());
+            offset = 0
+        }
+    }
+}
+
+animateSlider();
+
+
+
+
+
+
+
+
+const sliderContainer = document.querySelector('.Custom_slider');
+const listsContainer = sliderContainer.querySelector('.custom_lists');
+const sliders = [...listsContainer.children];
+
+const listsContainerWidth = listsContainer.offsetWidth;
+const sliderWidth = sliders.reduce((total, item) => total + item.offsetWidth + 20, 0);
+const translateContainer = sliderWidth - listsContainerWidth;
+
+//popup
+const sliderPopup = document.querySelector('.slider_popup');
+const sliderPopupImg = sliderPopup.querySelector('.slider_popup_img img');
+const sliderPopupHeading = sliderPopup.querySelector('.slider_popup_headeing');
+const sliderPopupText = sliderPopup.querySelector('.slider_popup_text');
+const sliderPopupClose = sliderPopup.querySelector('.slider_popup_close');
+
+let offset = 0;
+let speed = 2;
+let isHovered = false;
+
+function animateSlider() {
+    if (!isHovered) {
+        offset += speed;
+        if (offset >= translateContainer) {
+            offset = 0;
+        }
+        listsContainer.style.transform = `translateX(-${offset}px)`;
+    }
+    requestAnimationFrame(animateSlider);
+}
+
+animateSlider();
+
+sliders.forEach((item) => {
+    item.addEventListener('click', () => {
+        sliderPopup.classList.add('active');
+        let bgImage = window.getComputedStyle(item).backgroundImage;
+        let url = bgImage.slice(5, -2);
+        sliderPopupImg.src = url;
+        sliderPopupHeading.innerHTML = item.querySelector('.slider_heading').innerHTML
+        sliderPopupHeading.innerHTML = item.querySelector('.slider_text').innerHTML
+        isHovered = true;
+    })
+})
+
+sliderPopupClose.addEventListener('click', () => {
+    sliderPopup.classList.remove('active');
+    isHovered = false;
+})
+
+sliderContainer.addEventListener('mouseenter', () => {
+    isHovered = true;
+});
+
+sliderContainer.addEventListener('mouseleave', () => {
+    isHovered = false;
+});
