@@ -4753,6 +4753,8 @@ animateSlider();
 
 const sliderContainer = document.querySelector('.Custom_slider');
 const listsContainer = sliderContainer.querySelector('.custom_lists');
+const sliderNext = document.querySelector('.slider_next')
+const sliderPrev = document.querySelector('.slider_prev')
 const sliders = [...listsContainer.children];
 
 const listsContainerWidth = listsContainer.offsetWidth;
@@ -4762,10 +4764,11 @@ const translateContainer = sliderWidth - listsContainerWidth;
 //popup
 const sliderPopup = document.querySelector('.slider_popup');
 const sliderPopupImg = sliderPopup.querySelector('.slider_popup_img img');
-const sliderPopupHeading = sliderPopup.querySelector('.slider_popup_headeing');
-const sliderPopupText = sliderPopup.querySelector('.slider_popup_text');
+const sliderPopupHeading = sliderPopup.querySelector('.slider_popup_headeing h2');
+const sliderPopupText = sliderPopup.querySelector('.slider_popup_text h2');
 const sliderPopupClose = sliderPopup.querySelector('.slider_popup_close');
 
+let preTranslet = 300;
 let offset = 0;
 let speed = 2;
 let isHovered = false;
@@ -4789,11 +4792,22 @@ sliders.forEach((item) => {
         let bgImage = window.getComputedStyle(item).backgroundImage;
         let url = bgImage.slice(5, -2);
         sliderPopupImg.src = url;
-        sliderPopupHeading.innerHTML = item.querySelector('.slider_heading').innerHTML
-        sliderPopupHeading.innerHTML = item.querySelector('.slider_text').innerHTML
+        sliderPopupHeading.innerHTML = item.querySelector('.slider_heading h2').innerHTML
+        sliderPopupText.innerHTML = item.querySelector('.slider_text h2').innerHTML
         isHovered = true;
     })
 })
+
+function next() {
+    offset = Math.min(offset + preTranslet, translateContainer);
+    listsContainer.style.transform = `translateX(-${offset}px)`;
+}
+
+function prev() {
+    offset = Math.max(offset - preTranslet, 0);
+    listsContainer.style.transform = `translateX(-${offset}px)`;
+}
+
 
 sliderPopupClose.addEventListener('click', () => {
     sliderPopup.classList.remove('active');
@@ -4807,3 +4821,7 @@ sliderContainer.addEventListener('mouseenter', () => {
 sliderContainer.addEventListener('mouseleave', () => {
     isHovered = false;
 });
+
+
+sliderNext.addEventListener('click', next);
+sliderPrev.addEventListener('click', prev);
