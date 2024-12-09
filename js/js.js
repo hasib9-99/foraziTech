@@ -4825,3 +4825,25 @@ sliderContainer.addEventListener('mouseleave', () => {
 
 sliderNext.addEventListener('click', next);
 sliderPrev.addEventListener('click', prev);
+
+
+
+// menu item click ad popup close
+const popupTrigar = document.querySelector('.menu-toggle');
+const poupopSection = document.querySelector('.popup_container');
+const poupopMenuItem = poupopSection.querySelectorAll('.poup_nemu .elementor-nav-menu__container .menu-item');
+const poupopClose = poupopSection.querySelector('.close_popup');
+
+
+popupTrigar.addEventListener('click', () => {
+    poupopSection.classList.add('active');
+})
+poupopClose.addEventListener('click', () => {
+    poupopSection.classList.remove('active');
+})
+poupopMenuItem.forEach((item) => {
+    item.addEventListener('click', () => {
+        poupopSection.classList.remove('active');
+    })
+})
+
