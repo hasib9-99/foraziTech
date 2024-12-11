@@ -4847,3 +4847,24 @@ poupopMenuItem.forEach((item) => {
     })
 })
 
+// circle animation ofr counter
+const circleAnimation = document.querySelectorAll('.circle_animation .elementor-counter-number-wrapper');
+const svgMarkup = `
+    <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="circle_animation-svg" style="display: block; width: 100%;" width="213" height="213">
+    <path d="M 50,50 m 0,-46.71038780580235 a 46.71038780580235,46.71038780580235 0 1 1 0,93.4207756116047 a 46.71038780580235,46.71038780580235 0 1 1 0,-93.4207756116047" 
+            stroke="#7D8C9A" stroke-width="6.57922px" fill-opacity="0" fill="#2C88D9"></path>
+    <path d="M 50,50 m 0,-46.71038780580235 a 46.71038780580235,46.71038780580235 0 1 1 0,93.4207756116047 a 46.71038780580235,46.71038780580235 0 1 1 0,-93.4207756116047" 
+        stroke="#2C88D9" stroke-width="6.57922px" fill-opacity="0" 
+        style="stroke-dasharray: 293.623, 293.623;stroke-dashoffset: 20.623;"></path>
+</svg>
+`;
+
+circleAnimation.forEach((item) => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = svgMarkup.trim();
+    console.log(tempDiv.innerHTML);
+
+    const svgElement = tempDiv.firstChild;
+
+    item.appendChild(svgElement);
+});
