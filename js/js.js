@@ -4868,3 +4868,32 @@ circleAnimation.forEach((item) => {
 
     item.appendChild(svgElement);
 });
+
+
+// time counter
+const initialTime = 7 * 60 + 12;
+let totalSeconds = initialTime;
+
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `0${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
+function startCountdown() {
+    const timerElement = document.querySelector('.custom_counter h2');
+
+    const interval = setInterval(() => {
+        timerElement.textContent = formatTime(totalSeconds);
+
+        if (totalSeconds <= 0) {
+            clearInterval(interval);
+            totalSeconds = initialTime;
+            startCountdown();
+        } else {
+            totalSeconds--;
+        }
+    }, 1000);
+}
+
+startCountdown();
