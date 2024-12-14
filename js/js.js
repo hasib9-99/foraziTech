@@ -4915,3 +4915,32 @@ CustomPopupClose.addEventListener('click', () => {
     CustomPopup.classList.remove('active');
 })
 
+
+
+// first lood animation
+
+function checkInView() {
+    const borderAnimation = document.querySelectorAll(".border_animation");
+    const cornerBorder = document.querySelectorAll('.corner_animation');
+
+    borderAnimation.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+            item.classList.add('active');
+        }
+    });
+
+    cornerBorder.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+            item.classList.add('active');
+        }
+    });
+}
+
+checkInView();
+
+window.addEventListener('scroll', checkInView);
+window.addEventListener('resize', checkInView);
