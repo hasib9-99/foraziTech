@@ -1,5 +1,7 @@
 <?php>
 
+// the array link 
+// /wp-json/custom/v1/categories-posts
 // this code make catagory and post for a array 
 function get_posts_grouped_by_categories() {
     // Get all categories
@@ -58,3 +60,25 @@ add_action('rest_api_init', function () {
 });
 
 <?>
+
+
+<script>
+    // face the data 
+    fetch('https://www.slideshare.forazitech.com/wp-json/custom/v1/categories-posts')
+    .then((response) => response.json())
+    .then((data) => {
+        console.log(data); // Use this data as needed
+        // Example: Displaying the data
+        data.forEach((category) => {
+            console.log(`Category: ${category.categoryName}`);
+            category.posts.forEach((post) => {
+                console.log(`Title: ${post.title}`);
+                console.log(`Content: ${post.content}`);
+                // Access other post fields as needed
+            });
+        });
+    })
+    .catch((error) => {
+        console.error('Error fetching detailed categories and posts:', error);
+    });
+</script>

@@ -48,7 +48,7 @@
     z-index: -23;
     
     /* active animation  */
-    webkit-animation: top-right-left 2s ease-in-out forwards;
+    -webkit-animation: top-right-left 2s ease-in-out forwards;
     animation: top-right-left 2s ease-in-out forwards;
 }
 .border_animation.image_on_right::after{
