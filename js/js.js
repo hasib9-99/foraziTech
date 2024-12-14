@@ -4897,3 +4897,21 @@ function startCountdown() {
 }
 
 startCountdown();
+
+
+
+// popup 
+const CustomPopup = document.querySelector('.form_popup');
+const CustomPopupClose = document.querySelector('.custom_popup_closer');
+const CustomPopupActive = document.querySelectorAll('.custom_popup_active');
+
+CustomPopupActive.forEach((item) => {
+    item.addEventListener('click', () => {
+        CustomPopup.classList.add('active');
+    })
+})
+
+CustomPopupClose.addEventListener('click', () => {
+    CustomPopup.classList.remove('active');
+})
+
