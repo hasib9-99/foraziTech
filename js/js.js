@@ -2258,7 +2258,7 @@ images.forEach((item) => {
 });
 console.log(all);
 
-// left to right motion
+// left to right motion  // frist lode animation
 function checkInView() {
     const containers = document.querySelectorAll(".left_to_right");
 
