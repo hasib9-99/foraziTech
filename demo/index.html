@@ -3,111 +3,66 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Infinity Slider</title>
+  <title>Scroll Timeline Animation</title>
   <style>
     body {
       margin: 0;
-      padding: 0;
-      overflow: hidden;
+      height: 300vh; /* Simulate a tall page for scrolling */
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .slider-container {
+
+    .scroll-container {
       position: relative;
       width: 100%;
-      height: 200px;
-      overflow: hidden;
-      background-color: #f0f0f0;
+      height: 300px;
+      background: lightgray;
     }
-    .slider-track {
-      display: flex;
+
+    .scroll-box {
+      width: 100px;
+      height: 100px;
+      background-color: coral;
       position: absolute;
-      top: 0;
+      top: 100px;
       left: 0;
-      height: 100%;
-      animation: slide 10s linear infinite;
-    }
-    .slider-item {
-      flex: 0 0 auto;
-      width: 300px;
-      height: 100%;
-      background-color: #ccc;
-      margin: 0 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: #333;
-    }
-    @keyframes slide {
-      0% {
-        transform: translateX(0);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
     }
   </style>
 </head>
 <body>
-  <div class="slider-container">
-    <div class="slider-track" id="slider-track"></div>
+  <div class="scroll-container">
+    <div class="scroll-box"></div>
   </div>
 
   <script>
-    const track = document.getElementById('slider-track');
-    const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5']; // Example items
-    const itemWidth = 320; // Item width including margin
+    // Ensure browser support for ScrollTimeline API
+    if ('ScrollTimeline' in window) {
+      const scrollBox = document.querySelector('.scroll-box');
 
-    // Create initial items in the slider
-    function createItems() {
-      for (let i = 0; i < items.length; i++) {
-        const item = document.createElement('div');
-        item.classList.add('slider-item');
-        item.textContent = items[i];
-        track.appendChild(item);
-      }
-    }
+      // Create a ScrollTimeline
+      const scrollTimeline = new ScrollTimeline({
+        source: document.scrollingElement,
+        orientation: 'block', // Use vertical scrolling
+        scrollOffsets: [
+          { target: scrollBox, edge: 'start', threshold: 1 },
+          { target: scrollBox, edge: 'end', threshold: 0 }
+        ],
+      });
 
-    // Clone items to fill the slider and ensure seamless animation
-    function cloneItems() {
-      const totalWidth = track.offsetWidth;
-      let currentWidth = 0;
-
-      while (currentWidth < window.innerWidth) {
-        for (let i = 0; i < items.length; i++) {
-          const item = document.createElement('div');
-          item.classList.add('slider-item');
-          item.textContent = items[i];
-          track.appendChild(item);
-          currentWidth += itemWidth;
-          if (currentWidth >= window.innerWidth) break;
+      // Attach animation to the ScrollTimeline
+      scrollBox.animate(
+        {
+          transform: ['translateX(0)', 'translateX(300px)'], // Move box horizontally
+        },
+        {
+          duration: 1,
+          timeline: scrollTimeline,
         }
-      }
+      );
+    } else {
+      console.warn('ScrollTimeline is not supported in this browser.');
     }
-
-    // Manage the slider by cloning and deleting elements dynamically
-    function manageSlider() {
-      const firstChild = track.firstElementChild;
-      if (firstChild && firstChild.getBoundingClientRect().right <= 0) {
-        track.removeChild(firstChild);
-
-        // Create a new item to keep the slider filled
-        const newItem = document.createElement('div');
-        newItem.classList.add('slider-item');
-        newItem.textContent = items[Math.floor(Math.random() * items.length)];
-        track.appendChild(newItem);
-      }
-
-      requestAnimationFrame(manageSlider);
-    }
-
-    // Initialize slider
-    function initSlider() {
-      createItems();
-      cloneItems();
-      manageSlider();
-    }
-
-    initSlider();
   </script>
 </body>
 </html>

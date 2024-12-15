@@ -4944,3 +4944,57 @@ checkInView();
 
 window.addEventListener('scroll', checkInView);
 window.addEventListener('resize', checkInView);
+
+
+
+//
+
+document.addEventListener('DOMContentLoaded', () => {
+    const sliders = document.querySelectorAll('.custom_slider .swiper-wrapper .swiper-slide:not(.swiper-slide-duplicate)');
+    const sliderWrapper = document.querySelectorAll('.custom_slider .swiper-wrapper');
+    const sliderBullets = document.querySelectorAll('.custom_slider .swiper-pagination-bullets .swiper-pagination-bullet');
+    const dotsContainer = document.querySelector('.custom_line');
+    const innerContainer = dotsContainer.querySelector('.inner_line');
+    let activeButtonIndex = -1;
+
+    if (sliders.length && dotsContainer && innerContainer && sliderBullets.length) {
+        sliders.forEach(() => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            dotsContainer.appendChild(dot);
+        });
+
+        const dots = document.querySelectorAll('.custom_line .dot');
+
+        dots.forEach((dot, i) => {
+            dot.addEventListener('click', () => {
+                sliderBullets[i].click();
+                updateProgressBar(i);
+            });
+        });
+
+        const updateProgressBar = (index) => {
+            activeButtonIndex = index;
+            const percentage = (100 / (dots.length - 1)) * activeButtonIndex;
+            innerContainer.style.transform = `translate(${percentage}%, -50%)`;
+        };
+
+        const observer = new MutationObserver(() => {
+            sliderBullets.forEach((button, index) => {
+                if (button.classList.contains('swiper-pagination-bullet-active')) {
+                    updateProgressBar(index);
+                }
+            });
+        });
+
+        sliderBullets.forEach((bullet) => {
+            observer.observe(bullet, { attributes: true, attributeFilter: ['class'] });
+        });
+
+        sliderBullets.forEach((button, index) => {
+            if (button.classList.contains('active')) {
+                updateProgressBar(index);
+            }
+        });
+    }
+})
