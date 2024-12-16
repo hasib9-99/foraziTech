@@ -4949,9 +4949,8 @@ window.addEventListener('resize', checkInView);
 
 //
 
-document.addEventListener('DOMContentLoaded', () => {
+setTimeout(() => {
     const sliders = document.querySelectorAll('.custom_slider .swiper-wrapper .swiper-slide:not(.swiper-slide-duplicate)');
-    const sliderWrapper = document.querySelectorAll('.custom_slider .swiper-wrapper');
     const sliderBullets = document.querySelectorAll('.custom_slider .swiper-pagination-bullets .swiper-pagination-bullet');
     const dotsContainer = document.querySelector('.custom_line');
     const innerContainer = dotsContainer.querySelector('.inner_line');
@@ -4977,6 +4976,13 @@ document.addEventListener('DOMContentLoaded', () => {
             activeButtonIndex = index;
             const percentage = (100 / (dots.length - 1)) * activeButtonIndex;
             innerContainer.style.transform = `translate(${percentage}%, -50%)`;
+            dots.forEach((dot) => {
+                dot.classList.remove('active')
+            });
+            dots[index].classList.add('active');
+            // let result = dots.indexOf.slice(0, activeButtonIndex);
+            // result.forEach((item) => item.style.borderColor = '#000')
+
         };
 
         const observer = new MutationObserver(() => {
@@ -4997,4 +5003,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-})
+}, 500);
