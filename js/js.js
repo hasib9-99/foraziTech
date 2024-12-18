@@ -4947,8 +4947,7 @@ window.addEventListener('resize', checkInView);
 
 
 
-//
-
+//  slider navigetor 
 setTimeout(() => {
     const sliders = document.querySelectorAll('.custom_slider .swiper-wrapper .swiper-slide:not(.swiper-slide-duplicate)');
     const sliderBullets = document.querySelectorAll('.custom_slider .swiper-pagination-bullets .swiper-pagination-bullet');
@@ -5004,3 +5003,19 @@ setTimeout(() => {
         });
     }
 }, 500);
+
+
+const items = document.querySelectorAll('.loop_iiem');
+
+items.forEach((card) => {
+    card.addEventListener('click', () => {
+        card.querySelector('.loop_popup').classList.add('active');
+    })
+
+    const itemPopup = document.querySelectorAll('.loop_popup');
+    itemPopup.forEach((popup) => {
+        popup.addEventListener('click', () => {
+            popup.classList.remove('active');
+        })
+    })
+})
