@@ -5070,3 +5070,52 @@ function handleResize() {
 
 window.addEventListener('resize', handleResize);
 handleResize();
+
+
+// video popup with puase and play
+const items = document.querySelectorAll('.loop_item');
+
+items.forEach((card) => {
+    const cardContant = card.querySelector('.card_contant')
+    const popup = card.querySelector('.loop_popup');
+    const closeBtn = popup.querySelector('.close_popup_loop');
+    const videoFrame = popup.querySelector('.loop_video')
+
+    if (!popup || !closeBtn) {
+        console.error('Missing popup or close button for:', card);
+        return;
+    }
+
+    cardContant.addEventListener('click', () => {
+        popup.classList.add('active');
+
+        let iframe = videoFrame.querySelector('iframe')
+        if (iframe) {
+            let src = iframe.src;
+            iframe.src = src
+        } else {
+            videoFrame.querySelector('.elementor-custom-embed-play').click()
+            let video = videoFrame.querySelector('video')
+            video.currentTime = 0;
+            video.play()
+        }
+    });
+
+    closeBtn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        popup.classList.remove('active');
+
+        const iframe = videoFrame.querySelector('iframe');
+        if (iframe) {
+            const iframeSrc = iframe.src;
+            if (iframeSrc.includes('youtube') || iframeSrc.includes('vimeo')) {
+                iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+            }
+        } else {
+            const video = videoFrame.querySelector('video');
+            if (video) {
+                video.pause();
+            }
+        }
+    });
+});
