@@ -5005,17 +5005,68 @@ setTimeout(() => {
 }, 500);
 
 
-const items = document.querySelectorAll('.loop_iiem');
 
-items.forEach((card) => {
-    card.addEventListener('click', () => {
-        card.querySelector('.loop_popup').classList.add('active');
-    })
+// menus some popup
+const searchPopup = document.querySelector('.search_popup');
+const searchClosePopup = searchPopup.querySelector('.search_close_popup');
+const searchPopupActive = document.querySelector('.menu_icon .elementor-grid-item:nth-child(1)');
 
-    const itemPopup = document.querySelectorAll('.loop_popup');
-    itemPopup.forEach((popup) => {
-        popup.addEventListener('click', () => {
-            popup.classList.remove('active');
-        })
-    })
+
+const popupSearch = searchPopup.querySelector('.popup_search input.e-search-input');
+const popupSearchContant = searchPopup.querySelector('.search_popup_contant');
+
+const menuPopup = document.querySelector('.menu_popup ');
+const menuClosePopup = document.querySelector('.menu_close_popup');
+const menuPopupActive = document.querySelector('.menu_popup_active')
+
+menuPopupActive.addEventListener('click', () => {
+    menuPopup.classList.add('active');
 })
+menuClosePopup.addEventListener('click', () => {
+    menuPopup.classList.remove('active');
+})
+
+searchPopupActive.addEventListener('click', () => {
+    searchPopup.classList.add('active');
+})
+searchClosePopup.addEventListener('click', () => {
+    searchPopup.classList.remove('active')
+})
+
+popupSearch.addEventListener('input', () => {
+    if (popupSearch.value.trim()) {
+        popupSearchContant.style.display = 'none';
+    } else {
+        popupSearchContant.style.display = 'block';
+    }
+});
+
+function subMenus() {
+    if (window.innerWidth <= 1024) {
+        const subMenuConainer = document.querySelector('.sub_popup')
+        const subMenus = document.querySelectorAll('.custom_menu nav:nth-child(1) li.menu-item-has-children .sub-menu li.menu-item-object-product_cat')
+        const appandSubMenu = document.querySelector('.appand_submenu')
+        const closeSubMenu = document.querySelector('.close_sub_menu')
+        const activeSubeMenu = document.querySelector('.custom_menu nav li.menu-item-has-children');
+
+
+        activeSubeMenu.addEventListener('click', () => {
+            subMenuConainer.classList.add('active');
+        })
+
+        closeSubMenu.addEventListener('click', () => {
+            subMenuConainer.classList.remove('active');
+        })
+
+        subMenus.forEach((item, i) => {
+            appandSubMenu.appendChild(item)
+        })
+    }
+}
+
+function handleResize() {
+    subMenus();
+}
+
+window.addEventListener('resize', handleResize);
+handleResize();
