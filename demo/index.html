@@ -1,68 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scroll Timeline Animation</title>
-  <style>
-    body {
-      margin: 0;
-      height: 300vh; /* Simulate a tall page for scrolling */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .scroll-container {
-      position: relative;
-      width: 100%;
-      height: 300px;
-      background: lightgray;
-    }
-
-    .scroll-box {
-      width: 100px;
-      height: 100px;
-      background-color: coral;
-      position: absolute;
-      top: 100px;
-      left: 0;
-    }
-  </style>
-</head>
-<body>
-  <div class="scroll-container">
-    <div class="scroll-box"></div>
-  </div>
-
-  <script>
-    // Ensure browser support for ScrollTimeline API
-    if ('ScrollTimeline' in window) {
-      const scrollBox = document.querySelector('.scroll-box');
-
-      // Create a ScrollTimeline
-      const scrollTimeline = new ScrollTimeline({
-        source: document.scrollingElement,
-        orientation: 'block', // Use vertical scrolling
-        scrollOffsets: [
-          { target: scrollBox, edge: 'start', threshold: 1 },
-          { target: scrollBox, edge: 'end', threshold: 0 }
-        ],
-      });
-
-      // Attach animation to the ScrollTimeline
-      scrollBox.animate(
-        {
-          transform: ['translateX(0)', 'translateX(300px)'], // Move box horizontally
-        },
-        {
-          duration: 1,
-          timeline: scrollTimeline,
+<style>
+        svg {
+            width: 100%;
+            height: 200px;
         }
-      );
-    } else {
-      console.warn('ScrollTimeline is not supported in this browser.');
-    }
-  </script>
-</body>
-</html>
+
+        .marqury_two text {
+            fill: #000;
+            font-family: "Rammetto One", sans-serif;
+            font-size: 150px;
+            line-height: 119px;
+            font-weight: 700;
+        }
+
+        .hiden-part {
+            visibility: hidden;
+        }
+    </style>
+
+<svg class="marqury_two" viewBox="0 0 1800 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <path id="wave2" d="M-850,164.17600000000002 L-850,164.17600000000002 
+            S-283.05,254.17600000000002 0,254.17600000000002 
+            S566.95,164.17600000000002 850,164.17600000000002 
+            S1416.95,254.17600000000002 1700,254.17600000000002 
+            S2266.95,164.17600000000002 2550,164.17600000000002 
+            S3116.95,254.17600000000002 3400,254.17600000000002" fill="none" stroke="black" />
+    </defs>
+
+    <text font-size="32" fill="black">
+        <textPath class="marqury_two" href="#wave2" startOffset="0">
+             NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️
+        </textPath>
+    </text>
+</svg>

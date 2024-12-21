@@ -1991,36 +1991,6 @@ function startCounters() {
 
 startCounters();
 
-// marqury
-document.addEventListener("DOMContentLoaded", () => {
-    function createMarquee(pathSelector, waveLength, direction, speed) {
-        const path = document.querySelector(pathSelector);
-        let offset = direction === "leftToRight" ? -waveLength : 0;
-
-        function increment() {
-            if (direction === "leftToRight") {
-                offset += speed; // Increase offset based on speed
-                if (offset > 0) {
-                    offset = -waveLength;
-                }
-            } else {
-                offset -= speed; // Decrease offset based on speed
-                if (offset < -waveLength) {
-                    offset = 0;
-                }
-            }
-            path.setAttribute("startOffset", offset);
-            requestAnimationFrame(increment);
-        }
-
-        increment();
-    }
-
-    // Adjust the speed parameter here
-    createMarquee(".marqury_one textPath", 3000, "rightToLeft", 5);
-    createMarquee(".marqury_two textPath", 3000, "leftToRight", 5);
-});
-
 //make a custom popup
 
 const popup = document.querySelector(".manu_popup");
@@ -5119,3 +5089,41 @@ items.forEach((card) => {
         }
     });
 });
+
+
+// path marquee
+function createMarquee(pathSelector, waveLength, direction, speed) {
+    const path = document.querySelector(pathSelector);
+    let lastTime = performance.now();
+    let offset = direction === 'leftToRight' ? -waveLength : 0;
+
+    function increment(currentTime) {
+        const timeElapsed = currentTime - lastTime;
+        lastTime = currentTime;
+
+        const movement = (speed * timeElapsed) / 16.67;
+
+        if (direction === 'leftToRight') {
+            offset += movement;
+            if (offset > 0) {
+                offset = -waveLength;
+            }
+        } else {
+            offset -= movement;
+            if (offset < -waveLength) {
+                offset = 0;
+            }
+        }
+
+        path.setAttribute('startOffset', offset);
+        requestAnimationFrame(increment);
+    }
+
+    requestAnimationFrame(increment);
+}
+
+// Adjust marquee speed and direction here
+createMarquee('.marqury_one textPath', 3000, 'rightToLeft', 3);
+createMarquee('.marqury_two textPath', 3000, 'leftToRight', 3);
+
+
