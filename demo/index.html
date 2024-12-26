@@ -1,4 +1,12 @@
-<style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
         svg {
             width: 100%;
             height: 200px;
@@ -15,21 +23,90 @@
         .hiden-part {
             visibility: hidden;
         }
+
+@keyframes bg-animation {
+  0% { background-position: 0 0;}
+  10% { background-position: -5% -5%;}
+  20% { background-position: -10% -10%;}
+  30% { background-position: 5% -10%; }
+  40% { background-position: -5% 15%; }
+  50% { background-position: -10% 5%; }
+  60% { background-position: 15% 0; }
+  70% { background-position: 0% 10%; }
+  80% { background-position: -15% 0%; }
+  90% { background-position: 10% 5%; }
+  100% { background-position: 5% 0%; }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </style>
 
-<svg class="marqury_two" viewBox="0 0 1800 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<svg class="marqury_one" viewBox="0 0 1800 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
     <defs>
-        <path id="wave2" d="M-850,164.17600000000002 L-850,164.17600000000002 
-            S-283.05,254.17600000000002 0,254.17600000000002 
-            S566.95,164.17600000000002 850,164.17600000000002 
-            S1416.95,254.17600000000002 1700,254.17600000000002 
-            S2266.95,164.17600000000002 2550,164.17600000000002 
-            S3116.95,254.17600000000002 3400,254.17600000000002" fill="none" stroke="black" />
+        <path id="wave2" d="M-400,23.832  L-400,23.832 S-133.20000000000002,113.832 0,113.832 S266.79999999999995,23.832 400,23.832 S666.8,113.832 800,113.832 S1066.8,23.832 1200,23.832 S1466.8,113.832 1600,113.832 S1866.8,23.832 2000,23.832" fill="none" stroke="red" />
     </defs>
 
     <text font-size="32" fill="black">
         <textPath class="marqury_two" href="#wave2" startOffset="0">
-             NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️ NEW SUMMER MENU!! 〰️
+            Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 
+
         </textPath>
     </text>
 </svg>
+
+
+
+<script>
+    
+// path marquee
+function createMarquee(pathSelector, waveLength, direction, speed) {
+    const path = document.querySelector(pathSelector);
+    let lastTime = performance.now();
+    let offset = direction === 'leftToRight' ? -waveLength : 0;
+
+    function increment(currentTime) {
+        const timeElapsed = currentTime - lastTime;
+        lastTime = currentTime;
+
+        const movement = (speed * timeElapsed) / 16.67;
+
+        if (direction === 'leftToRight') {
+            offset += movement;
+            if (offset > 0) {
+                offset = -waveLength;
+            }
+        } else {
+            offset -= movement;
+            if (offset < -waveLength) {
+                offset = 0;
+            }
+        }
+
+        path.setAttribute('startOffset', offset);
+        requestAnimationFrame(increment);
+    }
+
+    requestAnimationFrame(increment);
+}
+
+// Adjust marquee speed and direction here
+createMarquee('.marqury_one textPath', 3000, 'rightToLeft', 1);
+
+
+
+</script>
+</body>
+</html>

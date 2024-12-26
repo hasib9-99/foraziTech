@@ -5127,3 +5127,46 @@ createMarquee('.marqury_one textPath', 3000, 'rightToLeft', 3);
 createMarquee('.marqury_two textPath', 3000, 'leftToRight', 3);
 
 
+
+// button slider
+
+const btnSlider = document.querySelector('.custom_btn-slider');
+
+const sliderimgWrap = btnSlider.querySelector('.img_wraper');
+const sliderImgs = sliderimgWrap.querySelectorAll('.img_item');
+
+const sliderContentWrap = btnSlider.querySelector('.contant_wraper');
+const sliderContent = sliderContentWrap.querySelectorAll('.content_item');
+
+const sliderBtnWrap = btnSlider.querySelector('.btn_wraper');
+const sliderBtns = sliderBtnWrap.querySelectorAll('.custom_btn');
+
+const sliderimgWrapWidth = sliderimgWrap.offsetWidth;
+const sliderImgsWidth = sliderImgs[1].offsetWidth;
+
+const sliderContentWrapWidth = sliderContentWrap.offsetWidth;
+const sliderContentWidth = sliderContent[1].offsetWidth;
+
+const sliderBtnsWrapHeight = sliderBtnWrap.offsetHeight;
+const sliderBtnsHeight = sliderBtns[1].offsetHeight;
+
+let activeItem = 0;
+
+function moveToItem(index) {
+    sliderimgWrap.style.transform = `translateX(${-(index * sliderImgsWidth)}px)`;
+    sliderContentWrap.style.transform = `translateX(${-(index * sliderContentWidth)}px)`;
+    sliderBtnWrap.style.transform = `translateY(${-(index * (sliderBtnsHeight + 10))}px)`;
+
+    activeItem = index;
+}
+
+sliderBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        moveToItem(i);
+    });
+});
+
+setInterval(() => {
+    activeItem = (activeItem + 1) % sliderImgs.length;
+    moveToItem(activeItem);
+}, 3000);
