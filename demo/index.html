@@ -1,112 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wix-Like Tilt Animation</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    perspective: 1000px; /* Creates a 3D perspective */
+  }
+
+  .row-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+  }
+
+  .row {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    transform-style: preserve-3d;
+    opacity: 0;
+    animation: tilt-from-left 1.2s ease-out 0s forwards;
+  }
+
+  .row-item {
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  @keyframes tilt-from-left {
+    0% {
+      transform: translateX(-100px) rotateY(-15deg) rotateX(0deg) scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: translateX(0px) rotateY(0deg) rotateX(0deg) scale(1);
+      opacity: 1;
+    }
+  }
+</style>
 </head>
 <body>
-    <style>
-        svg {
-            width: 100%;
-            height: 200px;
-        }
-
-        .marqury_two text {
-            fill: #000;
-            font-family: "Rammetto One", sans-serif;
-            font-size: 150px;
-            line-height: 119px;
-            font-weight: 700;
-        }
-
-        .hiden-part {
-            visibility: hidden;
-        }
-
-@keyframes bg-animation {
-  0% { background-position: 0 0;}
-  10% { background-position: -5% -5%;}
-  20% { background-position: -10% -10%;}
-  30% { background-position: 5% -10%; }
-  40% { background-position: -5% 15%; }
-  50% { background-position: -10% 5%; }
-  60% { background-position: 15% 0; }
-  70% { background-position: 0% 10%; }
-  80% { background-position: -15% 0%; }
-  90% { background-position: 10% 5%; }
-  100% { background-position: 5% 0%; }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </style>
-
-<svg class="marqury_one" viewBox="0 0 1800 300" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-        <path id="wave2" d="M-400,23.832  L-400,23.832 S-133.20000000000002,113.832 0,113.832 S266.79999999999995,23.832 400,23.832 S666.8,113.832 800,113.832 S1066.8,23.832 1200,23.832 S1466.8,113.832 1600,113.832 S1866.8,23.832 2000,23.832" fill="none" stroke="red" />
-    </defs>
-
-    <text font-size="32" fill="black">
-        <textPath class="marqury_two" href="#wave2" startOffset="0">
-            Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 〰️ Discover life beyond the ordinary 
-
-        </textPath>
-    </text>
-</svg>
-
-
-
-<script>
-    
-// path marquee
-function createMarquee(pathSelector, waveLength, direction, speed) {
-    const path = document.querySelector(pathSelector);
-    let lastTime = performance.now();
-    let offset = direction === 'leftToRight' ? -waveLength : 0;
-
-    function increment(currentTime) {
-        const timeElapsed = currentTime - lastTime;
-        lastTime = currentTime;
-
-        const movement = (speed * timeElapsed) / 16.67;
-
-        if (direction === 'leftToRight') {
-            offset += movement;
-            if (offset > 0) {
-                offset = -waveLength;
-            }
-        } else {
-            offset -= movement;
-            if (offset < -waveLength) {
-                offset = 0;
-            }
-        }
-
-        path.setAttribute('startOffset', offset);
-        requestAnimationFrame(increment);
-    }
-
-    requestAnimationFrame(increment);
-}
-
-// Adjust marquee speed and direction here
-createMarquee('.marqury_one textPath', 3000, 'rightToLeft', 1);
-
-
-
-</script>
+<div class="row-container">
+  <div class="row">
+    <div class="row-item">Item 1</div>
+    <div class="row-item">Item 2</div>
+    <div class="row-item">Item 3</div>
+  </div>
+</div>
 </body>
 </html>
