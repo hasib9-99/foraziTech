@@ -5248,3 +5248,48 @@ menuItem.forEach((item) => {
     });
 });
 
+
+// hadeing after image loop
+
+const imgeSrc = [
+    '/wp-content/uploads/2024/12/Microsoft_logo.svg',
+    '/wp-content/uploads/2024/12/Netflix_2015_logo.svg',
+    '/wp-content/uploads/2024/12/Facebook.svg',
+    '/wp-content/uploads/2024/12/apple-light-1.svg',
+    '/wp-content/uploads/2024/12/amazon-logo.png',
+    '/wp-content/uploads/2024/12/linkedin-light-2.svg',
+    '/wp-content/uploads/2024/12/Logo_Google_2013_Official.svg'
+];
+
+const title = document.querySelector('.post_title h2');
+const postLogo = document.querySelector('.post_logo img');
+let index = 0;
+
+const imgeDiv = document.createElement('div');
+imgeDiv.classList.add('img_div');
+title.appendChild(imgeDiv);
+
+const Img = document.createElement('img');
+Img.classList.add('title_img');
+imgeDiv.appendChild(Img);
+
+Img.style.transition = 'opacity 0.5s ease-in-out';
+Img.style.opacity = 1;
+
+if (postLogo) {
+    Img.src = postLogo.src;
+} else {
+    setInterval(() => {
+        // Fade out
+        Img.style.opacity = 0;
+
+        setTimeout(() => {
+            // Change the image source once faded out
+            Img.src = imgeSrc[index];
+            index = (index + 1) % imgeSrc.length;
+
+            // Fade back in
+            Img.style.opacity = 1;
+        }, 200);
+    }, 1500);
+}
