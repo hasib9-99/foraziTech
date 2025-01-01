@@ -2244,12 +2244,34 @@ function checkInView() {
     });
 }
 
-// Initial check on page load
 checkInView();
-
-// Attach scroll event listener
 document.addEventListener("scroll", checkInView);
 
+// left to right motion  // frist lode animation
+// virson 2.0
+function checkInView() {
+    const containers = document.querySelectorAll(".left_to_right");
+
+    containers.forEach((container) => {
+        const rect = container.getBoundingClientRect();
+
+        // Check if the container is within the viewport
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+            container.style.clipPath = "polygon(0 0, 100% 0, 100% 100%, 0 100%)"; // Full view
+        } else {
+            container.style.clipPath = "polygon(0 0, 0 0, 0 100%, 0 100%)"; // Hidden view
+        }
+    });
+}
+
+let lastCall = 0;
+window.addEventListener("scroll", () => {
+    const now = Date.now();
+    if (now - lastCall > 100) {
+        lastCall = now;
+        checkInView();
+    }
+});
 //
 const popup = document.querySelector(".form_popup");
 const popupClose = document.querySelector(".form_popup_close");
@@ -5311,3 +5333,39 @@ if (postLogo) {
 }
 
 
+// custom slider
+const sliderOffset = document.querySelector('.phone_slider .offset-both');  // Offset container
+const fream = document.createElement('div');
+// fream.src = '/wp-content/uploads/2024/12/mobile_frame.png';
+fream.classList.add('phone_fream');
+sliderOffset.appendChild(fream);
+
+//
+
+// const sliderNext = document.querySelector('.testumonial-slider .elementor-swiper-button-next[aria-label="Next slide"]');
+// const sliderPrev = document.querySelector('.testumonial-slider .elementor-swiper-button-prev[aria-label="Next slide"]');
+const sliderPrev = document.querySelectorAll('.testumonial-slider elementor-swiper-button');
+
+const customNext = document.querySelector('.next_btn');
+const customPrev = document.querySelector('.prev_btn');
+
+sliderPrev[1].addEventListener('click', () => {
+    customNext.click();
+});
+// sliderPrev.addEventListener('click', () => {
+//     customPrev.click();
+// });
+
+
+// Locate the Elementor Swiper instance
+const elementorSwiper = document.querySelector('.testumonial-slider').swiper;
+
+// Custom Previous Button
+document.querySelector('.prev_btn').addEventListener('click', function () {
+    elementorSwiper.slidePrev(); // Go to the previous slide
+});
+
+// Custom Next Button
+document.querySelector('.next_btn').addEventListener('click', function () {
+    elementorSwiper.slideNext(); // Go to the next slide
+});
