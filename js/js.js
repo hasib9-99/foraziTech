@@ -5260,11 +5260,18 @@ const imgeSrc = [
     '/wp-content/uploads/2024/12/linkedin-light-2.svg',
     '/wp-content/uploads/2024/12/Logo_Google_2013_Official.svg'
 ];
+const ipv3imgeSrc = [
+    '/wp-content/uploads/2024/12/Facebook-Logo.png',
+    '/wp-content/uploads/2024/12/svgexport-1.png',
+    '/wp-content/uploads/2024/12/svgexport-2.png',
+    '/wp-content/uploads/2024/12/svgexport-3.png'
+];
 
 const title = document.querySelector('.post_title h2');
 const postLogo = document.querySelector('.post_logo img');
 let index = 0;
 
+// Create and append image container
 const imgeDiv = document.createElement('div');
 imgeDiv.classList.add('img_div');
 title.appendChild(imgeDiv);
@@ -5273,23 +5280,34 @@ const Img = document.createElement('img');
 Img.classList.add('title_img');
 imgeDiv.appendChild(Img);
 
-Img.style.transition = 'opacity 0.5s ease-in-out';
-Img.style.opacity = 1;
+let pageAddress = document.location.href;
+let segments = pageAddress.split('/');
+let ipv3 = segments[3];
 
 if (postLogo) {
     Img.src = postLogo.src;
+} else if (ipv3 === 'ipv3') {
+    ipv3imgeSrc.forEach((item, i) => {
+        if (i === 0) {
+            Img.src = item;
+        } else {
+            const ipv3Img = document.createElement('img');
+            ipv3Img.classList.add('title_img');
+            ipv3Img.src = item;
+            imgeDiv.appendChild(ipv3Img);
+        }
+    });
 } else {
+    // Image slider with fade effect
+    Img.src = imgeSrc[index];
     setInterval(() => {
-        // Fade out
         Img.style.opacity = 0;
-
         setTimeout(() => {
-            // Change the image source once faded out
-            Img.src = imgeSrc[index];
             index = (index + 1) % imgeSrc.length;
-
-            // Fade back in
+            Img.src = imgeSrc[index];
             Img.style.opacity = 1;
-        }, 200);
-    }, 1500);
+        }, 500); // Match fade-out duration
+    }, 2000); // Adjusted for better visibility
 }
+
+
