@@ -5369,3 +5369,14 @@ document.querySelector('.prev_btn').addEventListener('click', function () {
 document.querySelector('.next_btn').addEventListener('click', function () {
     elementorSwiper.slideNext(); // Go to the next slide
 });
+
+
+
+// menu problem 
+const items = document.querySelectorAll('#menu-main-nav li a');
+
+items.forEach((item) => {
+    item.addEventListener('click', () => {
+        window.location.href = item.href;
+    });
+});
