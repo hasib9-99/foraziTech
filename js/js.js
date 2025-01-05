@@ -5372,11 +5372,39 @@ document.querySelector('.next_btn').addEventListener('click', function () {
 
 
 
-// menu problem 
+// menu problem
+
+const menuBtn = document.querySelector('.menu_btn');
 const items = document.querySelectorAll('#menu-main-nav li a');
 
+function isMobileDevice() {
+    return window.matchMedia('(max-width: 1024px)').matches;
+}
+
 items.forEach((item) => {
-    item.addEventListener('click', () => {
-        window.location.href = item.href;
+    item.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetHref = item.href;
+
+        window.location.href = targetHref;
+
+        if (isMobileDevice() && menuBtn) {
+            menuBtn.click();
+        }
     });
 });
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const readMore = document.querySelectorAll('.read-more');
+    readMore.forEach((item) => {
+        item.addEventListener('click', () => {
+            if (item.textContent === 'Read more..') {
+                item.textContent = 'Read less..';
+            } else {
+                item.textContent = 'Read more..';
+            }
+        });
+    });
+})
