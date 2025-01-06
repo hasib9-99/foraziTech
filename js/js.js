@@ -5454,3 +5454,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
+// single page product price update
+
+
+const allFields = document.querySelectorAll('.wapf-checkable');
+const showPricing = document.querySelector('.single_add_to_cart_button.button.alt');
+const defaultPrice = document.querySelector('.elementor-widget-woocommerce-product-price .woocommerce-Price-amount.amount bdi');
+const priceCurrency = defaultPrice.querySelector('.woocommerce-Price-currencySymbol').textContent;
+
+
+const defaultPriceValue = parseFloat(
+    Array.from(defaultPrice.childNodes)
+        .filter(node => node.nodeType === Node.TEXT_NODE)
+        .map(node => node.textContent.trim())
+        .join('')
+);
+
+function calculateTotalPrice() {
+    setTimeout(() => {
+        const checkedFields = document.querySelectorAll('.wapf-checkable.has-pricing.wapf-checked');
+        let totalPrice = 0;
+
+        checkedFields.forEach((field) => {
+            const priceElement = field.querySelector('.wapf-addon-price');
+            if (priceElement) {
+                const priceValue = parseFloat(priceElement.textContent.replace(/[^\d.]/g, ''));  // filter only number in string
+                if (!isNaN(priceValue)) {
+                    totalPrice += priceValue;
+                }
+            }
+        });
+
+        // Update button text
+        const finalPrice = (defaultPriceValue + totalPrice).toFixed(2);
+        showPricing.textContent = `Add to cart (${priceCurrency} ${finalPrice})`;
+        console.log(`Add to cart (${priceCurrency} ${finalPrice})`);
+    }, 300);
+}
+
+allFields.forEach((field) => {
+    field.addEventListener('click', calculateTotalPrice);
+});
+
+
+window.addEventListener('DOMContentLoaded', calculateTotalPrice);
