@@ -5408,3 +5408,49 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 })
+
+
+// hover content grow effect
+
+const growItems = document.querySelectorAll('.hover_grow .grow_con');
+
+growItems.forEach((item) => {
+    item.addEventListener('mouseenter', () => {
+        item.classList.add('active');
+    });
+
+    item.addEventListener('mouseleave', () => {
+        item.classList.remove('active');
+    });
+});
+
+
+// header amination
+
+document.addEventListener('DOMContentLoaded', () => {
+    const headers = document.querySelectorAll(".header_call_ani");
+    let prevScrollPos = window.pageYOffset;
+
+    window.addEventListener('scroll', () => {
+        const currentScrollPos = window.pageYOffset;
+
+        if (window.innerWidth > 1024) {
+            if (currentScrollPos < prevScrollPos) {
+                headers[0]?.classList.remove('scrolled');
+            } else {
+                headers[0]?.classList.add('scrolled');
+            }
+        } else {
+            if (currentScrollPos < prevScrollPos) {
+                headers[1]?.classList.remove('scrolled');
+            } else {
+                headers[1]?.classList.add('scrolled');
+            }
+        }
+
+        prevScrollPos = currentScrollPos;
+    });
+});
+
+
+
