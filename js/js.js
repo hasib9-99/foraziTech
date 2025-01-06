@@ -5500,3 +5500,14 @@ allFields.forEach((field) => {
 
 
 window.addEventListener('DOMContentLoaded', calculateTotalPrice);
+
+// menu icon toggole aso tigar menu icon outsite click close
+const menuIcon = document.querySelector('.menu_icon');
+menuIcon.addEventListener('click', () => {
+    menuIcon.classList.toggle('active');
+});
+document.addEventListener('click', (e) => {
+    if (!menuIcon.contains(e.target)) {
+        menuIcon.classList.remove('active');
+    }
+});
