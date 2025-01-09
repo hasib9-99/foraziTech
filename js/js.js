@@ -5555,3 +5555,19 @@ document.addEventListener('scroll', () => {
         numberSection.style.transform = `translateY(0%)`;
     }
 });
+
+
+// scroll and class add
+const mainHeader = document.querySelector('.custom_header');
+const BlackSction = document.querySelector('.black-section');
+
+document.addEventListener('scroll', () => {
+    const rect = BlackSction.getBoundingClientRect();
+    console.log(rect.top);
+    if (rect.top < 0) {
+        mainHeader.classList.add('active');
+    } else {
+        mainHeader.classList.remove('active');
+    }
+});
+
