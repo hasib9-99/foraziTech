@@ -5586,3 +5586,29 @@ document.addEventListener('scroll', () => {
 });
 
 
+// scroll and translet updateted
+const footer = document.querySelector('.custom_footer');
+let viewportHeight = window.innerHeight;
+
+// Update viewport height on resize
+window.addEventListener('resize', () => {
+    viewportHeight = window.innerHeight;
+});
+
+// Throttle scroll event for better performance
+let scrollTimeout;
+document.addEventListener('scroll', () => {
+    if (scrollTimeout) return;
+
+    scrollTimeout = setTimeout(() => {
+        const rect = footer.getBoundingClientRect();
+        const offset = viewportHeight - rect.bottom;
+
+        // Update footer position if within the range
+        footer.style.transform = offset > -700 && offset < 0
+            ? `translateY(${offset}px)`
+            : `translateY(0px)`;
+
+        scrollTimeout = null;
+    }, 50); // Adjust throttle time as needed
+});
