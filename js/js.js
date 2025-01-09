@@ -5536,3 +5536,22 @@ function checkInView() {
 }
 
 document.addEventListener("scroll", checkInView);
+
+
+
+// scroll with transform
+const numberSection = document.querySelector('.custom_numbers');
+const numberContent = document.querySelector('.number_contant');
+
+document.addEventListener('scroll', () => {
+    const rect = numberContent.getBoundingClientRect();
+    console.log(rect.top);
+
+    const numberMover = (rect.top / rect.height) * 100;
+
+    if (rect.top < 0 && numberMover < (100 - (100 / 5))) {
+        numberSection.style.transform = `translateY(${numberMover}%)`;
+    } else if (rect.top > 0) {
+        numberSection.style.transform = `translateY(0%)`;
+    }
+});
