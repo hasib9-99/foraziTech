@@ -5503,11 +5503,18 @@ window.addEventListener('DOMContentLoaded', calculateTotalPrice);
 
 // menu icon toggole aso tigar menu icon outsite click close
 const menuIcon = document.querySelector('.menu_icon');
+const menuPopup = document.querySelector('.menu-popup');
 menuIcon.addEventListener('click', () => {
     menuIcon.classList.toggle('active');
+    menuPopup.classList.toggle('active');
+
 });
 document.addEventListener('click', (e) => {
     if (!menuIcon.contains(e.target)) {
         menuIcon.classList.remove('active');
+        menuPopup.classList.remove('active');
     }
 });
+
+
+

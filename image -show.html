@@ -1,34 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <button id="demoButton"> Lorem ipsum dolor sit amet.</button>
-
-  <script>
-const button = document.getElementById('demoButton');
-
-// Action for pressing the button
-button.addEventListener('mousedown', () => {
-    console.log('Button pressed (mousedown): Action 1 triggered!');
-    button.style.backgroundColor = 'lightblue'; // Example visual feedback
-});
-
-// Action for releasing the button
-button.addEventListener('mouseup', () => {
-    console.log('Button released (mouseup): Action 2 triggered!');
-    button.style.backgroundColor = 'red'; // Reset visual feedback
-});
-
-button.addEventListener('mousemove', () => {
-    console.log('Button released (mouseup): Action 3 triggered!');
-    button.style.backgroundColor = 'blue'; // Reset visual feedback
-});
 
 
-  </script>
-</body>                                                                                     
-</html>
+<svg
+  viewBox="0 0 100 100"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <path
+    id="circlePath"
+    d="
+      M 10, 50
+      a 40,40 0 1,1 80,0
+      40,40 0 1,1 -80,0
+    "
+  />
+  <text>
+    <textPath href="#circlePath">
+      Your text here!
+    </textPath>
+  </text>
+</svg>
+
