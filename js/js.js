@@ -5517,4 +5517,22 @@ document.addEventListener('click', (e) => {
 });
 
 
+// scroll add classs and remove class
+function checkInView() {
+    const containers = document.querySelectorAll(".sticy_number, .vakue_card");
 
+    containers.forEach((container) => {
+        const rect = container.getBoundingClientRect();
+        const viewportMiddle = window.innerHeight / 2;
+        console.log(viewportMiddle);
+
+
+        if (rect.top < viewportMiddle) {
+            container.classList.add("active");
+        } else {
+            container.classList.remove("active");
+        }
+    });
+}
+
+document.addEventListener("scroll", checkInView);
