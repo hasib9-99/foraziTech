@@ -5612,3 +5612,22 @@ document.addEventListener('scroll', () => {
         scrollTimeout = null;
     }, 50); // Adjust throttle time as needed
 });
+
+
+// custom tab
+const tabBtn = document.querySelectorAll('.tab_btns .tab_btn');
+const tabContent = document.querySelectorAll('.tab_contants .tab_contant-item');
+console.log(tabBtn, tabContent);
+
+
+tabBtn.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        tabBtn.forEach((item) => item.classList.remove('active'));
+        tabContent.forEach((item) => item.classList.remove('active'));
+
+        btn.classList.add('active');
+        tabContent[i].classList.add('active');
+    })
+});
+
+tabBtn[0].click();
