@@ -5631,3 +5631,26 @@ tabBtn.forEach((btn, i) => {
 });
 
 tabBtn[0].click();
+
+
+// test animiation loade
+
+const h2Element = document.querySelector('.custom_heading span');
+const text = h2Element.innerText
+h2Element.innerHTML = '';
+
+for (let i = 0; i < text.length; i++) {
+    console.log(text[i]);
+    const span = document.createElement('span');
+    span.classList.add('char', `char-${i}`);
+
+    span.textContent = text[i];
+    h2Element.appendChild(span);
+}
+
+const words = document.querySelectorAll('.char');
+words.forEach((word, i) => {
+    setTimeout(() => {
+        word.classList.add('active');
+    }, 150 * i);
+});
