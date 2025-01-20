@@ -5654,3 +5654,26 @@ words.forEach((word, i) => {
         word.classList.add('active');
     }, 150 * i);
 });
+
+
+// mouse over and out add class and remove class
+const philosophyTitles = document.querySelectorAll('.philosophy_title');
+const philosophyContents = document.querySelectorAll('.philosophy_content');
+
+philosophyTitles.forEach((title, i) => {
+    title.addEventListener('mouseover', () => {
+        philosophyTitles.forEach((item) => item.classList.remove('active'));
+        philosophyContents.forEach((item) => item.classList.remove('active'));
+
+        title.classList.add('active');
+        philosophyContents[i].classList.add('active');
+    });
+
+    title.addEventListener('mouseout', () => {
+        title.classList.remove('active');
+        philosophyContents[i].classList.remove('active');
+        philosophyTitles[0].classList.add('active');
+        philosophyContents[0].classList.add('active');
+
+    });
+});
