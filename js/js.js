@@ -5677,3 +5677,35 @@ philosophyTitles.forEach((title, i) => {
 
     });
 });
+
+
+// if text on haif veiwport clsaa add and remove
+
+const servicesTexts = document.querySelectorAll('.services_tttle');
+const servicesImg = document.querySelectorAll('.servise_image');
+const viewportMiddle = window.innerHeight / 2;
+
+const handleScroll = () => {
+    let activeIndex = 0;
+    servicesTexts.forEach((text, i) => {
+        const textRect = text.getBoundingClientRect();
+        if (textRect.top < viewportMiddle && textRect.bottom > viewportMiddle) {
+            text.classList.add('active');
+            activeIndex = i;
+        } else {
+            text.classList.remove('active');
+        }
+    });
+
+    servicesImg.forEach((img, i) => {
+        if (i === activeIndex) {
+            img.classList.add('active');
+        } else {
+            img.classList.remove('active');
+        }
+    });
+};
+
+window.addEventListener('scroll', handleScroll);
+handleScroll();
+
