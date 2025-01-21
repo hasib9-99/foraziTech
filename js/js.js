@@ -5743,3 +5743,17 @@ galleryItems.forEach((item) => {
 });
 
 galleryItems[0].click();
+
+
+// section grow effect
+const growItems = document.querySelectorAll('.grow_effect');
+
+growItems.forEach((item) => {
+    item.addEventListener('mouseenter', () => {
+        item.style.width = '150%';
+    });
+
+    item.addEventListener('mouseleave', () => {
+        item.style.width = '100%';
+    });
+});
