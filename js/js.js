@@ -5757,3 +5757,22 @@ growItems.forEach((item) => {
         item.style.width = '100%';
     });
 });
+
+
+//calculate hight and toggle class
+const contactBtn = document.querySelector('.contact_btn');
+const contactSection = document.querySelector('.custom_form-con');
+
+let contactHeight = contactSection.offsetHeight;
+contactSection.style.top = `${-contactHeight}px`;
+
+
+contactBtn.addEventListener('click', () => {
+    contactSection.classList.toggle('active');
+
+    if (!contactSection.classList.contains('active')) {
+        contactSection.style.top = `${-contactHeight}px`;
+    } else {
+        contactSection.style.top = '0px';
+    }
+});
