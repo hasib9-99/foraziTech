@@ -5776,3 +5776,37 @@ contactBtn.addEventListener('click', () => {
         contactSection.style.top = '0px';
     }
 });
+
+
+// custom form font change
+const form = document.querySelector('.custom_field .wapf-field-group');
+const select = form.querySelector('select');
+const inputs = form.querySelectorAll('input');
+const fonts = [
+    'Amaze',
+    'Caliban',
+    'CollegiateFLF',
+    'FrenchScriptStd',
+    'Gem',
+    'Georgia',
+    'HarlowSolidItalic',
+    'LucidaHandwriting',
+    'ITCMonaLisaStd',
+    'OldEnglishTextMT',
+    'Stencil'
+];
+
+inputs[1].addEventListener('input', () => {
+    inputs[2].value = inputs[1].value;
+});
+
+select.addEventListener('change', () => {
+    const selectedOption = select.options[select.selectedIndex];
+    const optionsIndex = Array.prototype.indexOf.call(select.options, selectedOption);
+    fontChange(inputs[2], optionsIndex);
+    
+});
+
+function fontChange(input, index) {
+    input.style.fontFamily = `"${fonts[index - 1]}", Sans-serif`;
+}
