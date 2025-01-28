@@ -5804,9 +5804,20 @@ select.addEventListener('change', () => {
     const selectedOption = select.options[select.selectedIndex];
     const optionsIndex = Array.prototype.indexOf.call(select.options, selectedOption);
     fontChange(inputs[2], optionsIndex);
-    
+
 });
 
 function fontChange(input, index) {
     input.style.fontFamily = `"${fonts[index - 1]}", Sans-serif`;
 }
+
+
+// marquee text 
+document.addEventListener('DOMContentLoaded', () => {
+    const marqueeText = document.querySelectorAll('.custom-marquee .deensimc-scroll-text');
+    marqueeText.forEach((text) => {
+        const textContent = text.textContent;
+        text.innerHTML = textContent;
+    });
+});
+
