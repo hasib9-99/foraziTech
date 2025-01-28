@@ -5821,3 +5821,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+
+// marquee text upadte
+const marqueeText = document.querySelector('.custom-marqury');
+const marqueeTextContent = marqueeText.textContent;
+marqueeText.innerHTML = '';
+const marqueeTextElements = [];
+for (let i = 0; i < marqueeTextContent.length; i++) {
+    const span = document.createElement('span');
+    span.textContent = marqueeTextContent[i];
+    marqueeText.appendChild(span);
+    marqueeTextElements.push(span);
+}
+const marquee = marqueeTextElements[0];
+let marqueeIndex = 0;
+const marqueeInterval = setInterval(() => {
+    marqueeIndex = (marqueeIndex + 1) % marqueeTextElements.length;
+    marqueeTextElements.forEach((span, i) => {
+        span.classList.toggle('active', i === marqueeIndex);
+    });
+}, 500);
