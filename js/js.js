@@ -5841,3 +5841,17 @@ const marqueeInterval = setInterval(() => {
         span.classList.toggle('active', i === marqueeIndex);
     });
 }, 500);
+
+
+// blog card popup
+const blogSection = document.querySelector('.blog_section');
+const popupCard = blogSection.querySelectorAll('.blog_popup');
+
+popupCard.forEach((card) => {
+    card.querySelector('.open_pop').addEventListener('click', () => {
+        card.querySelector('.main_pop_come').classList.add('active');
+    });
+    card.querySelector('.close_pop').addEventListener('click', () => {
+        card.querySelector('.main_pop_come').classList.remove('active');
+    });
+});
