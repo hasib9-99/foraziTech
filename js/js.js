@@ -5855,3 +5855,25 @@ popupCard.forEach((card) => {
         card.querySelector('.main_pop_come').classList.remove('active');
     });
 });
+
+
+// scroll slide left and right
+const scrollLeftElements = document.querySelectorAll('.scroll_left');
+const scrollRightElements = document.querySelectorAll('.scroll_right');
+
+document.addEventListener('scroll', () => {
+    scrollLeftElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            element.style.transform = `translateX(${rect.top / 2}px)`; // Adjust the divisor for smoother motion
+        }
+    });
+
+    scrollRightElements.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            element.style.transform = `translateX(${-rect.top / 2}px)`; // Adjust the divisor for smoother motion
+        }
+    });
+});
+
