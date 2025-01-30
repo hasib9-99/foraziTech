@@ -5877,3 +5877,47 @@ document.addEventListener('scroll', () => {
     });
 });
 
+
+
+// success form page redirect outher page
+const redirectForm = document.querySelector('.redirect_form');
+const theOvserver = redirectForm.querySelector('form');
+const applyBtn = redirectForm.querySelector('button');
+
+applyBtn.addEventListener('click', () => {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1) {
+                        const result = yourFunction(node);
+                        console.log('Function result:', result);
+                        if (result) {
+                            window.location.href = 'https://relaunch.smartico.one/products/smartico-ad-studio/beta-access_success/';
+                            
+                        }
+                    }
+                });
+            }
+        });
+    });
+    observer.observe(theOvserver, { childList: true });
+    function yourFunction(newElement) {
+        const isDiv = newElement.tagName === 'DIV';
+        return isDiv;
+    }
+});
+
+
+
+// copy url and show copy text
+const theBtn = document.querySelector('.copyUrlButton');
+
+theBtn.addEventListener('click', function() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url)
+    theBtn.querySelector('p').textContent = 'Copied!';
+    setTimeout(() => {
+        theBtn.querySelector('p').textContent = 'Copy Link';
+    }, 400);
+});
