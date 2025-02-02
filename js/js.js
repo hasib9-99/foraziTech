@@ -5935,3 +5935,20 @@ colapsSection.forEach((section) => {
 });
 
 
+// image popup form galary
+const imagePopup = document.querySelector('.image_popup');
+const floorDesigns = document.querySelectorAll('.floor_design .gallery-item');
+const imagePopupClose = document.querySelector('.image_popup_close');
+
+floorDesigns.forEach((design) => {
+    design.addEventListener('click', () => {
+        const img = design.querySelector('img');
+        console.log(img.src);
+        imagePopup.querySelector('img').src = img.src;
+        imagePopup.classList.add('active');
+    });
+});
+imagePopupClose.addEventListener('click', () => {
+    imagePopup.classList.remove('active');
+});
+
