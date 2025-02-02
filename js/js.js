@@ -2201,12 +2201,12 @@ closeMenu.addEventListener("click", () => {
 // parallax images
 function parallax() {
     var parallax = document.querySelectorAll(".parallax");
-    var speed = 0.3; // The speed of the parallax effect
+    var speed = 0.2; // The speed of the parallax effect
     for (var i = 0; i < parallax.length; i++) {
         var windowHalfY = window.innerHeight / 2;
         var parallaxY = parallax[i].getBoundingClientRect().top + windowHalfY;
         var pos = parallaxY * -speed;
-        parallax[i].style.backgroundPosition = "50% " + pos + "px";
+        parallax[i].style.backgroundPosition = " center" + -pos + "px";
     }
 }
 window.addEventListener("scroll", parallax);
@@ -5893,7 +5893,7 @@ applyBtn.addEventListener('click', () => {
                         const result = yourFunction(node);
                         console.log('Function result:', result);
                         if (result) {
-                            window.location.href = 'https://relaunch.smartico.one/products/smartico-ad-studio/beta-access_success/';
+                            window.location.href = 'https://relaunch.smartico.one/products/ad-studio/beta-access_success/';
                             
                         }
                     }
@@ -5920,4 +5920,18 @@ theBtn.addEventListener('click', function() {
     setTimeout(() => {
         theBtn.querySelector('p').textContent = 'Copy Link';
     }, 400);
+}); 
+
+// collaps section
+const colapsSection = document.querySelectorAll('.colaps_section');
+colapsSection.forEach((section) => {
+    const textWraper = section.querySelector('.text_wraper');
+    const colapsBtn = section.querySelector('.colaps_btn');
+
+    colapsBtn.addEventListener('click', () => {
+        textWraper.classList.toggle('active');
+    });
+
 });
+
+
