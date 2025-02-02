@@ -5952,3 +5952,24 @@ imagePopupClose.addEventListener('click', () => {
     imagePopup.classList.remove('active');
 });
 
+
+// menu stycy and translet top
+document.addEventListener('DOMContentLoaded', () => {
+
+    let menu = document.querySelector(".main_header");
+    let lastScrollTop = 0;
+
+    window.addEventListener("scroll", function () {
+        let scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+        if (scrollTop > 1000 && scrollTop > lastScrollTop) {
+            // Scrolling down past 1000px
+            menu.classList.add("active");
+        } else {
+            // Scrolling up
+            menu.classList.remove("active");
+        }
+
+        lastScrollTop = scrollTop;
+    });
+});
