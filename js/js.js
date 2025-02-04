@@ -6018,3 +6018,41 @@ document.addEventListener('scroll', () => {
     });
 
 });
+
+
+
+
+// type writer i array
+const texts = ["Saves You Money", "Saves You Time", "Makes You Money"];
+const heading = document.querySelector(".typewriter h2");
+
+let textIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
+
+function typeText() {
+    if (!heading) return;
+
+    const currentText = texts[textIndex];
+
+    if (isDeleting) {
+        heading.textContent = currentText.substring(0, charIndex--);
+    } else {
+        heading.textContent = currentText.substring(0, charIndex++);
+    }
+
+    let speed = isDeleting ? 50 : 100;
+
+    if (!isDeleting && charIndex === currentText.length) {
+        isDeleting = true;
+        speed = 2000; // Pause before deleting
+    } else if (isDeleting && charIndex === 0) {
+        isDeleting = false;
+        textIndex = (textIndex + 1) % texts.length; // Move to next text
+        speed = 500; // Pause before typing new text
+    }
+
+    setTimeout(typeText, speed);
+}
+
+typeText();
