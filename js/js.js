@@ -5993,3 +5993,28 @@ if (window.innerWidth > 768) {
     workWraper.style.transform = `translateX(${progress}px)`;
 });
 }
+
+
+
+// class add in sticky mood
+const iconCon = document.querySelector('.icon_section');
+const iconBoxs = iconCon.querySelectorAll('.custom_icon_box');
+const iconImage = iconCon.querySelectorAll('.mony_image');
+
+document.addEventListener('scroll', () => {
+    const iconRect = iconCon.getBoundingClientRect();
+    const sectionHeight = iconCon.clientHeight;
+
+    let activeIndex = 2;
+
+    if (iconRect.top > -sectionHeight * 0.33) {
+        activeIndex = 0;
+    } else if (iconRect.top > -sectionHeight * 0.66) {
+        activeIndex = 1;
+    }
+
+    iconBoxs.forEach((box, i) => {
+        box.classList.toggle('active', i === activeIndex);
+    });
+
+});
