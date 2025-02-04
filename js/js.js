@@ -5894,7 +5894,7 @@ applyBtn.addEventListener('click', () => {
                         console.log('Function result:', result);
                         if (result) {
                             window.location.href = 'https://relaunch.smartico.one/products/ad-studio/beta-access_success/';
-                            
+
                         }
                     }
                 });
@@ -5913,14 +5913,14 @@ applyBtn.addEventListener('click', () => {
 // copy url and show copy text
 const theBtn = document.querySelector('.copyUrlButton');
 
-theBtn.addEventListener('click', function() {
+theBtn.addEventListener('click', function () {
     const url = window.location.href;
     navigator.clipboard.writeText(url)
     theBtn.querySelector('p').textContent = 'Copied!';
     setTimeout(() => {
         theBtn.querySelector('p').textContent = 'Copy Link';
     }, 400);
-}); 
+});
 
 // collaps section
 const colapsSection = document.querySelectorAll('.colaps_section');
@@ -5954,22 +5954,42 @@ imagePopupClose.addEventListener('click', () => {
 
 
 // menu stycy and translet top
-document.addEventListener('DOMContentLoaded', () => {
+const menuIcon = document.querySelector('.nav-burger-icon');
+const subMenu = document.querySelector('.sub_menu');
+let menu = document.querySelector(".main_header");
+let lastScrollTop = 0;
 
-    let menu = document.querySelector(".main_header");
-    let lastScrollTop = 0;
-
-    window.addEventListener("scroll", function () {
-        let scrollTop = window.scrollY || document.documentElement.scrollTop;
-
-        if (scrollTop > 1000 && scrollTop > lastScrollTop) {
-            // Scrolling down past 1000px
-            menu.classList.add("active");
-        } else {
-            // Scrolling up
-            menu.classList.remove("active");
-        }
-
-        lastScrollTop = scrollTop;
-    });
+window.addEventListener("scroll", function () {
+    let scrollTop = window.scrollY || document.documentElement.scrollTop;
+    if (scrollTop > 0 && scrollTop > lastScrollTop) {
+        // Scrolling down past 1000px
+        menu.classList.add("active");
+    } else {
+        // Scrolling up
+        menu.classList.remove("active");
+    }
+    lastScrollTop = scrollTop;
 });
+
+menuIcon.addEventListener('click', () => {
+    subMenu.classList.toggle('active');
+});
+
+
+//  varticale scroll and sticky section
+if (window.innerWidth > 768) { 
+    const mainCon = document.querySelector('.main_con');
+    const workItems = mainCon.querySelectorAll('.work_item');
+    const workWraper = mainCon.querySelector('.work_wraper');
+
+    let totalWidth = Array.from(workItems).reduce((acc, item) => acc + item.offsetWidth, 0);
+    let useWidth = totalWidth - workItems[0].offsetWidth;
+
+    mainCon.style.height = `${useWidth + window.innerHeight}px`; // Ensure enough scroll space
+
+    document.addEventListener('scroll', () => {
+    const rect = mainCon.getBoundingClientRect();
+    let progress = Math.min(0, Math.max(rect.top, -useWidth)); // Keep within bounds
+    workWraper.style.transform = `translateX(${progress}px)`;
+});
+}
