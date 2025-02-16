@@ -6131,3 +6131,90 @@ previewVideoClose.addEventListener('click', () => {
     previewVideo.pause();
 });
 
+
+// custom slider
+const about = document.querySelector('.custom_about');
+
+window.addEventListener('scroll', () => {
+    console.log(window.scrollY);
+    
+    if (window.scrollY === 0) {
+        about.style.transform = `scale(1)`;
+    } else if (window.scrollY >= 10) {
+        about.style.transform = `scale(${window.scrollY / 10 })`;
+    }
+});
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cardSection = document.querySelector('.card_section');
+    const cardWraper = document.querySelector('.card_wraper');
+    let wrapperCenter = window.innerWidth / 2;
+    const maxMovement = 300; // Adjust as needed
+
+    // Update wrapperCenter on window resize
+    window.addEventListener('resize', () => {
+        wrapperCenter = window.innerWidth / 2;
+    });
+
+    // Apply smooth transition
+    cardWraper.style.transition = 'transform 0.3s ease-out';
+
+    cardSection.addEventListener('mousemove', (e) => {
+        const x = e.clientX;
+        const moveX = ((x - wrapperCenter) / wrapperCenter) * maxMovement;
+        cardWraper.style.transform = `translateX(${moveX}px)`;
+    });
+
+    cardSection.addEventListener('mouseout', () => {
+        cardWraper.style.transform = `translateX(0px)`; // Reset smoothly
+    });
+});
+
+
+//pathfill
+document.addEventListener('DOMContentLoaded', () => {
+    const thepath = document.querySelectorAll('.pathfill');
+    thepath.forEach((path) => {
+        path.classList.add('active');
+    });
+});
+
+//
+const theBtns = document.querySelectorAll('.location_btn ul li');
+const locationTabs = document.querySelectorAll('.locarions_tabs .locarions_tab');
+
+theBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        const isActive = locationTabs[i].classList.contains('active');
+        locationTabs.forEach((tab) => tab.classList.remove('active'));
+        if (!isActive) {
+            locationTabs[i].classList.add('active');
+        }
+    });
+});
+
+
+
+
+// if text on haif veiwport clsaa add and remove
+const servicesTexts = document.querySelectorAll('.services_tttle');
+const servicesImg = document.querySelectorAll('.servise_image');
+const viewportMiddle = window.innerHeight / 2;
+let activeIndex = 0;
+
+const handleScroll = () => {
+    servicesTexts.forEach((text, i) => {
+        const textRect = text.getBoundingClientRect();
+        if (textRect.top < viewportMiddle && textRect.bottom > viewportMiddle) {
+            servicesTexts.forEach((item) => item.classList.remove('active'))
+            servicesImg.forEach((image) => image.classList.remove('active'))
+            
+            text.classList.add('active');
+            servicesImg[i].classList.add('active')
+        }
+    });
+};
+
+window.addEventListener('scroll', handleScroll);
+handleScroll();
