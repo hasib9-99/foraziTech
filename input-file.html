@@ -1,206 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Horizontal Scroll with Mouse Wheel</title>
-  <style>
-    .wapf-field-container{
-    padding: 0 0 16px 0;
-}
-@media (max-width: 767px){
-    .wapf-field-container{
-    padding: 0 0 12px 0;
-}
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Screen Popup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: Arial, sans-serif;
+        }
 
+        /* Popup Styling */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
 
-.wapf-pricing-hint{
-    display: none;
-}
+        .popup-content {
+            background: white;
+            padding: 20px;
+            width: 50%;
+            max-width: 500px;
+            text-align: center;
+            border-radius: 8px;
+            position: relative;
+        }
 
+        .popup.active {
+            opacity: 1;
+            visibility: visible;
+        }
 
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+        }
 
-
-.wapf-field-label{
-    font-family: "Black Han Sans";
-    font-size: 20px;
-    line-height: 28px;
-    margin-bottom: 8px !important;
-}
-.wapf-field-label .required{
-    text-decoration: none;
-    color: #FF0000;
-}
-.wapf-field-input .wapf-radios{
-    display: flex;
-    gap: 16px;
-}
-@media (max-width: 767px){
-    .wapf-field-input .wapf-radios{
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-}
-
-
-
-
-
-.wapf-field-input .wapf-radios > .wapf-checkable{
-    width: 50%;
-    background: #F5F5F5;
-    padding: 16px 2px 16px 16px;
-    border: 2px solid #171717;
-    border-radius: 8px;
-    position: relative;
-}
-@media (max-width: 767px){
-    .wapf-field-input .wapf-radios > .wapf-checkable{
-    width: 100%;
-}
-}
-.wapf-field-input .wapf-radios > .wapf-checkable.wapf-checked{
-    background-color: #171717;
-}
-.wapf-field-input .wapf-radios > .wapf-checkable .wapf-input-label{
-    display: flex;
-    align-items: center;
-    gap: 0px;
-}
-.wapf-field-input .wapf-radios > .wapf-checkable input{
-    margin-top: 0;
-    width: 16px;
-    height: 16px;
-}
-.wapf-field-input .wapf-radios > .wapf-checkable .wapf-label-text{
-    font-family: "Syne";
-    font-size: 20px;
-    line-height: 28px;
-    font-weight: 500;
-    color: #171717;
-    padding-left: 8;
-}
-.wapf-field-input .wapf-radios > .wapf-checkable.wapf-checked .wapf-label-text{
-    color: #FFF;
-}
-.wapf-field-input .wapf-radios > .wapf-checkable .wapf-label-text::after{
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border-radius: 6px
-}
-.wapf-field-input .wapf-radios > .wapf-checkable.wapf-checked input{
-    accent-color: #F5F5F5;
-}
-
-
-
-.wapf-field-description{
-    font-family: "Syne" !important;
-    font-size: 20px !important;
-    line-height: 28px !important;
-    font-weight: 500 !important;
-    color: #171717 !important;
-    padding: 8px 0 0 0 !important;
-    opacity: 1 !important;
-}
-@media (max-width: 767px){
-    .wapf-field-description{
-    font-size: 16px !important;
-    line-height: 20px !important;
-}
-}
-
-
-
-.wapf-field-textarea textarea{
-    border: 2px solid #171717;
-    border-radius: 8px;
-    padding: 16px;
-    height: 140px;
-    font-family: "Syne";
-    font-size: 20px;
-    line-height: 28px;
-    font-weight: 500;
-    color: #171717;
-    background-color: #F5F5F5;
-}
-.wapf-field-text input{
-    border: 2px solid #171717;
-    border-radius: 8px;
-    padding: 16px;
-    font-family: "Syne";
-    font-size: 20px;
-    line-height: 28px;
-    font-weight: 500;
-    color: #171717;
-    background-color: #F5F5F5;
-}
-.wapf-field-email input{
-    border: 2px solid #171717;
-    border-radius: 8px;
-    padding: 16px;
-    font-family: "Syne";
-    font-size: 20px;
-    line-height: 28px;
-    font-weight: 500;
-    color: #171717;
-    background-color: #F5F5F5;
-}
-.wapf-field-file input{
-    background: #F5F5F5;
-    width: 100%;
-    height: 150px;
-    padding: 20px;
-    border: 2px solid #171717;
-    border-radius: 8px;
-    font-family: "Syne";
-    font-size: 20px;
-    line-height: 28px;
-    font-weight: 500;
-    color: #171717;
-}
-
-
-
-
-.wapf-product-totals{
-    display: none !important;
-}
-
-
-.single_add_to_cart_button{
-    box-shadow: 2px 2px 0px 1px #000000 !important;
-    max-width: calc(100% - 5px) !important;
-}
-  </style>
+        /* Open Button */
+        .open-popup-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 20px;
+        }
+    </style>
 </head>
+
+
 <body>
 
-  <!-- HTML Structure for Horizontal Scroll Section -->
-  <div class="scroll-section">
-    <div class="card">Card 1</div>
-    <div class="card">Card 2</div>
-    <div class="card">Card 3</div>
-    <!-- Add more cards as needed -->
-  </div>
+    <button class="open-popup-btn" onclick="openPopup()">Open Full Screen Popup</button>
 
-  <!-- JavaScript for Horizontal Scrolling on Vertical Mouse Wheel -->
-  <script>
-    const scrollSection = document.querySelector('.scroll-section');
+    <div class="popup" id="popup">
+        <div class="popup-content">
+            <button class="close-btn" onclick="closePopup()">✖</button>
+            <h2>Full Screen Popup</h2>
+            <p>This is a simple full-screen popup.</p>
+        </div>
+    </div>
+    <div class="con" style="height: 100vh; width: 100vw; background-color: red;">
+        <h1>hello</h1>
+    </div>
 
-    scrollSection.addEventListener("scroll", () => {
-  console.log("Scroll position:", window.scrollY);
-});
-;
-  </script>
+
+
+
+
+
+
+
+
+<code class="language-javascript" style="white-space:pre"><span>&lt;a href=</span><span style="color:#abe338">"https://eu.jotform.com/app/222497381619364?utm_source=share-qr&amp;utm_medium=website&amp;utm_campaign=portal-app&amp;utm_term=222497381619364"</span><span> rel=</span><span style="color:#abe338">"no-follow"</span><span>&gt;</span><span class="" style="color:#ffa07a">&lt;</span><span class="xml" style="color:#ffa07a">img</span><span class="xml" style="color:#ffa07a"> </span><span class="xml hljs-attr" style="color:#ffa07a">src</span><span class="xml" style="color:#ffa07a">=</span><span class="xml" style="color:#abe338">""</span><span class="xml" style="color:#ffa07a"> </span><span class="xml hljs-attr" style="color:#ffa07a">width</span><span class="xml" style="color:#ffa07a">=</span><span class="xml" style="color:#abe338">"100%"</span><span class="xml" style="color:#ffa07a"> </span><span class="xml hljs-attr" style="color:#ffa07a">style</span><span class="xml" style="color:#ffa07a">=</span><span class="xml" style="color:#abe338">"max-width: 200px"</span><span class="xml" style="color:#ffa07a"> </span><span class="xml hljs-attr" style="color:#ffa07a">alt</span><span class="xml" style="color:#ffa07a">=</span><span class="xml" style="color:#abe338">"QR Code for Talentos GBI"</span><span class="xml" style="color:#ffa07a">/&gt;</span><span>&lt;/a&gt;</span></code>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function openPopup() {
+            document.getElementById("popup").classList.add("active");
+        }
+
+        function closePopup() {
+            document.getElementById("popup").classList.remove("active");
+        }
+    </script>
 
 </body>
+
 </html>
