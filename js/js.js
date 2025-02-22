@@ -5977,7 +5977,7 @@ menuIcon.addEventListener('click', () => {
 
 
 //  varticale scroll and sticky section
-if (window.innerWidth > 768) { 
+if (window.innerWidth > 768) {
     const mainCon = document.querySelector('.main_con');
     const workItems = mainCon.querySelectorAll('.work_item');
     const workWraper = mainCon.querySelector('.work_wraper');
@@ -5988,10 +5988,10 @@ if (window.innerWidth > 768) {
     mainCon.style.height = `${useWidth + window.innerHeight}px`; // Ensure enough scroll space
 
     document.addEventListener('scroll', () => {
-    const rect = mainCon.getBoundingClientRect();
-    let progress = Math.min(0, Math.max(rect.top, -useWidth)); // Keep within bounds
-    workWraper.style.transform = `translateX(${progress}px)`;
-});
+        const rect = mainCon.getBoundingClientRect();
+        let progress = Math.min(0, Math.max(rect.top, -useWidth)); // Keep within bounds
+        workWraper.style.transform = `translateX(${progress}px)`;
+    });
 }
 
 
@@ -6105,7 +6105,7 @@ sliderWrapper.addEventListener('transitionend', () => {
     sliderPreview.style.transform = 'translateY(100%)';
     sliderPreview.style.opacity = 0;
 
-    void sliderPreview.offsetHeight; 
+    void sliderPreview.offsetHeight;
 
     if (activeSlide) {
         const bgImage = window.getComputedStyle(activeSlide).backgroundImage;
@@ -6115,7 +6115,7 @@ sliderWrapper.addEventListener('transitionend', () => {
         prevDitels.textContent = activeDesrip;
     }
 
-    sliderPreview.style.transition = 'all 0.5s ease'; 
+    sliderPreview.style.transition = 'all 0.5s ease';
     sliderPreview.style.transform = 'translateY(0%)';
     sliderPreview.style.opacity = 1;
 });
@@ -6123,7 +6123,7 @@ sliderWrapper.addEventListener('transitionend', () => {
 activeVideoBtn.addEventListener('click', () => {
     videoSection.classList.add('active');
     previewVideo.play();
-    
+
 });
 
 previewVideoClose.addEventListener('click', () => {
@@ -6137,11 +6137,11 @@ const about = document.querySelector('.custom_about');
 
 window.addEventListener('scroll', () => {
     console.log(window.scrollY);
-    
+
     if (window.scrollY === 0) {
         about.style.transform = `scale(1)`;
     } else if (window.scrollY >= 10) {
-        about.style.transform = `scale(${window.scrollY / 10 })`;
+        about.style.transform = `scale(${window.scrollY / 10})`;
     }
 });
 
@@ -6209,7 +6209,7 @@ const handleScroll = () => {
         if (textRect.top < viewportMiddle && textRect.bottom > viewportMiddle) {
             servicesTexts.forEach((item) => item.classList.remove('active'))
             servicesImg.forEach((image) => image.classList.remove('active'))
-            
+
             text.classList.add('active');
             servicesImg[i].classList.add('active')
         }
@@ -6218,3 +6218,22 @@ const handleScroll = () => {
 
 window.addEventListener('scroll', handleScroll);
 handleScroll();
+
+// custom varticale scroll and sticky section
+const section = document.querySelector('.the-section');
+const cardWraper = document.querySelector('.card_wraper')
+document.addEventListener('scroll', () => {
+    const rect = section.getBoundingClientRect();
+    console.log(rect.top);
+    if (rect.top > 0) {
+        console.log(rect.top);
+        cardWraper.style.transform = `translateX(${rect.top}px)`;
+
+    } else if (rect.top < 0) {
+        console.log(rect.top);
+        cardWraper.style.transform = `translateX(0px)`;
+
+    }
+});
+
+
