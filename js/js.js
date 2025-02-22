@@ -6249,3 +6249,19 @@ document.addEventListener('click', () => {
     thebox.style.borderColor = 'rgb(237, 239, 243)';
 });
 
+
+// scroll efect
+
+const scrollSections = document.querySelectorAll('.scroll_section');
+
+scrollSections.forEach((section) => {
+    document.addEventListener('scroll', () => {
+        const rec = section.getBoundingClientRect();
+        if (rec.top < window.innerHeight / 2) {
+            section.classList.add('active');
+        } else {
+            section.classList.remove('active');
+        }
+    });
+});
+
