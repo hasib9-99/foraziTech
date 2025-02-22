@@ -6237,3 +6237,15 @@ document.addEventListener('scroll', () => {
 });
 
 
+// outline focus
+const thebox = document.querySelector('.outline_focuse > div');
+
+thebox.addEventListener('click', (event) => {
+    event.stopPropagation();
+    thebox.style.borderColor = 'rgb(58, 125, 255)';
+});
+
+document.addEventListener('click', () => {
+    thebox.style.borderColor = 'rgb(237, 239, 243)';
+});
+
