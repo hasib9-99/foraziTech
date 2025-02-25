@@ -6346,3 +6346,49 @@ setInterval(wraper.addEventListener('transitionend', updateProgress), 1000);
 updateProgress();
 
 
+
+// varticar scroll and sticky section and pre card animation 
+const animationSection = document.querySelector('.animation-section');
+const animationDiv = document.querySelector('.animation-section .animation-div');
+const boxWrap = document.querySelector('.animation-section .box-wrap');
+// boxs
+const oddBox = boxWrap.querySelectorAll('.box.odd');
+const evenBox = boxWrap.querySelectorAll('.box.even');
+
+animationSection.style.height = `${animationSection.offsetHeight + 800}px`;
+
+animationDiv.style.position = 'sticky';
+animationDiv.style.top = '0';
+
+document.addEventListener('scroll', () => {
+    const animationSectionRect = animationSection.getBoundingClientRect();
+    const animationDivRect = animationDiv.getBoundingClientRect();
+
+    let distance = animationDivRect.top - animationSectionRect.top;
+
+    console.log("Distance:", distance);
+
+    boxWrap.style.transform = `translateX(${-distance / 2.5}px)`;
+    boxWrap.style.transition = 'transform 0.5s ease';
+
+    // celculate the tranlateY each box
+    const evenTranslate = 30 - (distance / 800) * 60;
+    const oddTranslate = (distance / 800) * 30;
+
+    // Apply transformations
+    oddBox.forEach(box => {
+        box.style.transform = `translateY(${oddTranslate}px)`;
+        box.style.transition = 'transform 0.5s ease';
+    });
+
+    evenBox.forEach(box => {
+        box.style.transform = `translateY(${evenTranslate}px)`;
+        box.style.transition = 'transform 0.5s ease';
+    });
+});
+
+const splitUrl = window.location.href.split('/');
+const url = splitUrl[3];
+if (url === 'sample') {
+    mainHeader.classList.add('active');
+}
