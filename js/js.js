@@ -6296,3 +6296,53 @@ slides.forEach((slide) => {
 updateSlides();
 
 
+
+// custom slider nevigetor
+const sliders = document.querySelectorAll('.custom_slider .swiper-wrapper .swiper-slide');
+const SliderLenth = document.querySelectorAll('.custom_slider .swiper-slide:not(.swiper-slide-duplicate)');
+const progresBar = document.querySelector('.progres_bar');
+console.log(sliders);
+
+function updateprogres() {
+    sliders.forEach((slider) => {
+        const activeSlide = slider.querySelector('.swiper-slide-active');
+        const lable = activeSlide.getAttribute('aria-label');
+        console.log(lable);
+        lable.split('/')[1];
+        progresBar.style.width = `${(lable.split('/')[1] / SliderLenth.length) * 100}%`;
+
+    });
+}
+
+
+updateprogres();
+
+
+
+// custom slider nevigetor
+const sliders = document.querySelectorAll('.custom_slider .swiper-slide');
+const SliderLength = document.querySelectorAll('.custom_slider .swiper-slide:not(.swiper-slide-duplicate)').length;
+const progresBar = document.querySelector('.progres_bar');
+const wraper = document.querySelector('.custom_slider .swiper-wrapper');
+const progresText = document.querySelector('.progtes_text  h3');
+
+function updateProgress() {
+    const activeSlide = document.querySelector('.custom_slider .swiper-slide-active');
+
+    if (activeSlide) {
+        const label = activeSlide.getAttribute('aria-label'); // Example: "2 / 5"
+        const [currentSlide, totalSlides] = label.split('/').map(num => parseInt(num.trim(), 10));
+
+        if (!isNaN(currentSlide) && !isNaN(totalSlides)) {
+            progresBar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+            console.log(progresText.textContent);
+
+            progresText.textContent = `0${currentSlide} / 0${totalSlides}`;
+        }
+    }
+}
+
+setInterval(wraper.addEventListener('transitionend', updateProgress), 1000);
+updateProgress();
+
+
