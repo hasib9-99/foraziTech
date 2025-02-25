@@ -6250,18 +6250,49 @@ document.addEventListener('click', () => {
 });
 
 
-// scroll efect
+// custom slider
+const slides = document.querySelectorAll(".slide");
+let currentIndex = 0;
 
-const scrollSections = document.querySelectorAll('.scroll_section');
+function updateSlides() {
+    slides.forEach((slide, index) => {
+        slide.classList.remove("active", "prev", "next", "hidden", "hidden-left");
 
-scrollSections.forEach((section) => {
-    document.addEventListener('scroll', () => {
-        const rec = section.getBoundingClientRect();
-        if (rec.top < window.innerHeight / 2) {
-            section.classList.add('active');
+        if (index === currentIndex) {
+            slide.classList.add("active");
+        } else if (index === (currentIndex + 1) % slides.length) {
+            slide.classList.add("next");
+        } else if (index === (currentIndex - 1 + slides.length) % slides.length) {
+            slide.classList.add("prev");
+        } else if (index === (currentIndex + 2) % slides.length) {
+            slide.classList.add("hidden");
         } else {
-            section.classList.remove('active');
+            slide.classList.add("hidden-left");
+        }
+    });
+}
+
+function nextSlide() {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateSlides();
+}
+
+function prevSlide() {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    updateSlides();
+}
+
+slides.forEach((slide) => {
+    slide.addEventListener("click", (event) => {
+        if (event.target.classList.contains("next")) {
+            nextSlide();
+        } else if (event.target.classList.contains("prev")) {
+            prevSlide();
         }
     });
 });
+
+// setInterval(nextSlide, 3000); // Auto slide every 3 seconds
+updateSlides();
+
 
