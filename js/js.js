@@ -6392,3 +6392,30 @@ const url = splitUrl[3];
 if (url === 'sample') {
     mainHeader.classList.add('active');
 }
+
+// custom hover efect
+const theFeature = document.querySelectorAll('.hover_card');
+
+theFeature.forEach((feature) => {
+    const philosophyTitles = feature.querySelectorAll('.philosophy_title');
+    const philosophyContents = feature.querySelectorAll('.philosophy_content');
+
+    philosophyTitles.forEach((title, i) => {
+        title.addEventListener('mouseover', () => {
+            philosophyTitles.forEach((item) => item.classList.remove('active'));
+            philosophyContents.forEach((item) => item.classList.remove('active'));
+
+            title.classList.add('active');
+            philosophyContents[i].classList.add('active');
+        });
+
+        title.addEventListener('mouseout', () => {
+            title.classList.remove('active');
+            philosophyContents[i].classList.remove('active');
+            philosophyTitles[0].classList.add('active');
+            philosophyContents[0].classList.add('active');
+
+        });
+    });
+});
+
