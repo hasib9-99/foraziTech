@@ -6419,3 +6419,27 @@ theFeature.forEach((feature) => {
     });
 });
 
+
+
+
+
+// mulitple after content add using set property
+
+const data = {
+    'Explosive Review Growth': 'Our clients see a 1,152% increase in reviews in their first year. 4x more reviews? That’s just the beginning!',
+    'Texting Beats Email – Every Time': 'Texts are 6x more effective than emails for reviews. We do both to guarantee results.',
+    'Personalised Review Requests That Get Noticed': 'We text & email each customer a custom image with their name—featuring you or your team—to grab their attention!',
+    'Turn 5-Star Reviews into Social Proof': 'Every time you earn a 5-star review, we create and post branded social media content using your logo & photos!',
+    'Never Worry About Review Responses Again': "We personally respond to every review using the reviewer's name and context—so you don’t have to.",
+    'Full Automation – No Extra Work for You': 'We custom-build an integration into your business, automating the entire process. Get reviews, referrals & customers on autopilot with 6,000+ integrations!',
+    'Protect Your Reputation Before Issues Go Public': 'Negative feedback? We send it to you, not Google—so you can fix problems before they impact your rating. (Optional feature.)'
+};
+
+const listIcons = document.querySelectorAll('.hover_item ul li');
+
+listIcons.forEach((list) => {
+    const theIcon = list.querySelector('.elementor-icon-list-icon');
+    const title = list.querySelector('.elementor-icon-list-text')?.textContent.trim();
+    theIcon.style.setProperty('--after-content', `"${data[title]}"`);
+});
+
