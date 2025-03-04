@@ -6476,7 +6476,7 @@ const sectionBtn = document.querySelectorAll('.section_btn');
 sectionBtn.forEach((btn, i) => {
     btn.addEventListener('click', () => {
         sectionBtn.forEach((btn) => btn.classList.remove('btn_active'));
-
+        
         sectionBtn[i].classList.add('btn_active');
         wraper.style.transform = `translateX(${i * -100}%)`;
 
@@ -6492,4 +6492,42 @@ function bgupadte(btn) {
         bg.remove();
     }, 800);
 }
+
+
+
+// custom page loder
+document.addEventListener("DOMContentLoaded", function () {
+    // Create preloader container
+    let preloader = document.createElement("div");
+    preloader.id = "custom-preloader";
+    Object.assign(preloader.style, {
+        position: "fixed",
+        width: "100%",
+        height: "100%",
+        background: "#ffffff",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: "9999",
+        top: "0",
+        left: "0"
+    });
+
+    // Create image element
+    let img = document.createElement("img");
+    img.src = "https://elated-mayer.77-68-127-114.plesk.page/wp-content/uploads/2025/03/loading.gif"; // Replace with your image URL
+    img.alt = "Loading...";
+    img.style.width = "100px"; // Adjust as needed
+
+    // Append image to preloader
+    preloader.appendChild(img);
+    document.body.appendChild(preloader);
+
+    // Remove preloader after page loads
+    window.onload = function () {
+        setTimeout(() => {
+            preloader.remove();
+        }, 1000); // Adjust delay if needed
+    };
+});
 
