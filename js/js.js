@@ -6443,3 +6443,53 @@ listIcons.forEach((list) => {
     theIcon.style.setProperty('--after-content', `"${data[title]}"`);
 });
 
+
+//
+const iconslist = document.querySelectorAll('.list-scroll-on-mobile .elementor-icon-list-items .elementor-icon-list-item');
+const containers = document.querySelectorAll('#generative-ai-course-curriculum, #instructors-section, #alumni-is-saying, #capstone-projects');
+
+document.addEventListener('scroll', () => {
+    containers.forEach((container, i) => {
+        if (container.getBoundingClientRect().top <= window.innerHeight) {
+
+            iconslist.forEach((icon) => icon.classList.remove('active'));
+            iconslist[i].classList.add('active');
+        } else {
+            iconslist[i].classList.remove('active');
+        }
+    });
+});
+
+iconslist.forEach((item) => {
+    item.addEventListener('click', () => {
+        iconslist.forEach((icon) => icon.classList.remove('active'));
+        item.classList.add('active');
+    });
+})
+
+
+// slider with custom button
+const wraper = document.querySelector('.section_wraper');
+const theSection = wraper.querySelectorAll('.custom_section');
+const sectionBtn = document.querySelectorAll('.section_btn');
+
+sectionBtn.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        sectionBtn.forEach((btn) => btn.classList.remove('btn_active'));
+
+        sectionBtn[i].classList.add('btn_active');
+        wraper.style.transform = `translateX(${i * -100}%)`;
+
+        bgupadte(btn)
+    });
+});
+
+function bgupadte(btn) {
+    const bg = document.createElement('div');
+    bg.classList.add('btn_bg');
+    btn.appendChild(bg);
+    setTimeout(() => {
+        bg.remove();
+    }, 800);
+}
+
