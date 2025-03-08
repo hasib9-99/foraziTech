@@ -6476,10 +6476,12 @@ const sectionBtn = document.querySelectorAll('.section_btn');
 sectionBtn.forEach((btn, i) => {
     btn.addEventListener('click', () => {
         sectionBtn.forEach((btn) => btn.classList.remove('btn_active'));
-        
+
         sectionBtn[i].classList.add('btn_active');
         wraper.style.transform = `translateX(${i * -100}%)`;
 
+        theSection.forEach((section) => section.classList.remove('active_overly'));
+        ssvActive(i)
         bgupadte(btn)
     });
 });
@@ -6491,6 +6493,12 @@ function bgupadte(btn) {
     setTimeout(() => {
         bg.remove();
     }, 800);
+}
+
+function ssvActive(item) {
+    setTimeout(() => {
+        theSection[item].classList.add('active_overly');
+    }, 1000);
 }
 
 
@@ -6529,5 +6537,43 @@ document.addEventListener("DOMContentLoaded", function () {
             preloader.remove();
         }, 1000); // Adjust delay if needed
     };
+});
+
+// 
+document.addEventListener('DOMContentLoaded', () => {
+    const theHeader = document.querySelector('.elementor-sticky');
+
+    document.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+
+        if (scrollPosition > 20) {
+            theHeader.classList.add('active');
+        } else {
+            theHeader.classList.remove('active');
+        }
+    });
+});
+
+
+// spasicic page add class for header
+
+const mainHeader = document.querySelector('.custom_header');
+const BlackSction = document.querySelector('.black-section');
+
+const splitUrl = window.location.href.split('/');
+const url = splitUrl[3];
+const pageSlags = ['phuket-web-design', '404', 'test-3'];
+
+if (pageSlags.includes(url)) {
+    mainHeader.classList.add('active');
+}
+
+document.addEventListener('scroll', () => {
+    const rect = BlackSction.getBoundingClientRect();
+    if (rect.top < 0) {
+        mainHeader.classList.add('active');
+    } else {
+        mainHeader.classList.remove('active');
+    }
 });
 

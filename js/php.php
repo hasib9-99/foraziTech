@@ -82,3 +82,40 @@ add_action('rest_api_init', function () {
         console.error('Error fetching detailed categories and posts:', error);
     });
 </script>
+
+
+
+
+
+
+
+<!-- blog parmaling change  -->
+<?php
+
+function custom_post_permalink($permalink, $post) {
+    // Only modify the default "post" type
+    if ($post->post_type === 'post') {
+        return home_url('/blog/' . $post->post_name . '/');
+    }
+    return $permalink;
+}
+add_filter('post_link', 'custom_post_permalink', 10, 2);
+
+// Add a rewrite rule to ensure posts work correctly
+function custom_post_rewrite_rules($rules) {
+    $new_rules = array(
+        'blog/([^/]+)/?$' => 'index.php?name=$matches[1]'
+    );
+    return $new_rules + $rules;
+}
+add_filter('rewrite_rules_array', 'custom_post_rewrite_rules');
+
+// Ensure the post type query works
+function custom_parse_request($query) {
+    if (!is_admin() && isset($query->query['name']) && !isset($query->query['post_type'])) {
+        $query->set('post_type', 'post');
+    }
+}
+add_action('pre_get_posts', 'custom_parse_request');
+
+?>
