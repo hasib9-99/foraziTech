@@ -6577,3 +6577,60 @@ document.addEventListener('scroll', () => {
     }
 });
 
+
+
+// custm menu popup animation
+const mainPopup = document.querySelector('.main_popup');
+const manuBtn = document.querySelector('.menu_btn');
+const menuClose = document.querySelector('.menu_close');
+const bars = mainPopup.querySelectorAll('.bar');
+const totalDuration = (bars.length + 1) * 100;
+
+const fadeUp = document.querySelectorAll('.custom_fade-up');
+const menuImage = document.querySelector('.menu_image');
+
+
+manuBtn.addEventListener('click', () => {
+    mainPopup.style.display = 'flex';
+
+    bars.forEach((bar, i) => {
+        setTimeout(() => {
+            bar.style.transform = 'translateX(0%)';
+        }, i * 100);
+    });
+
+    setTimeout(() => {
+        menuClose.style.transform = 'scale(1)';
+    }, 100);
+
+    fadeUp.forEach((item, i) => {
+        setTimeout(() => {
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+            menuImage.style.opacity = '1';
+        }, totalDuration + (i * 100));
+    });
+
+});
+
+menuClose.addEventListener('click', () => {
+    fadeUp.forEach((item, i) => {
+        setTimeout(() => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(50%)';
+            menuImage.style.opacity = '0';
+        }, i * 100);
+    });
+
+    bars.forEach((bar, i) => {
+        setTimeout(() => {
+            bar.style.transform = 'translateX(100%)';
+        }, 200 + (i * 100));
+    });
+
+    setTimeout(() => {
+        mainPopup.style.display = 'none';
+    }, 600);
+
+    menuClose.style.transform = 'scale(0)';
+});
