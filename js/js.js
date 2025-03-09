@@ -6634,3 +6634,28 @@ menuClose.addEventListener('click', () => {
 
     menuClose.style.transform = 'scale(0)';
 });
+
+
+// scroll and add class
+
+const cards = document.querySelectorAll('.card_wraper .scroll-points');
+const scrollImgs = document.querySelectorAll('.scroll_img');
+
+const activeLocative = window.innerHeight / 3;
+
+document.addEventListener('scroll', () => {
+    cards.forEach((card, i) => {
+
+        const rect = card.getBoundingClientRect();
+        if (rect.top < activeLocative) {
+            card.classList.add('active');
+            console.log(i);
+            scrollImgs[i]?.classList.add('active');
+
+        } else if (rect.top > activeLocative) {
+            card.classList.remove('active');
+            console.log(i);
+            scrollImgs[i]?.classList.remove('active');
+        }
+    });
+});
