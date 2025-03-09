@@ -6659,3 +6659,43 @@ document.addEventListener('scroll', () => {
         }
     });
 });
+
+//mega menu
+const theMenu = document.querySelectorAll('.custom_menu .elementor-nav-menu--main .menu-item');
+const content = document.querySelectorAll('.menu_drop');
+
+theMenu.forEach((menu) => {
+    const menuTitle = menu.querySelector('a').textContent.trim();
+    const relatedContent = document.querySelector(`.menu_drop[data-type="${menuTitle}"]`);
+
+    if (!relatedContent) return;
+
+    // Show dropdown on hover
+    menu.addEventListener('mouseenter', () => {
+        relatedContent.style.transform = 'translateY(0)';
+        relatedContent.style.opacity = '1';
+        relatedContent.style.pointerEvents = 'auto';
+    });
+
+    relatedContent.addEventListener('mouseenter', () => {
+        relatedContent.style.transform = 'translateY(0)';
+        relatedContent.style.opacity = '1';
+        relatedContent.style.pointerEvents = 'auto';
+    });
+
+    const hideDropdown = () => {
+        relatedContent.style.transform = 'translateY(-100%)';
+        relatedContent.style.opacity = '0';
+        relatedContent.style.pointerEvents = 'none';
+    };
+
+    menu.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            if (!relatedContent.matches(':hover')) {
+                hideDropdown();
+            }
+        }, 200); // Small delay to allow smooth transition
+    });
+
+    relatedContent.addEventListener('mouseleave', hideDropdown);
+});
