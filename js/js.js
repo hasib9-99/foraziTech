@@ -6699,3 +6699,276 @@ theMenu.forEach((menu) => {
 
     relatedContent.addEventListener('mouseleave', hideDropdown);
 });
+
+
+
+//
+const theContainer = document.querySelector('.the_container');
+const titles = theContainer.querySelectorAll('.cusom_title');
+const Images = theContainer.querySelectorAll('.backgroun_images');
+const circle = theContainer.querySelector('.custom_circle');
+
+titles.forEach((title, i) => {
+    title.addEventListener('mouseenter', () => {
+        Images.forEach((img) => img.classList.remove('active'));
+        Images[i].classList.add('active');
+
+    });
+    title.addEventListener('mouseleave', () => {
+        Images.forEach((img) => img.classList.remove('active'));
+    });
+});
+
+// in theContainer the cusrsor position
+theContainer.addEventListener('mousemove', (e) => {
+    circle.style.display = 'block';
+    const rect = theContainer.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    circle.style.left = `${x - circle.offsetWidth / 2}px`;
+    circle.style.top = `${y - circle.offsetHeight / 2}px`;
+});
+
+theContainer.addEventListener('mouseleave', (e) => {
+    circle.style.display = 'none';
+});
+
+
+
+
+// btns
+const btns = document.querySelectorAll('.custom_btn');
+
+btns.forEach((btn) => {
+    const btnWidth = btn.offsetWidth;
+    btn.style.width = `${btnWidth - 40}px`;
+});
+
+
+
+
+// Scroll animation
+const mainCon = document.querySelector('.full_contant');
+const sticyContainer = mainCon.querySelector('.custom_sticky_con');
+const phone = sticyContainer.querySelector('.phone_image');
+const rightContant = sticyContainer.querySelector('.right_contant');
+const logos = sticyContainer.querySelectorAll('.custom_logo');
+
+// Predefined positions from your example
+const logoPositions = [
+    { x: 502, y: 160 },
+    { x: -497, y: 12 },
+    { x: -540, y: -350 },
+    { x: -42, y: -420 },
+    { x: 590, y: -200 },
+    { x: -380, y: -171 },
+    { x: -470, y: 238 },
+    { x: -610, y: 406 },
+    { x: -67, y: 483 },
+    { x: 610, y: 415 },
+    { x: 380, y: -73 },
+    { x: 460, y: -330 }
+];
+
+document.addEventListener('scroll', () => {
+    const rect = mainCon.getBoundingClientRect();
+    const scrollTop = -rect.top;
+
+    // Stage 1: Initial Transition
+    if (scrollTop >= 0 && scrollTop <= 500) {
+        const progress = scrollTop / 500;
+        phone.style.transform = `translateX(${scrollTop}px)`;
+        rightContant.style.transform = `translateX(${scrollTop / 4}px) scale(${1 - progress})`;
+        rightContant.style.opacity = `${1 - progress}`;
+        rightContant.style.display = 'flex';
+    }
+
+    // Stage 2: Phone Rotation
+    else if (scrollTop > 500 && scrollTop <= 1400) {
+        rightContant.style.display = 'none';
+        const progress = (scrollTop - 500) / 900;
+        phone.style.transform = `translateX(500px) rotate(${progress * -90}deg)`;
+        logos.forEach((logo) => logo.style.display = 'none')
+    }
+
+    // Stage 3: Lock Phone Position
+    else if (scrollTop > 1400) {
+        phone.style.transform = `translateX(500px) rotate(-90deg)`;
+    }
+
+    // Stage 4: Animate Logos to Specific Positions
+    if (scrollTop >= 1400) {
+        const progress = scrollTop < 2000 
+            ? (scrollTop - 1400) / 600  // Animate between 1400-2000
+            : 1;                         // Lock after 2000
+
+        logos.forEach((logo, index) => {
+            logo.style.display = 'flex';
+            const pos = logoPositions[index];
+            const scale = Math.min(progress, 1);
+            const x = pos.x * progress;
+            const y = pos.y * progress;
+            
+            logo.style.transform = `translateX(${x}px) translateY(${y}px) scale(${scale})`;
+        });
+    }
+
+    console.log(scrollTop);
+});
+
+
+
+
+
+
+// custom slider
+document.addEventListener('DOMContentLoaded', () => {
+    function createMarquee(pathSelector, waveLength, direction) {
+        const path = document.querySelector(pathSelector);
+        let offset = direction === 'leftToRight' ? -waveLength : 0;
+
+        function increment() {
+            // check window width
+            if (window.innerWidth < 1024) {
+                if (direction === 'leftToRight') {
+                    offset += 3; // Left to right
+                    if (offset > 0) {
+                        offset = -waveLength;
+                    }
+                } else {
+                    offset -= 3; // Right to left
+                    if (offset < -waveLength) {
+                        offset = 0;
+                    }
+                }
+            } else {
+                if (direction === 'leftToRight') {
+                    offset += 1; // Left to right
+                    if (offset > 0) {
+                        offset = -waveLength;
+                    }
+                } else {
+                    offset -= 1; // Right to left
+                    if (offset < -waveLength) {
+                        offset = 0;
+                    }
+                }
+            }
+            path.setAttribute('startOffset', offset);
+            requestAnimationFrame(increment);
+        }
+
+        increment();
+    }
+    createMarquee('.marqury_one textPath', 3000, 'rightToLeft');
+    createMarquee('.marqury_two textPath', 3000, 'leftToRight');
+})
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    function createMarquee(pathSelector, waveLength, direction) {
+        const path = document.querySelector(pathSelector);
+        let offset = direction === 'leftToRight' ? -waveLength : 0;
+
+        function increment() {
+            if (direction === 'leftToRight') {
+                offset += 1; // Left to right
+                if (offset > 0) {
+                    offset = -waveLength;
+                }
+            } else {
+                offset -= 1; // Right to left
+                if (offset < -waveLength) {
+                    offset = 0;
+                }
+            }
+            path.setAttribute('startOffset', offset);
+            requestAnimationFrame(increment);
+        }
+
+        increment();
+    }
+    createMarquee('.marqury_one textPath', 3000, 'rightToLeft');
+    createMarquee('.marqury_two textPath', 3000, 'leftToRight');
+})
+
+
+
+
+
+
+
+
+
+
+const mainCon = document.querySelector('.full_contant');
+const sticyContainer = mainCon.querySelector('.custom_sticky_con');
+const phone = sticyContainer.querySelector('.phone_image');
+const rightContant = sticyContainer.querySelector('.right_contant');
+const logos = sticyContainer.querySelectorAll('.custom_logo');
+
+document.addEventListener('scroll', () => {
+    const rect = mainCon.getBoundingClientRect();
+    const scrollTop = -rect.top;
+
+    // -----------------------------
+    // Stage 1: Initial Transition (0 - 500px Scroll)
+    // -----------------------------
+    if (scrollTop >= 0 && scrollTop <= 500) {
+        const progress = scrollTop / 500;
+
+        phone.style.transform = `translateX(${scrollTop}px)`;
+        rightContant.style.transform = `translateX(${scrollTop / 4}px) scale(${progress})`;
+        rightContant.style.opacity = `${1 - progress}`;
+        rightContant.style.display = 'flex';
+    }
+
+    // -----------------------------
+    // Stage 2: Phone Rotation (500 - 1400px Scroll)
+    // -----------------------------
+    else if (scrollTop > 500 && scrollTop <= 1400) {
+        rightContant.style.display = 'none';
+
+        const progress = (scrollTop - 500) / 900;
+        const rotateDeg = progress * -90;
+        const scale = 1 - progress * 0.3;
+        phone.style.transform = `translateX(500px) rotate(${rotateDeg}deg) scale(${1 - scale})`;
+    }
+
+    // -----------------------------
+    // Stage 3: Lock Phone Position (After 1400px Scroll)
+    // -----------------------------
+    else if (scrollTop > 1400) {
+        phone.style.transform = `translateX(500px) rotate(-90deg)`;
+    }
+
+    // -----------------------------
+    // Stage 4: Logo Scaling and Expanding to Sides (1400 - 2000px Scroll)
+    // -----------------------------
+    if (scrollTop >= 1400 && scrollTop < 2000) {
+        const progress = (scrollTop - 1400) / 600;  // Progress from 0 to 1
+        const scaleValue = Math.min(progress, 1);
+
+        // Dynamically calculate translateX and translateY for each logo
+        logos.forEach((logo, index) => {
+            const offsetX = (index % 2 === 0 ? 1 : -1) * (progress * 600); // Alternate positive/negative
+            const offsetY = (Math.floor(index / 2) + 1) * (progress * 400); // More movement as you go down the grid
+
+            // Apply transformations
+            logo.style.transform = `translateX(${offsetX}px) translateY(${offsetY}px) scale(${scaleValue})`;
+        });
+    }
+
+    // -----------------------------
+    // Stage 5: Lock Logos at Full Scale and Position (After 2000px Scroll)
+    // -----------------------------
+    if (scrollTop >= 2000) {
+        logos.forEach((logo) => {
+            logo.style.transform = `translate(0, 0) scale(1)`;
+        });
+    }
+
+    // Debugging: Log the scroll position
+    console.log(scrollTop);
+});
