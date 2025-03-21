@@ -6757,18 +6757,18 @@ const logos = sticyContainer.querySelectorAll('.custom_logo');
 
 // Predefined positions from your example
 const logoPositions = [
-    { x: 502, y: 160 },
-    { x: -497, y: 12 },
-    { x: -540, y: -350 },
-    { x: -42, y: -420 },
-    { x: 590, y: -200 },
-    { x: -380, y: -171 },
-    { x: -470, y: 238 },
-    { x: -610, y: 406 },
-    { x: -67, y: 483 },
-    { x: 610, y: 415 },
-    { x: 380, y: -73 },
-    { x: 460, y: -330 }
+    { x: 452, y: 100 },
+    { x: -497, y: 41 },
+    { x: -540, y: -300 },
+    { x: -42, y: -344 },
+    { x: 564, y: -170 },
+    { x: -414, y: -71 },
+    { x: -442, y: 339 },
+    { x: -542, y: 466 },
+    { x: -13, y: 500 },
+    { x: 535, y: 440 },
+    { x: 380, y: -25 },
+    { x: 443, y: -294 }
 ];
 
 document.addEventListener('scroll', () => {
@@ -6778,28 +6778,34 @@ document.addEventListener('scroll', () => {
     // Stage 1: Initial Transition
     if (scrollTop >= 0 && scrollTop <= 500) {
         const progress = scrollTop / 500;
-        phone.style.transform = `translateX(${scrollTop}px)`;
+        const transletePhone = progress * 50;
+        const progressPhone = (transletePhone / 50) * 185;
+        phone.style.transform = `translateX(calc(${transletePhone}% - ${progressPhone}px))`;
         rightContant.style.transform = `translateX(${scrollTop / 4}px) scale(${1 - progress})`;
         rightContant.style.opacity = `${1 - progress}`;
         rightContant.style.display = 'flex';
     }
 
+
     // Stage 2: Phone Rotation
     else if (scrollTop > 500 && scrollTop <= 1400) {
         rightContant.style.display = 'none';
         const progress = (scrollTop - 500) / 900;
-        phone.style.transform = `translateX(500px) rotate(${progress * -90}deg)`;
+        // phone scale 1 to 0.9 
+        const scale = 1 - (progress * 0.1);
+
+        phone.style.transform = `translateX(calc(50% - 185px)) rotate(${progress * -90}deg) scale(${scale})`;
         logos.forEach((logo) => logo.style.display = 'none')
     }
 
     // Stage 3: Lock Phone Position
     else if (scrollTop > 1400) {
-        phone.style.transform = `translateX(500px) rotate(-90deg)`;
+        phone.style.transform = `translateX(calc(50% - 185px)) rotate(-90deg) scale(0.9)`;
     }
 
     // Stage 4: Animate Logos to Specific Positions
     if (scrollTop >= 1400) {
-        const progress = scrollTop < 2000 
+        const progress = scrollTop < 2000
             ? (scrollTop - 1400) / 600  // Animate between 1400-2000
             : 1;                         // Lock after 2000
 
@@ -6809,7 +6815,7 @@ document.addEventListener('scroll', () => {
             const scale = Math.min(progress, 1);
             const x = pos.x * progress;
             const y = pos.y * progress;
-            
+
             logo.style.transform = `translateX(${x}px) translateY(${y}px) scale(${scale})`;
         });
     }
@@ -6830,7 +6836,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function increment() {
             // check window width
-            if (window.innerWidth < 1024) {
+            if (window.innerWidth < 768) {
                 if (direction === 'leftToRight') {
                     offset += 3; // Left to right
                     if (offset > 0) {
@@ -6972,3 +6978,65 @@ document.addEventListener('scroll', () => {
     // Debugging: Log the scroll position
     console.log(scrollTop);
 });
+
+
+
+// custom menu
+const mainPopup = document.querySelector('.main_popup');
+const manuBtn = document.querySelector('.menu_btn');
+const menuClose = document.querySelector('.menu_close');
+const bars = mainPopup.querySelectorAll('.bar');
+const totalDuration = (bars.length + 1) * 100;
+
+const fadeUp = document.querySelectorAll('.custom_fade-up');
+const menuImage = document.querySelector('.menu_image');
+
+
+manuBtn.addEventListener('click', () => {
+    mainPopup.style.display = 'flex';
+
+    bars.forEach((bar, i) => {
+        setTimeout(() => {
+            bar.style.transform = 'translateX(0%)';
+        }, i * 100);
+    });
+
+    setTimeout(() => {
+        menuClose.style.transform = 'scale(1)';
+    }, 100);
+
+    fadeUp.forEach((item, i) => {
+        setTimeout(() => {
+            item.style.opacity = '1';
+            item.style.transform = 'translateY(0)';
+            menuImage.style.opacity = '1';
+        }, totalDuration + (i * 100));
+    });
+
+});
+
+menuClose.addEventListener('click', () => {
+    fadeUp.forEach((item, i) => {
+        setTimeout(() => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(50%)';
+            menuImage.style.opacity = '0';
+        }, i * 100);
+    });
+
+    bars.forEach((bar, i) => {
+        setTimeout(() => {
+            bar.style.transform = 'translateX(100%)';
+        }, 200 + (i * 100));
+    });
+
+    setTimeout(() => {
+        mainPopup.style.display = 'none';
+    }, 600);
+
+    menuClose.style.transform = 'scale(0)';
+});
+
+
+
+// slider
