@@ -7165,3 +7165,49 @@ nextArrow.addEventListener('click', () => {
 prevArrow.addEventListener('click', () => {
     sliderPrev.click()
 })
+
+
+// round counter
+const circleProgres = document.querySelector('.circular_progres');
+const progresNumber = parseInt(
+    document.querySelector('.calculate_number .elementor-counter-number')
+        .getAttribute('data-to-value')
+);
+
+console.log(progresNumber);
+
+const targetAngle = (progresNumber * 360) / 100;
+let currentAngle = 0;
+const speed = 4000; // Time to complete the animation
+const step = 10; // Smoothness factor
+const increment = (targetAngle / speed) * step;
+
+let isAnimating = false;
+
+
+function animateProgress() {
+    if (currentAngle < targetAngle) {
+        currentAngle = Math.min(currentAngle + increment, targetAngle);
+        circleProgres.style.background = `conic-gradient(orange ${currentAngle}deg, white ${currentAngle}deg)`;
+
+        requestAnimationFrame(animateProgress);
+    } else {
+        isAnimating = false;
+        updating()
+    }
+}
+
+document.addEventListener('scroll', () => {
+    if (!isAnimating) {
+        const rect = circleProgres.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            isAnimating = true;
+            animateProgress();
+        }
+    }
+});
+
+function updating() {
+    circleProgres.style.background = `conic-gradient( orange ${currentAngle}deg, white ${currentAngle}deg)`;
+}
