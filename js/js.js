@@ -7040,3 +7040,21 @@ menuClose.addEventListener('click', () => {
 
 
 // slider
+
+
+const Slider = document.querySelector('.custom_slider');
+const sliderWrapper = Slider.querySelector('.swiper_wrapper'); // Ensure this class is correct
+const slides = sliderWrapper.querySelectorAll('.slide');
+const sliderBtns = document.querySelectorAll('.slider_btn');
+
+sliderBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        sliderBtns.forEach((item) => item.classList.remove('active'))
+        btn.classList.add('active')
+        sliderWrapper.style.transform = `translateX(${i * -100}%)`;
+    });
+});
+
+sliderBtns[0].click()
+
+
