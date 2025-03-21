@@ -7058,3 +7058,80 @@ sliderBtns.forEach((btn, i) => {
 sliderBtns[0].click()
 
 
+
+// grab option
+const Slider = document.querySelector('.custom_slider');
+const sliderWrapper = Slider.querySelector('.swiper_wrapper');
+const slides = sliderWrapper.querySelectorAll('.slide');
+const sliderBtns = document.querySelectorAll('.slider_btn');
+
+let currentIndex = 0;
+let isDragging = false;
+let startX = 0;
+let currentTranslate = 0;
+let prevTranslate = 0;
+let animationID;
+
+// Function to update slide position
+function setPositionByIndex() {
+    currentTranslate = currentIndex * -100;
+    sliderWrapper.style.transform = `translateX(${currentTranslate}%)`;
+    sliderBtns.forEach((btn) => btn.classList.remove('active'));
+    sliderBtns[currentIndex].classList.add('active');
+}
+
+// Button Click Navigation
+sliderBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        currentIndex = i;
+        setPositionByIndex();
+    });
+});
+
+// Drag & Swipe Functionality
+const touchStart = (index) => (event) => {
+    isDragging = true;
+    startX = event.type.includes('touch') ? event.touches[0].clientX : event.clientX;
+    prevTranslate = currentTranslate;
+    animationID = requestAnimationFrame(animation);
+};
+
+const touchMove = (event) => {
+    if (!isDragging) return;
+    const currentX = event.type.includes('touch') ? event.touches[0].clientX : event.clientX;
+    const deltaX = currentX - startX;
+    currentTranslate = prevTranslate + (deltaX / Slider.clientWidth) * 100;
+    sliderWrapper.style.transform = `translateX(${currentTranslate}%)`;
+};
+
+const touchEnd = () => {
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+
+    // Determine direction
+    const movedBy = currentTranslate - prevTranslate;
+    if (movedBy < -10 && currentIndex < slides.length - 1) {
+        currentIndex += 1;
+    } else if (movedBy > 10 && currentIndex > 0) {
+        currentIndex -= 1;
+    }
+
+    setPositionByIndex();
+};
+
+// Continuous animation function
+const animation = () => {
+    if (isDragging) requestAnimationFrame(animation);
+};
+
+// Attach event listeners
+sliderWrapper.addEventListener('mousedown', touchStart(0));
+sliderWrapper.addEventListener('mousemove', touchMove);
+sliderWrapper.addEventListener('mouseup', touchEnd);
+sliderWrapper.addEventListener('mouseleave', touchEnd);
+sliderWrapper.addEventListener('touchstart', touchStart(0));
+sliderWrapper.addEventListener('touchmove', touchMove);
+sliderWrapper.addEventListener('touchend', touchEnd);
+
+
+
