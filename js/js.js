@@ -7135,3 +7135,33 @@ sliderWrapper.addEventListener('touchend', touchEnd);
 
 
 
+
+//  custom slider btn and progres
+const welcherSlider = document.querySelector('.welcher_slider')
+const sliderNext = welcherSlider.querySelector('.elementor-swiper-button-next')
+const sliderPrev = welcherSlider.querySelector('.elementor-swiper-button-prev')
+const nextArrow = document.querySelector('.next_arrow');
+const prevArrow = document.querySelector('.prev_arrow');
+const welcherSliderWrap = welcherSlider.querySelector('.swiper-wrapper')
+
+const progres_bar = document.querySelector('.progres_bar')
+
+
+welcherSliderWrap.addEventListener('transitionend', () => {
+    setTimeout(() => {
+        const activeSlide = welcherSliderWrap.querySelector('.swiper-slide-active');
+        const label = activeSlide.getAttribute('aria-label');
+        label.split('/');
+        const currentSlide = label.split('/')[0];
+        const totalSlides = label.split('/')[1];
+        progres_bar.style.width = `${(currentSlide / totalSlides) * 100}%`;
+    }, 200);
+})
+
+
+nextArrow.addEventListener('click', () => {
+    sliderNext.click()
+})
+prevArrow.addEventListener('click', () => {
+    sliderPrev.click()
+})
