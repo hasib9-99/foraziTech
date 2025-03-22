@@ -7211,3 +7211,27 @@ document.addEventListener('scroll', () => {
 function updating() {
     circleProgres.style.background = `conic-gradient( orange ${currentAngle}deg, white ${currentAngle}deg)`;
 }
+
+// hero section animation 
+
+const images = document.querySelectorAll('.img_header');
+const heroTitle = document.querySelector('.hero_title');
+const heroSubtitle = document.querySelector('.hero_subtitle');
+
+const imagePotion = [
+    { x: -55, y: 50 },
+    { x: 184, y: -60 },
+    { x: 185, y: 30 },
+    { x: 65, y: 58 },
+    { x: -180, y: 35 },
+    { x: -200, y: -45 }
+]
+
+images.forEach((image, i) => {
+    image.style.transform = `translate(${imagePotion[i].x}%, ${imagePotion[i].y}%)`
+})
+
+setTimeout(() => {
+    heroTitle.style = `opacity: 1; transform: translateY(0px)`
+    heroSubtitle.style = `opacity: 1; transform: translateY(0px)`
+}, 500);
