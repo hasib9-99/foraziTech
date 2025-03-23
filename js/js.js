@@ -5635,7 +5635,7 @@ tabBtn[0].click();
 
 // test animiation loade
 
-const h2Element = document.querySelector('.custom_heading span');
+const h2Element = document.querySelector('.custom_heading p');
 const text = h2Element.innerText
 h2Element.innerHTML = '';
 
@@ -7239,3 +7239,67 @@ document.addEventListener('DOMContentLoaded', () => {
         heroSubtitle.style = `opacity: 1; transform: translateY(0px)`
     }, (images.length * 200) + 200);
 });
+
+// double text button animation
+
+const button = document.querySelector('.btn_custom');
+if (button) {
+    const btnWrap = button.querySelector('.elementor-button-text');
+    const btnText = btnWrap.textContent.trim();
+    btnWrap.innerHTML = '';
+
+    const spanOne = document.createElement('span');
+    spanOne.classList.add('btn_text-one');
+
+    const spanTwo = document.createElement('span');
+    spanTwo.classList.add('btn_text-two');
+
+    [...btnText].forEach((char, index) => {
+        const charSpanOne = document.createElement('span');
+        charSpanOne.textContent = char;
+        charSpanOne.classList.add('char-one');
+
+        const charSpanTwo = document.createElement('span');
+        charSpanTwo.textContent = char;
+        charSpanTwo.classList.add('char-two');
+
+        spanOne.appendChild(charSpanOne);
+        spanTwo.appendChild(charSpanTwo);
+    });
+
+    btnWrap.appendChild(spanOne);
+    btnWrap.appendChild(spanTwo);
+
+    // Add event listeners
+    button.addEventListener('mouseenter', () => {
+        spanOne.querySelectorAll('.char-one').forEach((char, index) => {
+            setTimeout(() => {
+                char.style.transform = 'translateY(-20px)';
+                char.style.opacity = '0';
+            }, index * 50);
+        });
+
+        spanTwo.querySelectorAll('.char-two').forEach((char, index) => {
+            setTimeout(() => {
+                char.style.transform = 'translateY(-20px)';
+                char.style.opacity = '1';
+            }, index * 50);
+        });
+    });
+
+    button.addEventListener('mouseleave', () => {
+        spanOne.querySelectorAll('.char-one').forEach((char, index) => {
+            setTimeout(() => {
+                char.style.transform = 'translateY(0)';
+                char.style.opacity = '1';
+            }, index * 50);
+        });
+
+        spanTwo.querySelectorAll('.char-two').forEach((char, index) => {
+            setTimeout(() => {
+                char.style.transform = 'translateY(0)';
+                char.style.opacity = '0';
+            }, index * 50);
+        });
+    });
+}
