@@ -7242,8 +7242,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // double text button animation
 
-const button = document.querySelector('.btn_custom');
-if (button) {
+const buttons = document.querySelectorAll('.btn_custom');
+
+buttons.forEach((button) => {
+
     const btnWrap = button.querySelector('.elementor-button-text');
     const btnText = btnWrap.textContent.trim();
     btnWrap.innerHTML = '';
@@ -7302,4 +7304,6 @@ if (button) {
             }, index * 50);
         });
     });
-}
+});
+
+
