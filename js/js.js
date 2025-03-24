@@ -7345,3 +7345,73 @@ theTitles.forEach((theTitle) => {
 
     observer.observe(theTitle);
 });
+
+
+// image grabbing
+const draggableDiv = document.querySelector('.draggableDiv');
+    const theImage = draggableDiv.querySelector('img');
+
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 1247;  // Set default x position
+    let yOffset = 476;   // Set default y position
+
+    draggableDiv.style.left = xOffset + 'px';
+    draggableDiv.style.top = yOffset + 'px';
+
+    theImage.setAttribute('draggable', 'false');
+    draggableDiv.addEventListener('dragstart', (e) => {
+        if (e.target === theImage) {
+            e.preventDefault();
+        }
+    });
+
+    draggableDiv.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+
+        if (e.target === draggableDiv) {
+            isDragging = true;
+            draggableDiv.style.cursor = 'grabbing';
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault(); 
+
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            const section = draggableDiv.parentElement;
+            const maxX = section.offsetWidth - draggableDiv.offsetWidth;
+            const maxY = section.offsetHeight - draggableDiv.offsetHeight;
+
+            currentX = Math.min(Math.max(currentX, 0), maxX);
+            currentY = Math.min(Math.max(currentY, 0), maxY);
+
+            setTranslate(currentX, currentY, draggableDiv);
+        }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.left = xPos + 'px';
+        el.style.top = yPos + 'px';
+    }
+
+    function dragEnd(e) {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+        draggableDiv.style.cursor = 'grab';  // Reset cursor
+    }
