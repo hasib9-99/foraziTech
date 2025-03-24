@@ -7307,3 +7307,41 @@ buttons.forEach((button) => {
 });
 
 
+// text animarion
+
+const theTitles = document.querySelectorAll('.the_title h2');
+
+theTitles.forEach((theTitle) => {
+    const theText = theTitle.textContent.trim();
+    const words = theText.split(' ');
+
+    theTitle.innerHTML = '';
+
+    words.forEach((word) => {
+        const span = document.createElement('span');
+        span.classList.add('word');
+        span.textContent = `${word} `; // Maintain spacing
+        theTitle.appendChild(span);
+    });
+
+    function animateText() {
+        const spans = theTitle.querySelectorAll('.word');
+        spans.forEach((span, index) => {
+            setTimeout(() => {
+                span.classList.add('animate');
+            }, index * 100);
+        });
+    }
+
+    // Intersection Observer to detect when element enters the viewport
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                animateText();
+                observer.unobserve(theTitle); // Stop observing after animation starts
+            }
+        });
+    }, { threshold: 0.5 }); // Trigger when 50% of the element is visible
+
+    observer.observe(theTitle);
+});
