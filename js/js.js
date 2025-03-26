@@ -7349,69 +7349,70 @@ theTitles.forEach((theTitle) => {
 
 // image grabbing
 const draggableDiv = document.querySelector('.draggableDiv');
-    const theImage = draggableDiv.querySelector('img');
+const theImage = draggableDiv.querySelector('img');
 
-    let isDragging = false;
-    let currentX;
-    let currentY;
-    let initialX;
-    let initialY;
-    let xOffset = 1247;  // Set default x position
-    let yOffset = 476;   // Set default y position
+let isDragging = false;
+let currentX;
+let currentY;
+let initialX;
+let initialY;
+let xOffset = 1247;  // Set default x position
+let yOffset = 476;   // Set default y position
 
-    draggableDiv.style.left = xOffset + 'px';
-    draggableDiv.style.top = yOffset + 'px';
+draggableDiv.style.left = xOffset + 'px';
+draggableDiv.style.top = yOffset + 'px';
 
-    theImage.setAttribute('draggable', 'false');
-    draggableDiv.addEventListener('dragstart', (e) => {
-        if (e.target === theImage) {
-            e.preventDefault();
-        }
-    });
-
-    draggableDiv.addEventListener('mousedown', dragStart);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', dragEnd);
-
-    function dragStart(e) {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-
-        if (e.target === draggableDiv) {
-            isDragging = true;
-            draggableDiv.style.cursor = 'grabbing';
-        }
+theImage.setAttribute('draggable', 'false');
+draggableDiv.addEventListener('dragstart', (e) => {
+    if (e.target === theImage) {
+        e.preventDefault();
     }
+});
 
-    function drag(e) {
-        if (isDragging) {
-            e.preventDefault(); 
+draggableDiv.addEventListener('mousedown', dragStart);
+document.addEventListener('mousemove', drag);
+document.addEventListener('mouseup', dragEnd);
 
-            currentX = e.clientX - initialX;
-            currentY = e.clientY - initialY;
+function dragStart(e) {
+    initialX = e.clientX - xOffset;
+    initialY = e.clientY - yOffset;
 
-            xOffset = currentX;
-            yOffset = currentY;
-
-            const section = draggableDiv.parentElement;
-            const maxX = section.offsetWidth - draggableDiv.offsetWidth;
-            const maxY = section.offsetHeight - draggableDiv.offsetHeight;
-
-            currentX = Math.min(Math.max(currentX, 0), maxX);
-            currentY = Math.min(Math.max(currentY, 0), maxY);
-
-            setTranslate(currentX, currentY, draggableDiv);
-        }
+    if (e.target === draggableDiv) {
+        isDragging = true;
+        draggableDiv.style.cursor = 'grabbing';
     }
+}
 
-    function setTranslate(xPos, yPos, el) {
-        el.style.left = xPos + 'px';
-        el.style.top = yPos + 'px';
-    }
+function drag(e) {
+    if (isDragging) {
+        e.preventDefault();
 
-    function dragEnd(e) {
-        initialX = currentX;
-        initialY = currentY;
-        isDragging = false;
-        draggableDiv.style.cursor = 'grab';  // Reset cursor
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+
+        xOffset = currentX;
+        yOffset = currentY;
+
+        const section = draggableDiv.parentElement;
+        const maxX = section.offsetWidth - draggableDiv.offsetWidth;
+        const maxY = section.offsetHeight - draggableDiv.offsetHeight;
+
+        currentX = Math.min(Math.max(currentX, 0), maxX);
+        currentY = Math.min(Math.max(currentY, 0), maxY);
+
+        setTranslate(currentX, currentY, draggableDiv);
     }
+}
+
+function setTranslate(xPos, yPos, el) {
+    el.style.left = xPos + 'px';
+    el.style.top = yPos + 'px';
+}
+
+function dragEnd(e) {
+    initialX = currentX;
+    initialY = currentY;
+    isDragging = false;
+    draggableDiv.style.cursor = 'grab';  // Reset cursor
+}
+
