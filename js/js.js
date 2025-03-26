@@ -7515,3 +7515,18 @@ function groingEfectAdd(layerPsition) {
 
 
 integration();
+
+
+// icon droip
+const dropCon = document.querySelector('.drop_con');
+const dropImgs = dropCon.querySelectorAll('.drop_img');
+document.addEventListener('scroll', () => {
+    const rect = dropCon.getBoundingClientRect();
+    if (rect.top < window.innerHeight / 2) {
+        dropImgs.forEach((img, i) => {
+            setTimeout(() => {
+                img.classList.add('active');
+            }, i * 200);
+        });
+    }
+});
