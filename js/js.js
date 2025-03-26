@@ -7416,3 +7416,102 @@ function dragEnd(e) {
     draggableDiv.style.cursor = 'grab';  // Reset cursor
 }
 
+
+
+// Hero section feature animation
+const section = document.querySelector('.the_section');
+const heroTitle = section.querySelector('.hero_title .elementor-heading-title');
+const slideText = heroTitle.querySelector('.slide_text');
+const heroImage = section.querySelector('.hero_image img'); // Select <img> inside
+const groingEfect = section.querySelector('.groing_efect');
+
+const data = {
+    "extra protein": {
+        src: "/wp-content/uploads/2025/03/641abb7d502f81488b138e7d_hero-img-05.webp",
+        color: "#FED141"
+    },
+    "gluten free": {
+        src: "/wp-content/uploads/2025/03/641abb7d3ed7592c59438a16_hero-img-04.webp",
+        color: "#EB8900"
+    },
+    "low carb": {
+        src: "/wp-content/uploads/2025/03/641abb7d614c87135bd621c9_hero-img-03.webp",
+        color: "#4597C9"
+    },
+    "eating better": {
+        src: "/wp-content/uploads/2025/03/66c64664769c230f1965c3be_hero-img-rgh.webp",
+        color: "#00AA52"
+    },
+    "minding macros": {
+        src: "/wp-content/uploads/2025/03/641abb7da032193345e76a3a_hero-img-02.webp",
+        color: "#CF6F5E"
+    }
+};
+
+
+const keys = Object.keys(data);
+let index = 0;
+
+function integration() {
+    const key = keys[index];
+    titleUpdate(key);
+    imageUpdate(data[key].src);
+    sectionUpdate(data[key].color);
+    groingEfectAdd(50)
+
+    index = (index + 1) % keys.length;
+    setTimeout(integration, 3000);
+}
+
+function titleUpdate(titleKey,) {
+    slideText.style.transition = "opacity 0.5s ease, transform 0.5s ease, color 0.5s ease";
+    slideText.style.opacity = "0";
+    slideText.style.transform = "translateY(-20px)";
+
+    setTimeout(() => {
+        slideText.textContent = titleKey;
+
+        requestAnimationFrame(() => {
+            slideText.style.transition = "none";
+            slideText.style.opacity = "1";
+            slideText.style.transform = "translateY(0px)";
+        });
+    }, 500);
+}
+
+function imageUpdate(imgSrc) {
+    heroImage.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+    heroImage.style.opacity = "0";
+    heroImage.style.transform = "translateY(0)";
+
+    setTimeout(() => {
+        heroImage.src = imgSrc;
+        heroImage.setAttribute('srcset', imgSrc);
+
+        requestAnimationFrame(() => {
+            heroImage.style.opacity = "1";
+            heroImage.style.transform = "translateY(-100%)";
+        });
+    }, 500);
+}
+
+function sectionUpdate(color) {
+    section.style.transition = "background-color 0.5s ease";
+    section.style.backgroundColor = color;
+}
+
+function groingEfectAdd(layerPsition) {
+
+    // the animation is scale 1 to 3 and opacity 1 to 0 and after 500ms latter scale 1 opasity 1
+    groingEfect.style.transition = "transform 1s ease, opacity 1s ease";
+    groingEfect.style.transform = `translateY(${layerPsition}%) scale(2)`;
+    groingEfect.style.opacity = "0";
+    setTimeout(() => {
+        groingEfect.style.transition = "none";
+        groingEfect.style.transform = `translateY(${layerPsition}%) scale(1)`;
+        groingEfect.style.opacity = "1";
+    }, 1000);
+}
+
+
+integration();
