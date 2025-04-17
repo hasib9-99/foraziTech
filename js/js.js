@@ -7265,6 +7265,11 @@ buttons.forEach((button) => {
         charSpanTwo.textContent = char;
         charSpanTwo.classList.add('char-two');
 
+        if (char === ' ') {
+            charSpanOne.style.width = '10px';
+            charSpanTwo.style.width = '10px';
+        }
+
         spanOne.appendChild(charSpanOne);
         spanTwo.appendChild(charSpanTwo);
     });
@@ -7530,3 +7535,243 @@ document.addEventListener('scroll', () => {
         });
     }
 });
+
+
+const whiteSection = document.querySelector('.white_section');
+
+document.addEventListener('scroll', () => {
+    const whiteRect = whiteSection.getBoundingClientRect();
+    if (whiteRect.top < 0) {
+        whiteSection.classList.remove('active');
+    }
+});
+
+
+const sliders = document.querySelectorAll('.slide_card');
+const classes = ['hidden', 'third-card-appear', 'from-right-to-left', 'from-left-to-center', 'from-center-to-bottom'];
+
+function slider() {
+    sliders.forEach((slider, i) => {
+        classes.forEach(cls => slider.classList.remove(cls));
+
+        setTimeout(() => {
+            slider.classList.add(classes[i % classes.length]);
+        }, 100);
+    });
+}
+
+setTimeout(() => {
+    slider();
+}, 500);
+
+
+const menuIcon = document.querySelector('.menu_btn');
+const menu = document.querySelector('.popop_menu');
+
+menuIcon.addEventListener('click', () => {
+    menu.classList.toggle('active');
+});
+
+
+//
+
+
+//
+const slider = document.querySelector('.custom_slider');
+const theSlide = slider.querySelector('.slider_wraper');
+const cards = slider.querySelectorAll('.slider_wraper .card');
+const nextBtn = slider.querySelector('.next_btn');
+const prevBtn = slider.querySelector('.prev_btn');
+
+let totalWidth = 0;
+let translateX = 0;
+let translateWidth = 0;
+
+// Calculate total width of all cards
+cards.forEach(card => {
+    totalWidth += card.offsetWidth;
+});
+
+// Amount to scroll each time
+translateWidth = (totalWidth - window.innerWidth) / 2;
+
+nextBtn.addEventListener('click', () => {
+    // Make sure there's still space to scroll right
+    if (Math.abs(translateX) < (totalWidth - window.innerWidth)) {
+        translateX -= translateWidth;
+        if (Math.abs(translateX) >= (totalWidth - window.innerWidth)) {
+            translateX = -(totalWidth - window.innerWidth); // clamp at end
+        }
+        theSlide.style.transform = `translateX(${translateX}px)`;
+        prevBtn.style.display = 'block';
+    }
+});
+
+prevBtn.addEventListener('click', () => {
+    // Make sure there's space to scroll back left
+    if (translateX < 0) {
+        translateX += translateWidth;
+        if (translateX >= 0) {
+            translateX = 0;
+            prevBtn.style.display = 'none'; // hide if back at start
+        }
+        theSlide.style.transform = `translateX(${translateX}px)`;
+    }
+});
+
+
+
+//
+document.querySelectorAll('.custom_slider').forEach((slider) => {
+    const theSlide = slider.querySelector('.slider_wraper');
+    const cards = theSlide.querySelectorAll('.card');
+    const nextBtn = slider.querySelector('.next_btn');
+    const prevBtn = slider.querySelector('.prev_btn');
+
+    let totalWidth = 0;
+    let translateX = 0;
+
+    cards.forEach((card) => {
+        totalWidth += card.offsetWidth;
+    });
+
+    let translateWidth = (totalWidth - window.innerWidth) / 2;
+    const maxTranslate = -(totalWidth - window.innerWidth);
+    translateWidth = Math.min(translateWidth, Math.abs(maxTranslate)); // prevent overscroll
+
+    nextBtn.addEventListener('click', () => {
+        if (translateX - translateWidth >= maxTranslate) {
+            translateX -= translateWidth;
+            if (translateX <= maxTranslate) {
+                translateX = maxTranslate;
+                nextBtn.style.display = 'none';
+            }
+            prevBtn.style.display = 'block';
+            theSlide.style.transform = `translateX(${translateX}px)`;
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (translateX + translateWidth <= 0) {
+            translateX += translateWidth;
+            if (translateX >= 0) {
+                translateX = 0;
+                prevBtn.style.display = 'none';
+            }
+            nextBtn.style.display = 'block';
+            theSlide.style.transform = `translateX(${translateX}px)`;
+        }
+    });
+});
+
+
+const image = document.querySelectorAll('.clip_image')
+
+image.forEach((img) => {
+    img.classList.add('active')
+})
+
+
+// 
+const roundBox = document.querySelectorAll('.round_card');
+
+document.addEventListener('scroll', () => {
+    roundBox.forEach((box) => {
+        const rect = box.getBoundingClientRect();
+        const boxHeight = rect.height;
+        const visibleTop = Math.max(rect.top, 0);
+        const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+        const visibleHeight = visibleBottom - visibleTop;
+
+        if (visibleHeight >= boxHeight / 2) {
+            box.classList.add('active');
+        }
+    });
+});
+
+
+//
+const slideContainer = document.querySelectorAll('.slide_container');
+
+
+function action() {
+    slideContainer.forEach((slide) => {
+        const one = slide.querySelector('.image_one');
+        const two = slide.querySelector('.image_two');
+
+        two.style.zIndex = '';
+        one.style.left = '-100%';
+        two.style.left = '0%';
+
+        setTimeout(() => {
+            one.style.left = '100%';
+            one.style.zIndex = -1;
+        }, 100);
+
+        setTimeout(() => {
+            one.style.zIndex = '';
+            one.style.left = '0%';
+            two.style.left = '-100%';
+        }, 200);
+
+        setTimeout(() => {
+            two.style.zIndex = -1;
+            two.style.left = '100%';
+        }, 300);
+    });
+};
+
+
+setInterval(action, 2000);
+
+
+
+
+
+const mainCons = document.querySelectorAll('.main_con')
+const slideContainers = document.querySelectorAll('.slide_container');
+const color = [
+    {
+        one: '#96B6CC',
+        two: '#E2CCD2'
+    },
+    {
+        one: '#B8D6A4',
+        two: '#AF9D72'
+    }
+]
+
+function action() {
+    slideContainers.forEach((slide) => {
+        const one = slide.querySelector('.image_one');
+        const two = slide.querySelector('.image_two');
+
+        one.style.zIndex = '1';
+        two.style.zIndex = '2';
+
+        one.style.transform = 'translateX(-100%)';
+        two.style.transform = 'translateX(-100%)';
+        mainCons[0].style.backgroundColor = color[0].one;
+        mainCons[1].style.backgroundColor = color[1].one;
+
+        setTimeout(() => {
+            one.style.transform = 'translateX(100%)';
+        }, 500);
+
+        setTimeout(() => {
+            two.style.zIndex = 0;
+            one.style.transform = 'translateX(0)';
+            two.style.transform = 'translateX(-200%)';
+            mainCons[0].style.backgroundColor = color[0].two;
+            mainCons[1].style.backgroundColor = color[1].two;
+        }, 1000);
+
+        setTimeout(() => {
+            two.style.transform = 'translateX(0%)';
+        }, 1500);
+    });
+}
+
+setInterval(action, 2000);
+
+
