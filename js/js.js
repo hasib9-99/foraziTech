@@ -7775,3 +7775,532 @@ function action() {
 setInterval(action, 2000);
 
 
+// tab feature
+const tabs = document.querySelectorAll('.custom_tab');
+
+tabs.forEach((tab) => {
+    const tabBtns = tab.querySelectorAll('.tab_btn');
+    const tabContents = tab.querySelectorAll('.tab_content');
+    tabBtns.forEach((tabBtn, index) => {
+        tabBtn.addEventListener('click', () => {
+            tabBtns.forEach((btn) => btn.classList.remove('active'));
+            tabBtn.classList.add('active');
+            tabContents.forEach((content) => content.classList.remove('active'));
+            tabContents[index].classList.add('active');
+        });
+    });
+});
+
+
+
+const menu = document.querySelector('.main_menu');
+
+let lastScrollTop = 0;
+
+window.addEventListener("scroll", function () {
+    let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll > lastScrollTop) {
+        menu.style.transform = "translateY(-100%)"; // Scrolling Down
+    } else if (currentScroll < lastScrollTop) {
+        menu.style.transform = "translateY(0)"; // Scrolling Up
+    }
+
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // For Mobile or negative scrolling
+}, false);
+
+
+const wcPage = document.querySelector('.wc_page');
+wcPage.classList.add('active')
+
+document.addEventListener('DOMContentLoaded', () => {
+    wcPage.classList.remove('active')
+});
+
+
+//
+const postInfo = document.querySelector('.post_info time');
+const readingTime = document.querySelector('.rt-reading-time .rt-time');
+
+const createElement = (tag, className, text) => {
+    const element = document.createElement(tag);
+    element.classList.add(className);
+    element.textContent = text;
+    return element;
+};
+
+// Create dot separator
+const dot = createElement('span', 'dot', '.');
+
+// Add spacing if needed
+dot.style.margin = '0 6px';
+
+// Create a span for the reading time
+const reading = createElement('span', 'reading-info', `${readingTime.textContent} mins`);
+
+// Append the dot and reading time to postInfo
+postInfo.appendChild(dot);
+postInfo.appendChild(reading);
+
+
+//
+
+function checkInView() {
+    const borderAnimation = document.querySelectorAll(".border_animation");
+    const cornerBorder = document.querySelectorAll('.corner_animation');
+
+    borderAnimation.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+            item.classList.add('active');
+        }
+    });
+
+    cornerBorder.forEach((item) => {
+        const rect = item.getBoundingClientRect();
+
+        if (rect.top < window.innerHeight && rect.bottom >= 0) {
+            item.classList.add('active');
+        }
+    });
+}
+
+checkInView();
+
+window.addEventListener('scroll', checkInView);
+window.addEventListener('resize', checkInView);
+
+//
+const megaMenu = document.querySelectorAll('.mega_menu .e-n-menu-heading .e-n-menu-item');
+const miniMenu = document.querySelector('.mini_menu .elementor-nav-menu--main ul');
+
+function update() {
+    megaMenu.forEach((item, i) => {
+        if (i > 2) {
+            item.style.display = 'none';
+        }
+        else {
+            item.style.display = 'block';
+        }
+    });
+}
+
+const mediaQuery = window.matchMedia('(min-width: 1024px) and (max-width: 1440px)');
+
+if (mediaQuery.matches) {
+    update();
+}
+
+mediaQuery.addEventListener('change', (e) => {
+    if (e.matches) {
+        update();
+    }
+});
+
+//
+const registerBtn = document.querySelector('.register_btn');
+const fristSection = document.querySelector('.first_section');
+
+document.addEventListener('scroll', () => {
+    const rect = fristSection.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+        registerBtn.classList.add('active');
+    } else {
+        registerBtn.classList.remove('active');
+    }
+});
+
+
+//
+const menuBtn = document.querySelectorAll('.menu_tab_btn');
+const menuTabContent = document.querySelectorAll('.menu_contant');
+
+
+menuBtn.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        menuBtn.forEach((item) => item.classList.remove('active'));
+        btn.classList.add('active');
+        menuTabContent.forEach((content) => content.classList.remove('active'));
+        menuTabContent[i].classList.add('active');
+    });
+});
+
+
+//
+
+const menuOpenIcon = document.querySelector('.menu_open_icon');
+const menuCloseIcon = document.querySelector('.menu_close_icon');
+const menuPopup = document.querySelector('.menu_popup');
+
+menuOpenIcon.addEventListener('click', () => {
+    menuPopup.style.display = 'flex';
+    menuOpenIcon.style.display = 'none';
+    menuCloseIcon.style.display = 'block';
+});
+
+menuCloseIcon.addEventListener('click', () => {
+    menuPopup.style.display = 'none';
+    menuOpenIcon.style.display = 'block';
+    menuCloseIcon.style.display = 'none';
+});
+
+//
+const menuPrograms = document.querySelector('.menu_programs_phone');
+const menuProgramsPopup = document.querySelector('.programs_popup');
+
+menuPrograms.addEventListener('click', () => {
+    menuProgramsPopup.classList.toggle('active');
+    menuPrograms.classList.toggle('active');
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const registerBtn = document.querySelector('.register_btn');
+    const fristSection = document.querySelector('.first_section');
+
+    document.addEventListener('scroll', () => {
+        const rect = fristSection.getBoundingClientRect();
+        if (rect.bottom <= 0) {
+            registerBtn.classList.add('active');
+
+        } else {
+            registerBtn.classList.remove('active');
+        }
+    });
+});
+
+
+
+//
+
+const menuOpenIcon = document.querySelector('.menu_open_icon');
+const menuCloseIcon = document.querySelector('.menu_close_icon');
+const menuPopup = document.querySelector('.menu_popup');
+const menuWraper = menuPopup.querySelector('.menu_wraper');
+
+menuOpenIcon.addEventListener('click', () => {
+    menuPopup.style.display = 'flex';
+    menuOpenIcon.style.display = 'none';
+    menuCloseIcon.style.display = 'block';
+});
+
+menuCloseIcon.addEventListener('click', () => {
+    closeMenu();
+});
+
+// Close menu function
+function closeMenu() {
+    menuPopup.style.display = 'none';
+    menuOpenIcon.style.display = 'block';
+    menuCloseIcon.style.display = 'none';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    const isClickInsideMenu = menuWraper.contains(e.target);
+    const isClickOnIcons = menuOpenIcon.contains(e.target) || menuCloseIcon.contains(e.target);
+
+    if (!isClickInsideMenu && !isClickOnIcons) {
+        closeMenu();
+    }
+});
+
+
+//
+const megaMenuFirstItem = document.querySelector('.mega_menu ul li:nth-child(1)');
+const megaMenuFirstItemBtn = megaMenuFirstItem.querySelector('.e-n-menu-title');
+const megaMenuFirstItemContent = megaMenuFirstItem.querySelector('.e-n-menu-content');
+
+megaMenuFirstItem.addEventListener('click', () => {
+    const isActive = megaMenuFirstItemContent.classList.contains('e-active');
+
+    if (isActive) {
+        megaMenuFirstItemBtn.classList.add('active');
+    } else {
+        megaMenuFirstItemBtn.classList.remove('active');
+    }
+});
+
+
+
+const mainTab = document.querySelector('.main_tab');
+const tabBtn = mainTab.querySelectorAll('.main_tab_btn');
+const tabContent = mainTab.querySelectorAll('.main_tab_content');
+
+const SubTabs = mainTab.querySelectorAll('.sub_tab');
+
+tabBtn.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        tabBtn.forEach((item) => item.classList.remove('active'));
+        btn.classList.add('active');
+        tabContent.forEach((content) => content.classList.remove('active'));
+        tabContent[i].classList.add('active');
+    });
+});
+
+
+SubTabs.forEach((subTab) => {
+    const subTabBtn = subTab.querySelectorAll('.tab_btn');
+    const subTabContent = subTab.querySelectorAll('.tab_content');
+    subTabBtn.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            subTabBtn.forEach((item) => item.classList.remove('active'));
+            btn.classList.add('active');
+            subTabContent.forEach((content) => content.classList.remove('active'));
+            subTabContent[i].classList.add('active');
+        });
+    });
+});
+
+
+
+//
+
+const dropMwnu = document.querySelector('.programs_popup');
+const DropMenuBtn = dropMwnu.querySelectorAll('.menu_tab_btn');
+const DropMenuContent = dropMwnu.querySelectorAll('.menu_tab_contant');
+
+DropMenuBtn.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        // menuBtn.forEach((item) => item.classList.remove('active'));
+        // btn.classList.add('active');
+        DropMenuContent.forEach((content) => content.classList.remove('active'));
+        DropMenuContent[i].classList.add('active');
+    });
+});
+
+
+//
+
+const heroSection = document.querySelector('.hero_section');
+const fristImage = heroSection.querySelector('.hero-img-card.first');
+const secondImage = heroSection.querySelector('.hero-img-card.second');
+const thirdImage = heroSection.querySelector('.hero-img-card.third');
+
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+
+    // Animation happens from scroll 0px to 800px
+    const startScroll = 0;
+    const endScroll = 800;
+    const progress = Math.min(Math.max((scrollY - startScroll) / (endScroll - startScroll), 0), 1);
+
+    // === First Image Interpolation ===
+    const firstTranslateX = -104.428 + (104.428 * progress);
+    const firstTranslateY = 41.7714 + ((40 - 41.7714) * progress);
+    const firstRotateZ = 43.1638 + (-43.1638 * progress);
+    const firstOpacity = 0.37018 + ((1 - 0.37018) * progress);
+
+    fristImage.style.transform = `
+    translate3d(${firstTranslateX}%, ${firstTranslateY}%, 0px)
+    scale3d(1, 1, 1)
+    rotateZ(${firstRotateZ}deg)
+    skew(0deg, 0deg)
+`;
+    fristImage.style.opacity = firstOpacity;
+
+    // === Second Image Interpolation ===
+    const secondTranslateX = 126.038 + (-126.038 * progress);
+    const secondTranslateY = 90.027 + ((60 - 90.027) * progress);
+    const secondScale = 0.09973 + ((1 - 0.09973) * progress);
+    const secondRotateZ = -39.6119 + (39.6119 * progress);
+    const secondOpacity = 0.09973 + ((1 - 0.09973) * progress);
+
+    secondImage.style.transform = `
+    translate3d(${secondTranslateX}%, ${secondTranslateY}%, 0px)
+    scale3d(${secondScale}, ${secondScale}, 1)
+    rotateZ(${secondRotateZ}deg)
+    skew(0deg, 0deg)
+`;
+    secondImage.style.opacity = secondOpacity;
+
+    // === Third Image Interpolation ===
+    const thirdTranslateX = -150 + (150 * progress);
+    const thirdTranslateY = -70 + ((40 - (-70)) * progress);
+    const thirdScale = 0 + (1 * progress);
+    const thirdRotateZ = -131 + (131 * progress);
+    const thirdOpacity = 0 + (1 * progress);
+
+    thirdImage.style.transform = `
+    translate3d(${thirdTranslateX}%, ${thirdTranslateY}%, 0px)
+    scale3d(${thirdScale}, ${thirdScale}, 1)
+    rotateZ(${thirdRotateZ}deg)
+    skew(0deg, 0deg)
+`;
+    thirdImage.style.opacity = thirdOpacity;
+});
+
+
+//
+const heroSection = document.querySelector('.hero_section');
+const fristImage = heroSection.querySelector('.hero-img-card.first');
+const secondImage = heroSection.querySelector('.hero-img-card.second');
+const thirdImage = heroSection.querySelector('.hero-img-card.third');
+
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+
+    // Animation happens from scroll 0px to 1000px
+    const startScroll = 0;
+    const endScroll = 1000;
+    const progress = Math.min(Math.max((scrollY - startScroll) / (endScroll - startScroll), 0), 1);
+
+    // === First Image Interpolation (Rotation + Opacity for first 200px scroll) ===
+    const firstTranslateX = -104.428 + (104.428 * progress);
+    const firstTranslateY = 41.7714 + ((40 - 41.7714) * progress);
+    const firstRotateZ = scrollY >= 0 && scrollY < 200 ? 43.1638 - (43.1638 * (scrollY / 200)) : 0;
+    const firstOpacity = scrollY >= 0 && scrollY < 200 ? 0.37018 + ((1 - 0.37018) * (scrollY / 200)) : 1;
+
+    fristImage.style.transform = `
+    translate3d(${firstTranslateX}%, ${firstTranslateY}%, 0px)
+    scale3d(1, 1, 1)
+    rotateZ(${firstRotateZ}deg)
+    skew(0deg, 0deg)
+  `;
+    fristImage.style.opacity = firstOpacity;
+
+    // === Second Image Interpolation (Rotation + Opacity for 200px to 400px scroll) ===
+    const secondTranslateX = 126.038 + (-126.038 * progress);
+    const secondTranslateY = 90.027 + ((60 - 90.027) * progress);
+    const secondScale = 0.09973 + ((1 - 0.09973) * progress);
+    const secondRotateZ = scrollY >= 200 && scrollY < 400 ? -39.6119 + (39.6119 * ((scrollY - 200) / 200)) : 0;
+    const secondOpacity = scrollY >= 200 && scrollY < 400 ? 0.09973 + ((1 - 0.09973) * ((scrollY - 200) / 200)) : 1;
+
+    secondImage.style.transform = `
+    translate3d(${secondTranslateX}%, ${secondTranslateY}%, 0px)
+    scale3d(${secondScale}, ${secondScale}, 1)
+    rotateZ(${secondRotateZ}deg)
+    skew(0deg, 0deg)
+  `;
+    secondImage.style.opacity = secondOpacity;
+
+    // === Third Image Interpolation (Rotation + Opacity for 400px to 600px scroll) ===
+    const thirdTranslateX = -150 + (150 * progress);
+    const thirdTranslateY = -70 + ((40 - (-70)) * progress);
+    const thirdScale = 0 + (1 * progress);
+    const thirdRotateZ = scrollY >= 400 && scrollY < 600 ? -131 + (131 * ((scrollY - 400) / 200)) : 0;
+    const thirdOpacity = scrollY >= 400 && scrollY < 600 ? 0 + (1 * ((scrollY - 400) / 200)) : 1;
+
+    thirdImage.style.transform = `
+    translate3d(${thirdTranslateX}%, ${thirdTranslateY}%, 0px)
+    scale3d(${thirdScale}, ${thirdScale}, 1)
+    rotateZ(${thirdRotateZ}deg)
+    skew(0deg, 0deg)
+  `;
+    thirdImage.style.opacity = thirdOpacity;
+});
+
+
+
+///
+
+const stickyWrapper = document.querySelector('.sticky_wraper');
+const stickySection = stickyWrapper.querySelector('.custom_sticky');
+const items = stickySection.querySelectorAll('.item_wraper .item');
+
+document.addEventListener('scroll', () => {
+    const rect = stickyWrapper.getBoundingClientRect();
+    const stickyScrollY = -rect.top;
+
+    // animation progress calculation 0 - 1
+    const stickyScrollStart = 0;
+    const stickyScrollEnd = rect.height;
+    const stickyPreItem = stickyScrollEnd / 3;
+    const stickyProgress = Math.min(Math.max((stickyScrollY - stickyScrollStart) / (stickyScrollEnd - stickyScrollStart), 0), 1);
+
+    // === First Image Interpolation ===
+    const firstItemTranslateY = 200 - (200 * Math.min(stickyScrollY / stickyPreItem, 1));
+    const firstItemOpacity = Math.min(stickyScrollY / stickyPreItem, 1);
+
+    items[0].style.transform = `translate3d(0, ${firstItemTranslateY}px, 0px)`;
+    items[0].style.opacity = firstItemOpacity;
+
+    // === Second Image Interpolation ===
+    const secondStickyProgress = Math.min(Math.max((stickyScrollY - stickyPreItem) / stickyPreItem, 0), 1);
+    const secondItemTranslateY = 200 - (200 * secondStickyProgress);
+    const secondItemOpacity = secondStickyProgress;
+
+    items[1].style.transform = `translate3d(0, ${secondItemTranslateY}px, 0px)`;
+    items[1].style.opacity = secondItemOpacity;
+
+    // === Third Image Interpolation ===
+    const thirdStickyProgress = Math.min(Math.max((stickyScrollY - (stickyPreItem * 2)) / stickyPreItem, 0), 1);
+    const thirdItemTranslateY = 200 - (200 * thirdStickyProgress);
+    const thirdItemOpacity = thirdStickyProgress;
+
+    items[2].style.transform = `translate3d(0, ${thirdItemTranslateY}px, 0px)`;
+    items[2].style.opacity = thirdItemOpacity;
+});
+
+
+///
+
+
+
+
+
+//
+//
+const stickyWraper = document.querySelector('.sticky_wraper');
+const stickySection = stickyWraper.querySelector('.custom_sticky');
+const items = stickySection.querySelectorAll('.item_wraper .item');
+
+document.addEventListener('scroll', () => {
+    const rect = stickyWraper.getBoundingClientRect();
+    const stickyScrollY = -rect.top;
+
+    // animation progress calculation 0 - 1
+    const stickyScrollStart = 0;
+    const stickyScrollEnd = rect.height;
+    const stickyPreItem = stickyScrollEnd / 3
+    const stickyProgress = Math.min(Math.max((stickyScrollY - stickyScrollStart) / (stickyScrollEnd - stickyScrollStart), 0), 1)
+
+    // === First Image Interpolation ===
+    const fristItemTransleteY = 200 - (200 * Math.min(stickyScrollY / 200, 1));
+    const fristItemOpacity = 0 + (1 * Math.min(stickyScrollY / 200, 1));
+
+    items[0].style.transform = `
+    translate3d(0, ${fristItemTransleteY}px, 0px)
+    scale3d(1, 1, 1)
+    rotateZ(0deg)
+    skew(0deg, 0deg)
+`;
+    items[0].style.opacity = fristItemOpacity;
+
+
+    //secend progress calculation 0 - 1
+    const secendStickyProgress = Math.min(Math.max((stickyScrollY - stickyPreItem) / stickyPreItem, 0), 1)
+
+    // === secend Image Interpolation ===
+    const secendItemTransleteY = 200 + (-200 * secendStickyProgress);
+    const secendItemOpacity = 0 + (1 * secendStickyProgress);
+
+    items[1].style.transform = `
+    translate3d(0, ${secendItemTransleteY}px, 0px)
+    scale3d(1, 1, 1)
+    rotateZ(0deg)
+    skew(0deg, 0deg)
+`;
+    items[1].style.opacity = secendItemOpacity;
+
+
+
+    //third progress calculation 0 - 1
+    const thirdStickyProgress = Math.min(Math.max((stickyScrollY - (stickyPreItem * 2)) / (stickyPreItem * 2), 0), 1)
+
+    // === third Image Interpolation ===
+    const thirdItemTransleteY = 200 + (-200 * thirdStickyProgress);
+    const thirdItemOpacity = 0 + (1 * thirdStickyProgress);
+
+    items[2].style.transform = `
+    translate3d(0, ${thirdItemTransleteY}px, 0px)
+    scale3d(1, 1, 1)
+    rotateZ(0deg)
+    skew(0deg, 0deg)
+`;
+    items[2].style.opacity = thirdItemOpacity;
+
+
+});

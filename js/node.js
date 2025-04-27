@@ -1,29 +1,61 @@
-let a;
-let b;
+const heroSection = document.querySelector('.hero_section');
+const fristImage = heroSection.querySelector('.hero-img-card.first');
+const secondImage = heroSection.querySelector('.hero-img-card.second');
+const thirdImage = heroSection.querySelector('.hero-img-card.third');
 
-let c = function sum(a, b) {
-    return a + b;
-}
-// console.log(c(2, 3));
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
 
-// for lop
+    // Animation happens from scroll 0px to 600px, divided into 3 parts: 0-200, 200-400, 400-600px
+    const startScroll = 0;
+    const endScroll = 600;
+    const progress = Math.min(Math.max((scrollY - startScroll) / (endScroll - startScroll), 0), 1);
 
-for (let i = 0; i > 0; i++) {
-    console.log(i);
-}
+    // === First Image Interpolation (Rotation + Opacity for 0 to 200px scroll) ===
+    const firstTranslateX = -104.428 + (104.428 * Math.min(scrollY / 200, 1));
+    const firstTranslateY = 41.7714 + ((40 - 41.7714) * Math.min(scrollY / 200, 1));
+    const firstRotateZ = 43.1638 - (43.1638 * Math.min(scrollY / 200, 1));
+    const firstOpacity = 0.37018 + ((1 - 0.37018) * Math.min(scrollY / 200, 1));
 
+    fristImage.style.transform = `
+    translate3d(${firstTranslateX}%, ${firstTranslateY}%, 0px)
+    scale3d(1, 1, 1)
+    rotateZ(${firstRotateZ}deg)
+    skew(0deg, 0deg)
+  `;
+    fristImage.style.opacity = firstOpacity;
 
+    // === Second Image Interpolation (Rotation + Opacity for 200 to 400px scroll) ===
+    const secondProgress = Math.min(Math.max((scrollY - 200) / 200, 0), 1); // Progress for second image
 
-// hero section animation
+    const secondTranslateX = 126.038 + (-126.038 * secondProgress);
+    const secondTranslateY = 90.027 + ((60 - 90.027) * secondProgress);
+    const secondScale = 0.09973 + ((1 - 0.09973) * secondProgress);
+    const secondRotateZ = -39.6119 + (39.6119 * secondProgress);
+    const secondOpacity = 0.09973 + ((1 - 0.09973) * secondProgress);
 
-const section = document.querySelector('.the_section');
+    secondImage.style.transform = `
+    translate3d(${secondTranslateX}%, ${secondTranslateY}%, 0px)
+    scale3d(${secondScale}, ${secondScale}, 1)
+    rotateZ(${secondRotateZ}deg)
+    skew(0deg, 0deg)
+  `;
+    secondImage.style.opacity = secondOpacity;
 
-const data = {
-    'extra protein': '/wp-content/uploads/2025/03/641abb7da032193345e76a3a_hero-img-02.webp',
-    'gluten free': '/wp-content/uploads/2025/03/66c64664769c230f1965c3be_hero-img-rgh.webp',
-    'low carb': '/wp-content/uploads/2025/03/641abb7d614c87135bd621c9_hero-img-03.webp',
-    'eating better': '/wp-content/uploads/2025/03/641abb7d3ed7592c59438a16_hero-img-04.webp',
-    'minding macros': '/wp-content/uploads/2025/03/641abb7d502f81488b138e7d_hero-img-05.webp'
-};
+    // === Third Image Interpolation (Rotation + Opacity for 400 to 600px scroll) ===
+    const thirdProgress = Math.min(Math.max((scrollY - 400) / 200, 0), 1); // Progress for third image
 
-console.log(data.keys());
+    const thirdTranslateX = -150 + (150 * thirdProgress);
+    const thirdTranslateY = -70 + ((40 - (-70)) * thirdProgress);
+    const thirdScale = 0 + (1 * thirdProgress);
+    const thirdRotateZ = -131 + (131 * thirdProgress);
+    const thirdOpacity = 0 + (1 * thirdProgress);
+
+    thirdImage.style.transform = `
+    translate3d(${thirdTranslateX}%, ${thirdTranslateY}%, 0px)
+    scale3d(${thirdScale}, ${thirdScale}, 1)
+    rotateZ(${thirdRotateZ}deg)
+    skew(0deg, 0deg)
+  `;
+    thirdImage.style.opacity = thirdOpacity;
+});
