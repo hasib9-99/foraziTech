@@ -8627,7 +8627,7 @@ subscribObserver.observe(subscribeForm, {
 
 
 
-jQuery(window).on('elementor/popup/show', function(event, id, instance) {
+jQuery(window).on('elementor/popup/show', function (event, id, instance) {
     // Check for a specific popup ID
     if (id !== 357) return;
 
@@ -8649,4 +8649,31 @@ jQuery(window).on('elementor/popup/show', function(event, id, instance) {
         childList: true,
         subtree: true
     });
+});
+
+
+
+// menu scroll up down
+
+const menu = document.querySelector('.custom_menu');
+let lastScrollTop = 0;
+let scrollTriggerPoint = 0;
+
+window.addEventListener("scroll", function () {
+    let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (currentScroll <= 200) {
+        menu.style.top = "0px";
+        menu.style.backgroundColor = "transparent";
+    } else if (currentScroll > lastScrollTop) {
+        menu.style.top = "-150px";
+        menu.style.backgroundColor = "#ffeccf";
+        scrollTriggerPoint = currentScroll;
+    } else if (scrollTriggerPoint - currentScroll > 200) {
+        menu.style.top = "0px";
+        menu.style.backgroundColor = "#ffeccf";
+        scrollTriggerPoint = currentScroll;
+    }
+
+    lastScrollTop = Math.max(currentScroll, 0);
 });
