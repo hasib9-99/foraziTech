@@ -1,0 +1,19 @@
+<svg width="500" height="500" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Oval path -->
+    <path id="ovalPath"
+      d="M250,50
+         C370,50 450,150 450,250
+         C450,350 370,450 250,450
+         C130,450 50,350 50,250
+         C50,150 130,50 250,50Z"
+      fill="none" />
+  </defs>
+
+  <!-- Text following the path -->
+  <text font-size="20" fill="black">
+    <textPath href="#ovalPath" startOffset="0">
+      PLANT-BASED HOT & FRESH BURGERS & FRIES • PLANT-BASED HOT & FRESH BURGERS & FRIES •
+    </textPath>
+  </text>
+</svg>

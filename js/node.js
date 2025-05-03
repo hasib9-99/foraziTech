@@ -59,3 +59,9 @@ window.addEventListener('scroll', () => {
   `;
     thirdImage.style.opacity = thirdOpacity;
 });
+
+
+let fullHight = stickyWrapper.offsetHeight
+perItemHight = fullHight / items.index
+stayTime = perItemHight / 2
+// other half hight will be the tranlsate

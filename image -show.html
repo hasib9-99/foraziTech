@@ -3,114 +3,93 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Tabs</title>
-  <style>
-    .tab-content {
-      display: none;
-      padding: 10px;
-      background: #f2f2f2;
-      margin-top: 5px;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    @media (max-width: 768px) {
-      .tab {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .tab-btns {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .tab-contents {
-        display: none; /* Hide shared contents on mobile */
-      }
-
-      .tab-btn {
-        width: 100%;
-        text-align: left;
-      }
-
-      .mobile-tab-content {
-        display: none;
-      }
-
-      .mobile-tab-content.active {
-        display: block;
-        background: #f2f2f2;
-        margin-top: 5px;
-        padding: 10px;
-      }
-    }
-  </style>
+  <title>Document</title>
+  
 </head>
 <body>
+    <div class="container">
+        <svg class="marqury_one" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="-50 -50 630 830" style="enable-background:new 0 0 552 750;" xml:space="preserve">
+    <defs>
+        <!-- Defining the wave path -->
+        <path id="wave" d="M276,750L276,750C123.6,750,0,626.4,0,474l0-198C0,123.6,123.6,0,276,0h0c152.4,0,276,123.6,276,276v198
+        C552,626.4,428.4,750,276,750z" fill="none" stroke="black" />
+    </defs>
 
-<div class="tab">
-  <div class="tab-btns">
-    <button class="tab-btn" data-tab="0">Tab 1</button>
-    <button class="tab-btn" data-tab="1">Tab 2</button>
-    <button class="tab-btn" data-tab="2">Tab 3</button>
-  </div>
+    <text font-size="32" fill="black">
+        <textPath id="textPath" href="#wave" startOffset="300">Energetic - Disciplined - Optimistic - Sophisticated - Warm - Empathetic - Balanced - Honest - Strategic - Multicultural - Inclusive - Courageous - Determined - Hard Working - Aware - Present - Driven - Ever-learning - Ambitious - Brave - Disciplined - Respectful - Intuitive - Open - Fun - Social - Generous - Creation-oriented - Solution-oriented - Resolution-focused - Peaceful warrior-like Energetic - Disciplined - Optimistic - Sophisticated - Warm - Empathetic - Balanced - Honest - Strategic - Multicultural - Inclusive - Courageous - Determined - Hard Working - Aware - Present - Driven - Ever-learning - Ambitious - Brave - Disciplined - Respectful - Intuitive - Open - Fun - Social - Generous - Creation-oriented - Solution-oriented - Resolution-focused - Peaceful warrior-like Energetic - Disciplined - Optimistic - Sophisticated - Warm - Empathetic - Balanced - Honest - Strategic - Multicultural - Inclusive - Courageous - Determined - Hard Working - Aware - Present - Driven - Ever-learning - Ambitious - Brave - Disciplined - Respectful - Intuitive - Open - Fun - Social - Generous - Creation-oriented - Solution-oriented - Resolution-focused - Peaceful warrior-like</textPath>
+    </text>
 
-  <div class="tab-contents">
-    <div class="tab-content">Content for Tab 1</div>
-    <div class="tab-content">Content for Tab 2</div>
-    <div class="tab-content">Content for Tab 3</div>
-  </div>
-</div>
+    <!-- <text class="hiden-part" font-size="32" fill="black">
+        <textPath href="#wave" startOffset="2000"> 
+            PLANT-BASED HOT & FRESH BURGERS & FRIES
+        </textPath>
+    </text> -->
+</svg>
 
-<script>
-const tabButtons = document.querySelectorAll('.tab-btn');
-const tabContents = document.querySelectorAll('.tab-content');
-
-// Create mobile content under each button
-tabButtons.forEach((button, index) => {
-  const mobileContent = tabContents[index].cloneNode(true);
-  mobileContent.classList.add('mobile-tab-content');
-  button.insertAdjacentElement('afterend', mobileContent);
-});
-
-const mobileContents = document.querySelectorAll('.mobile-tab-content');
-
-function resetDesktop() {
-  tabContents.forEach(content => content.classList.remove('active'));
-}
-
-function resetMobile() {
-  tabButtons.forEach(btn => btn.classList.remove('active'));
-  mobileContents.forEach(content => content.classList.remove('active'));
-}
-
-function isMobile() {
-  return window.innerWidth <= 768;
-}
-
-tabButtons.forEach((button, index) => {
-  button.addEventListener('click', () => {
-    if (!isMobile()) {
-      // Desktop behavior
-      resetDesktop();
-      tabContents[index].classList.add('active');
-    } else {
-      // Mobile behavior
-      if (button.classList.contains('active')) {
-        button.classList.remove('active');
-        mobileContents[index].classList.remove('active');
-      } else {
-        resetMobile();
-        button.classList.add('active');
-        mobileContents[index].classList.add('active');
-      }
+<style>
+    
+    
+    .marqury_one {
+        width: 100%;
+        height: 100%;
     }
-  });
-});
-</script>
 
+    textPath {
+        font-size: 42px;
+        fill: #e3a945;
+        text-decoration: none;
+        text-anchor: middle;
+    }
+</style>
+
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    function createMarquee(pathSelector, waveLength, direction) {
+        const path = document.querySelector(pathSelector);
+        let offset = direction === 'leftToRight' ? -waveLength : 0;
+
+        function increment() {
+            if (window.innerWidth < 768) {
+                if (direction === 'leftToRight') {
+									// this is for tabe and phone 
+                    offset += 5; // Left to right
+                    if (offset > 0) {
+                        offset = -waveLength;
+                    }
+                } else {
+									// this is for tabe and phone 
+                    offset -= 5; // Right to left
+                    if (offset < -waveLength) {
+                        offset = 0;
+                    }
+                }
+            } else {
+                if (direction === 'leftToRight') {
+									// this is for desktop
+                    offset += 1; // Left to right
+                    if (offset > 0) {
+                        offset = -waveLength;
+                    }
+                } else {
+									// this is for desktop
+                    offset -= 1; // Right to left
+                    if (offset < -waveLength) {
+                        offset = 0;
+                    }
+                }
+            }
+            path.setAttribute('startOffset', offset);
+            requestAnimationFrame(increment);
+        }
+
+        increment();
+    }
+    createMarquee('.marqury_one textPath', 1300, 'leftToRight');
+})
+    </script>
 </body>
 </html>

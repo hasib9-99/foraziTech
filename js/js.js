@@ -8255,52 +8255,398 @@ document.addEventListener('scroll', () => {
     const stickyScrollStart = 0;
     const stickyScrollEnd = rect.height;
     const stickyPreItem = stickyScrollEnd / 3
-    const stickyProgress = Math.min(Math.max((stickyScrollY - stickyScrollStart) / (stickyScrollEnd - stickyScrollStart), 0), 1)
+
 
     // === First Image Interpolation ===
+    const firstTitle = items[0].querySelector('.item_title');
+    const firstContent = items[0].querySelector('.item_content');
+
+    const stickyProgress = Math.min(Math.max((stickyScrollY - stickyScrollStart) / (stickyScrollEnd - stickyScrollStart), 0), 1)
     const fristItemTransleteY = 200 - (200 * Math.min(stickyScrollY / 200, 1));
     const fristItemOpacity = 0 + (1 * Math.min(stickyScrollY / 200, 1));
+    const firstTitleProgress = -50 + (50 * Math.min(stickyScrollY / 50, 1));
+    const firstTitleContent = 50 - (50 * Math.min(stickyScrollY / 50, 1));
 
-    items[0].style.transform = `
-    translate3d(0, ${fristItemTransleteY}px, 0px)
-    scale3d(1, 1, 1)
-    rotateZ(0deg)
-    skew(0deg, 0deg)
-`;
+    items[0].style.transform = `translate3d(0, ${fristItemTransleteY}px, 0px)`;
     items[0].style.opacity = fristItemOpacity;
+    firstTitle.style.transform = `translate3d( ${firstTitleProgress}%, 0px, 0px)`;
+    firstContent.style.transform = `translate3d( ${firstTitleContent}%, 0px, 0px)`;
 
-
-    //secend progress calculation 0 - 1
-    const secendStickyProgress = Math.min(Math.max((stickyScrollY - stickyPreItem) / stickyPreItem, 0), 1)
 
     // === secend Image Interpolation ===
+    const secendStickyProgress = Math.min(Math.max((stickyScrollY - stickyPreItem) / stickyPreItem, 0), 1)
     const secendItemTransleteY = 200 + (-200 * secendStickyProgress);
     const secendItemOpacity = 0 + (1 * secendStickyProgress);
 
-    items[1].style.transform = `
-    translate3d(0, ${secendItemTransleteY}px, 0px)
-    scale3d(1, 1, 1)
-    rotateZ(0deg)
-    skew(0deg, 0deg)
-`;
+    items[1].style.transform = `translate3d(0, ${secendItemTransleteY}px, 0px)`;
     items[1].style.opacity = secendItemOpacity;
 
 
 
-    //third progress calculation 0 - 1
-    const thirdStickyProgress = Math.min(Math.max((stickyScrollY - (stickyPreItem * 2)) / (stickyPreItem * 2), 0), 1)
-
     // === third Image Interpolation ===
+    const thirdStickyProgress = Math.min(Math.max((stickyScrollY - (stickyPreItem * 2)) / (stickyPreItem * 2), 0), 1)
     const thirdItemTransleteY = 200 + (-200 * thirdStickyProgress);
     const thirdItemOpacity = 0 + (1 * thirdStickyProgress);
 
-    items[2].style.transform = `
-    translate3d(0, ${thirdItemTransleteY}px, 0px)
-    scale3d(1, 1, 1)
-    rotateZ(0deg)
-    skew(0deg, 0deg)
-`;
+    items[2].style.transform = `translate3d(0, ${thirdItemTransleteY}px, 0px)`;
     items[2].style.opacity = thirdItemOpacity;
+});
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const stickyWrapper = document.querySelector('.sticky_wraper');
+const stickySection = stickyWrapper.querySelector('.custom_sticky');
+const items = stickySection.querySelectorAll('.item_wraper .item');
+
+document.addEventListener('scroll', () => {
+    const rect = stickyWrapper.getBoundingClientRect();
+    const stickyScrollY = -rect.top;
+
+    const stickyScrollStart = 0;
+    const stickyScrollEnd = rect.height;
+    const stickyPreItem = stickyScrollEnd / items.length; // dynamically divide for any number of items
+
+    items.forEach((item, index) => {
+        const itemTitle = item.querySelector('.item_title');
+        const itemContent = item.querySelector('.item_content');
+
+        const itemStart = stickyPreItem * index;
+        const itemEnd = stickyPreItem * (index + 1);
+
+        const itemProgress = Math.min(Math.max((stickyScrollY - itemStart) / stickyPreItem, 0), 1);
+
+        const itemTranslateY = 200 - (200 * itemProgress);
+        const itemOpacity = itemProgress;
+
+        item.style.transform = `translate3d(0, ${itemTranslateY}px, 0)`;
+        item.style.opacity = itemOpacity;
+
+        if (itemTitle) {
+            const titleTranslateX = -50 + (50 * Math.min(stickyScrollY / 50, 1));
+            itemTitle.style.transform = `translate3d(${titleTranslateX}%, 0, 0)`;
+        }
+
+        if (itemContent) {
+            const contentTranslateX = 50 - (50 * Math.min(stickyScrollY / 50, 1));
+            itemContent.style.transform = `translate3d(${contentTranslateX}%, 0, 0)`;
+        }
+    });
+});
+
+
+
+
+// DOM elements
+const stickyWrapper = document.querySelector('.sticky_wraper');
+const stickySection = stickyWrapper.querySelector('.custom_sticky');
+const items = stickySection.querySelectorAll('.item_wraper .item');
+
+document.addEventListener('scroll', () => {
+    const rect = stickyWrapper.getBoundingClientRect();
+    const stickyScrollY = -rect.top;
+
+    const scrollPerItem = 1800; // 600px enter + 600px hold + 600px exit
+
+    items.forEach((item, index) => {
+        const itemTitle = item.querySelector('.item_title');
+        const itemContent = item.querySelector('.item_content');
+
+        const itemStart = index * scrollPerItem;
+        const enterStart = itemStart;
+        const enterEnd = itemStart + 600;
+        const holdStart = enterEnd;
+        const holdEnd = holdStart + 600;
+        const exitStart = holdEnd;
+        const exitEnd = exitStart + 600;
+
+        let translateY = 200; // default before appearing
+        let titleTranslateX = -50;
+        let contentTranslateX = 50;
+        let opacity = 0;
+
+        if (stickyScrollY < enterStart) {
+            // Before entering
+            translateY = 200;
+            titleTranslateX = -50;
+            contentTranslateX = 50;
+            opacity = 0;
+        } else if (stickyScrollY >= enterStart && stickyScrollY < enterEnd) {
+            // Entering
+            const progress = (stickyScrollY - enterStart) / 600;
+            translateY = 200 - (200 * progress);
+            titleTranslateX = -50 + (50 * progress);
+            contentTranslateX = 50 - (50 * progress);
+            opacity = progress;
+        } else if (stickyScrollY >= holdStart && stickyScrollY < holdEnd) {
+            // Holding
+            translateY = 0;
+            titleTranslateX = 0;
+            contentTranslateX = 0;
+            opacity = 1;
+        } else if (stickyScrollY >= exitStart && stickyScrollY < exitEnd) {
+            // Exiting
+            const progress = (stickyScrollY - exitStart) / 600;
+            translateY = 0 - (200 * progress);
+            titleTranslateX = 0 + (50 * progress);
+            contentTranslateX = 0 - (50 * progress);
+            opacity = 1 - (0.5 * progress); // fade a little during exit
+        } else {
+            // After exiting
+            translateY = -200;
+            titleTranslateX = 50;
+            contentTranslateX = -50;
+            opacity = 0.5; // keep half visible if fully exited
+        }
+
+        // Apply transforms
+        item.style.transform = `translate3d(0, ${translateY}%, 0)`;
+        item.style.opacity = opacity;
+        if (itemTitle) {
+            itemTitle.style.transform = `translate3d(${titleTranslateX}%, 0, 0)`;
+        }
+        if (itemContent) {
+            itemContent.style.transform = `translate3d(${contentTranslateX}%, 0, 0)`;
+        }
+    });
+});
+
+
+
+
+const stickyWrapper = document.querySelector('.sticky_wraper');
+const stickySection = stickyWrapper.querySelector('.custom_sticky');
+const items = stickySection.querySelectorAll('.item_wraper .item');
+
+document.addEventListener('scroll', () => {
+    const rect = stickyWrapper.getBoundingClientRect();
+    const stickyScrollY = -rect.top;
+
+    const fullHeight = stickyWrapper.offsetHeight;
+    const numberOfItems = items.length + 1; // +1 for the last item that doesn't animate
+    const perItemHeight = fullHeight / numberOfItems;
+    const stayTime = perItemHeight / 2; // half stay, half move
+    const scrollPerItem = stayTime * 3; // total scroll for one item
+
+    items.forEach((item, index) => {
+        const itemTitle = item.querySelector('.item_title');
+        const itemContent = item.querySelector('.item_content');
+
+        const itemScrollStart = index * scrollPerItem;
+        const enterStart = itemScrollStart;
+        const enterEnd = enterStart + stayTime;
+        const holdStart = enterEnd;
+        const holdEnd = holdStart + stayTime;
+        const exitStart = holdEnd;
+        const exitEnd = exitStart + stayTime;
+
+        let translateY = 200;
+        let titleTranslateX = -50;
+        let contentTranslateX = 50;
+        let opacity = 0;
+
+        if (stickyScrollY < enterStart) {
+            // Before enter
+            translateY = 200;
+            titleTranslateX = -50;
+            contentTranslateX = 50;
+            opacity = 0;
+        } else if (stickyScrollY >= enterStart && stickyScrollY < enterEnd) {
+            // Entering
+            const progress = (stickyScrollY - enterStart) / stayTime;
+            translateY = 200 - (200 * progress);
+            titleTranslateX = -50 + (50 * progress);
+            contentTranslateX = 50 - (50 * progress);
+            opacity = progress;
+        } else if (stickyScrollY >= holdStart && stickyScrollY < holdEnd) {
+            // Holding
+            translateY = 0;
+            titleTranslateX = 0;
+            contentTranslateX = 0;
+            opacity = 1;
+        } else if (stickyScrollY >= exitStart && stickyScrollY < exitEnd) {
+            // Exiting
+            const progress = (stickyScrollY - exitStart) / stayTime;
+            translateY = 0 - (200 * progress);
+            titleTranslateX = 0 + (50 * progress);
+            contentTranslateX = 0 - (50 * progress);
+            opacity = 1 - (0.5 * progress);
+        } else {
+            // After exit
+            translateY = -200;
+            titleTranslateX = 50;
+            contentTranslateX = -50;
+            opacity = 0.5;
+        }
+
+        // Apply styles
+        item.style.transform = `translate3d(0, ${translateY}%, 0)`;
+        item.style.opacity = opacity;
+        if (itemTitle) {
+            itemTitle.style.transform = `translate3d(${titleTranslateX}%, 0, 0)`;
+        }
+        if (itemContent) {
+            itemContent.style.transform = `translate3d(${contentTranslateX}%, 0, 0)`;
+        }
+    });
+});
+
+
+//@ts-check
+//
+const accordion = document.querySelector('.custom_accordion');
+const accordionItems = accordion.querySelectorAll('.e-n-accordion-item');
+
+function handleScroll() {
+    accordionItems.forEach((item, index) => {
+        const itemRect = item.getBoundingClientRect();
+        const itemTop = itemRect.top;
+        const itemBottom = itemRect.bottom;
+        const windowHeight = window.innerHeight;
+
+        // Check if item is entering viewport
+        if (itemTop < windowHeight && itemBottom > 0) {
+            const delay = index * 100; // stagger delay
+            setTimeout(() => {
+                item.style.transition = 'all 0.5s ease';
+                item.style.transform = 'translateY(0px)';
+                item.style.opacity = '1';
+            }, delay);
+        } else {
+            // Reset if not visible
+            item.style.transition = 'none';
+            item.style.transform = 'translateY(100px)';
+            item.style.opacity = '0';
+        }
+    });
+}
+
+// Initialize all items hidden at start
+accordionItems.forEach(item => {
+    item.style.transform = 'translateY(100px)';
+    item.style.opacity = '0';
+});
+
+// Listen to scroll
+window.addEventListener('scroll', handleScroll);
+
+// Also trigger once in case some items already visible
+handleScroll();
+
+
+
+//  menu popu
+
+const menuIcon = document.querySelector('.menu_icon');
+const menuPopup = document.querySelector('.menu_popup');
+
+document.addEventListener('click', (e) => {
+    const isClickInsideMenu = menuPopup.contains(e.target);
+    const isClickOnIcon = menuIcon.contains(e.target);
+    if (!isClickInsideMenu && !isClickOnIcon) {
+        menuPopup.classList.remove('active');
+    }
+    if (isClickOnIcon) {
+        menuPopup.classList.toggle('active');
+    }
+});
+
+
+
+// 
+const menuPopup = document.querySelector('.menu_popup');
+const menuOpenIcon = document.querySelector('.menu_open_icon');
+const menuCloseIcon = document.querySelector('.menu_close_icon');
+
+menuOpenIcon.addEventListener('click', () => {
+    menuPopup.classList.add('active');
+    menuOpenIcon.style.display = 'none';
+    menuCloseIcon.style.display = 'block';
+});
+menuCloseIcon.addEventListener('click', () => {
+    menuPopup.classList.remove('active');
+    menuCloseIcon.style.display = 'none';
+    menuOpenIcon.style.display = 'block';
+});
+
+// main form
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.querySelector('.newsletter-form .elementor-form');
+    const fieldsWrapper = form.querySelector('.elementor-form-fields-wrapper');
+
+    if (!form) return;
+
+    // Use MutationObserver to watch for .elementor-message being added
+    const observer = new MutationObserver(() => {
+        const message = form.querySelector('.elementor-message');
+        if (message && message.offsetParent !== null) {
+            fieldsWrapper.style.display = 'none';
+        }
+    });
+
+    observer.observe(form, {
+        childList: true,
+        subtree: true
+    });
+});
+
+// submit popup form 
+
+
+const subscribeForm = document.querySelector('.subscribe-form .elementor-form');
+const subscribeWrapper = subscribeForm.querySelector('.elementor-form-fields-wrapper');
+
+if (subscribeForm) return;
+
+// Use MutationObserver to watch for .elementor-message being added
+const subscribObserver = new MutationObserver(() => {
+    const subscribeMessage = subscribeForm.querySelector('.elementor-message');
+    if (subscribeMessage && subscribeMessage.offsetParent !== null) {
+        subscribeWrapper.style.display = 'none';
+    }
+});
+
+subscribObserver.observe(subscribeForm, {
+    childList: true,
+    subtree: true
+});
+
+
+
+jQuery(window).on('elementor/popup/show', function(event, id, instance) {
+    // Check for a specific popup ID
+    if (id !== 357) return;
+
+    const subscribeForm = document.querySelector('#elementor-popup-modal-357 .subscribe-form .elementor-form');
+    if (!subscribeForm) return;
+
+    const subscribeWrapper = subscribeForm.querySelector('.elementor-form-fields-wrapper');
+    if (!subscribeWrapper) return;
+
+    // Use MutationObserver to detect success message
+    const subscribObserver = new MutationObserver(() => {
+        const subscribeMessage = subscribeForm.querySelector('.elementor-message');
+        if (subscribeMessage && subscribeMessage.offsetParent !== null) {
+            subscribeWrapper.style.display = 'none';
+        }
+    });
+
+    subscribObserver.observe(subscribeForm, {
+        childList: true,
+        subtree: true
+    });
 });
