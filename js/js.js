@@ -8296,19 +8296,7 @@ document.addEventListener('scroll', () => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+// sticky animation
 const stickyWrapper = document.querySelector('.sticky_wraper');
 const stickySection = stickyWrapper.querySelector('.custom_sticky');
 const items = stickySection.querySelectorAll('.item_wraper .item');
@@ -8677,3 +8665,39 @@ window.addEventListener("scroll", function () {
 
     lastScrollTop = Math.max(currentScroll, 0);
 });
+
+
+//outside click close menu
+
+const menuOpenIcon = document.querySelector('.menu_open_icon');
+const menuCloseIcon = document.querySelector('.menu_close_icon');
+const menuPopup = document.querySelector('.menu_popup');
+const menuWraper = menuPopup.querySelector('.menu_wraper');
+
+menuOpenIcon.addEventListener('click', () => {
+    menuPopup.style.display = 'flex';
+    menuOpenIcon.style.display = 'none';
+    menuCloseIcon.style.display = 'block';
+});
+
+menuCloseIcon.addEventListener('click', () => {
+    closeMenu();
+});
+
+// Close menu function
+function closeMenu() {
+    menuPopup.style.display = 'none';
+    menuOpenIcon.style.display = 'block';
+    menuCloseIcon.style.display = 'none';
+}
+
+// Close menu when clicking outside
+document.addEventListener('click', (e) => {
+    const isClickInsideMenu = menuWraper.contains(e.target);
+    const isClickOnIcons = menuOpenIcon.contains(e.target) || menuCloseIcon.contains(e.target);
+
+    if (!isClickInsideMenu && !isClickOnIcons) {
+        closeMenu();
+    }
+});
+
