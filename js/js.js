@@ -8701,3 +8701,20 @@ document.addEventListener('click', (e) => {
     }
 });
 
+// black menu custom
+
+
+const theHeader = document.querySelector('.custom_menu');
+const pageSlags = ['commercial-photographer-austin', 'about', 'services', 'contact'];
+
+const currentHref = window.location.href;
+
+const isMatch = pageSlags.some((page) => currentHref.includes(page));
+console.log(isMatch, currentHref, pageSlags);
+
+
+if (isMatch) {
+    theHeader.classList.add('black');
+} else {
+    theHeader.classList.remove('black');
+}
