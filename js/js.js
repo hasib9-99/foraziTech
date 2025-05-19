@@ -9104,4 +9104,25 @@ function applyTransform(element, index) {
 
 
 
-//
+// card auto fill the section 
+const aboutSection = document.querySelector('.about_Wrapr');
+const aboutCard = aboutSection.querySelectorAll('.about_card');
+
+function updateAboutCards() {
+    const perCardWidth = aboutSection.offsetWidth / (aboutCard.length - 1);
+    const transformValue = perCardWidth / aboutCard.length;
+
+    const rect = aboutSection.getBoundingClientRect();
+    const topOffset = rect.top;
+
+    if (topOffset < window.innerHeight / 2) {
+        aboutCard.forEach((card, i) => {
+            card.style.transform = `translate3d(${transformValue * i}px, ${30 * i}%, 0)`;
+            card.style.zIndex = i;
+            card.style.width = `${perCardWidth}px`;
+        });
+    }
+}
+
+document.addEventListener('scroll', updateAboutCards);
+document.addEventListener('resize', updateAboutCards);
