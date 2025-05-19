@@ -8718,3 +8718,298 @@ if (isMatch) {
 } else {
     theHeader.classList.remove('black');
 }
+
+
+//
+
+const mainPrice = document.querySelector('.main_price .elementor-heading-title');
+const mainName = document.querySelector('.main_price_name');
+const fildPrice = document.querySelector('.custom_frild_price .order-total bdi');
+const fildName = document.querySelector('.pisol_product_name');
+const cuponBtn = document.querySelector('.e-apply-coupon');
+
+console.log(fildPrice.textContent, fildName.textContent, mainPrice.textContent, mainName.textContent);
+
+mainPrice.textContent = fildPrice.textContent;
+mainName.textContent = fildName.textContent;
+
+cuponBtn.addEventListener('click', () => {
+    const observer = new MutationObserver(() => {
+        mainPrice.textContent = fildPrice.textContent;
+        mainName.textContent = fildName.textContent;
+    });
+    observer.observe(fildPrice, {
+        childList: true,
+        subtree: true
+    });
+})
+
+
+
+const mainPrice = document.querySelector('.main_price .elementor-heading-title');
+const mainName = document.querySelector('.main_price_name');
+const oderBox = document.querySelector('.woocommerce-checkout-review-order');
+
+function updateMainFields() {
+    const fildPrice = document.querySelector('.custom_frild_price .order-total bdi');
+    const fildName = document.querySelector('.pisol_product_name');
+
+    if (fildPrice && fildName) {
+        mainPrice.textContent = fildPrice.textContent;
+        mainName.textContent = fildName.textContent;
+    }
+}
+
+// Initial set
+updateMainFields();
+
+// Set up observer
+const observer = new MutationObserver(() => {
+    updateMainFields();
+});
+
+observer.observe(oderBox, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+});
+
+
+
+
+
+
+
+
+
+
+
+
+//
+const mainPrice = document.querySelector('.main_price .elementor-heading-title');
+const mainName = document.querySelector('.main_price_name');
+const oderBox = document.querySelector('.woocommerce-checkout-review-order');
+const productBox = document.querySelector('.shop_table'); // Adjust if needed
+
+function updateMainFields() {
+    const fildPrice = document.querySelector('.custom_frild_price .order-total bdi');
+    const fildName = document.querySelector('.pisol_product_name');
+
+    if (fildPrice && mainPrice) {
+        mainPrice.textContent = fildPrice.textContent;
+    }
+
+    if (fildName && mainName) {
+        mainName.textContent = fildName.textContent;
+    }
+
+    console.log('Updated:', {
+        price: fildPrice?.textContent,
+        name: fildName?.textContent
+    });
+}
+
+// Initial set
+updateMainFields();
+
+// Observe changes in both relevant containers
+const observer = new MutationObserver(updateMainFields);
+
+if (oderBox) {
+    observer.observe(oderBox, {
+        childList: true,
+        subtree: true,
+        attributes: true
+    });
+}
+
+if (productBox) {
+    observer.observe(productBox, {
+        childList: true,
+        subtree: true,
+        attributes: true
+    });
+}
+
+
+
+const mainPrice = document.querySelector('.main_price .elementor-heading-title');
+const mainName = document.querySelector('.main_price_name');
+const checkoutArea = document.querySelector('.woocommerce-checkout'); // Covers all updates
+
+function updateMainFields() {
+    const fildPrice = document.querySelector('.custom_frild_price .order-total bdi');
+    const fildName = document.querySelector('.pisol_product_name');
+
+    if (fildPrice && mainPrice) {
+        mainPrice.textContent = fildPrice.textContent;
+    }
+
+    if (fildName && mainName) {
+        mainName.textContent = fildName.textContent;
+    }
+
+    console.log('Updated:', {
+        price: fildPrice?.textContent,
+        name: fildName?.textContent
+    });
+}
+
+// Initial sync
+updateMainFields();
+
+// MutationObserver for dynamic updates
+const observer = new MutationObserver(() => {
+    updateMainFields();
+
+    setTimeout(() => {
+        observer.disconnect();
+        console.log("MutationObserver stopped.");
+    }, 2000);
+
+});
+
+if (checkoutArea) {
+    observer.observe(checkoutArea, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+    });
+}
+// Observe the main price and name fields for changes
+const mainPrice = document.querySelector('.main_price .elementor-heading-title');
+const mainName = document.querySelector('.main_price_name');
+
+function updateMainFields() {
+    setTimeout(() => {
+        const fieldPrice = document.querySelector('.custom_frild_price .order-total bdi');
+        const fieldName = document.querySelector('.pisol_product_name');
+        mainPrice.textContent = fieldPrice.textContent;
+        mainName.textContent = fieldName.textContent;
+    }, 100);
+}
+
+const observer = new MutationObserver(updateMainFields);
+observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+});
+
+
+const x = function (a, b) {
+    return a + b;
+}
+
+console.log(x(2, 3));
+
+
+//popup
+const menuPopup = document.querySelector('.menu_popup');
+const openIcon = document.querySelector('.open_icon');
+const closeIcon = document.querySelector('.close_icon');
+
+openIcon.addEventListener('click', () => {
+    menuPopup.classList.add('active');
+    openIcon.style.display = 'none';
+    closeIcon.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Corrected "Document" to "document"
+});
+
+closeIcon.addEventListener('click', () => {
+    menuPopup.classList.remove('active');
+    openIcon.style.display = 'block';
+    closeIcon.style.display = 'none';
+    document.body.style.overflow = 'auto'; // Corrected "Document" to "document"
+});
+
+
+const progresBar = document.querySelector('.progress_bar');
+
+document.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = window.innerHeight;
+
+    const scrollPercent = (scrollTop / (scrollHeight - clientHeight)) * 100;
+
+    progresBar.style.height = `${scrollPercent}%`;
+
+    console.log(`ScrollTop: ${scrollTop}`);
+    console.log(`ScrollHeight: ${scrollHeight}`);
+    console.log(`ClientHeight: ${clientHeight}`);
+    console.log(`Scroll Percent: ${scrollPercent.toFixed(2)}%`);
+});
+
+
+
+const menuPopup = document.querySelector('.menu_popup');
+const openIcon = document.querySelector('.open_icon');
+const closeIcon = document.querySelector('.close_icon');
+
+openIcon.addEventListener('click', () => {
+    menuPopup.classList.add('active');
+    document.body.style.overflow = 'hidden';
+});
+
+closeIcon.addEventListener('click', () => {
+    menuPopup.classList.remove('active');
+    document.body.style.overflow = 'auto';
+});
+
+
+const playBtn = document.querySelector('.custom_play_btn');
+
+if (playBtn) {
+    playBtn.addEventListener('click', () => {
+        setTimeout(() => {
+            const btn = document.querySelector('.video-stream.html5-main-video');
+            btn.play();
+        }, 1000);
+    });
+}
+
+
+const customMenu = document.querySelectorAll('.update_attribute');
+const theAttribute = 'data-click-id'
+customMenu.forEach((menu) => {
+    const menuItem = menu.querySelectorAll('ul li a');
+    menuItem.forEach((item) => {
+        const menuAttribute = item.getAttribute('title');
+        item.setAttribute(theAttribute, menuAttribute);
+        item.removeAttribute('title')
+    })
+})
+
+
+
+
+//
+const theInput = document.querySelectorAll('[type="file"]');
+
+theInput.forEach((input) => {
+    input.addEventListener('change', () => {
+        const fileName = input.files[0].name;
+        document.documentElement.style.setProperty('--after-content', `"${fileName}"`);
+    });
+})
+
+//
+
+const links = ['https://example.com/page1', 'https://example.com/page2', 'https://example.com/page3'];
+const currentUrl = window.location.href;
+let nextIndex = 0;
+
+const currentIndex = links.findIndex(link => link === currentUrl);
+
+if (currentIndex !== -1) {
+    nextIndex = (currentIndex + 1) % links.length;
+}
+
+setTimeout(() => {
+    // window.location.href = links[nextIndex];
+    console.log(links[nextIndex]);
+
+}, 300);
+
+
+//
