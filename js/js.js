@@ -9013,3 +9013,95 @@ setTimeout(() => {
 
 
 //
+
+
+// const efect = [
+//     {
+//         current: { x: 25, y: -2, rotate: 2.11 },
+//         to: { x: 25, y: -100, rotate: -90 }
+//     },
+//     {
+//         current: { x: 10, y: -1, rotate: 1.13 },
+//         to: { x: 10, y: -100, rotate: -90 }
+//     },
+//     {
+//         current: { x: -5, y: 0, rotate: 0 },
+//         to: { x: -5, y: -100, rotate: -90 }
+//     },
+//     {
+//         current: { x: -20, y: 1, rotate: 0.1 },
+//         to: { x: -20, y: -100, rotate: -90 }
+//     }
+// ];
+
+// card sticky and scroll animation
+const mainCon = document.querySelector('.main_con');
+const cards = document.querySelectorAll('.sticky_card');
+const segmentCount = cards.length + 1;
+const mediaQuery = window.matchMedia('(max-width: 768px)');
+
+
+// adjust the height of the main container
+mainCon.style.height = `${segmentCount * 100}vh`;
+
+document.addEventListener('scroll', () => {
+    const rect = mainCon.getBoundingClientRect();
+    const topOffset = rect.top;
+
+    if (topOffset > 0) {
+        // Before animation starts
+        cards.forEach((card, i) => {
+            applyTransform(card, i);
+        });
+        return;
+    }
+
+    const scrollableHeight = mainCon.offsetHeight - window.innerHeight;
+    const scrollY = Math.abs(topOffset);
+    const segmentHeight = scrollableHeight / segmentCount;
+
+    cards.forEach((card, i) => {
+        const start = segmentHeight * i;
+        const end = segmentHeight * (i + 1);
+        let progress = (scrollY - start) / (end - start);
+        progress = Math.max(0, Math.min(progress, 1)); // Clamp 0–1
+
+        // const currentEffect = efect[i];
+
+        if (mediaQuery.matches) {
+            const x = interpolate(25 - (10 * i), 25 - (10 * i), progress);
+            const y = interpolate(-2 - (1 * i), -100, progress);
+            const rotate = interpolate(0 - (0.6 * i), -90, progress);
+
+            const transform = `translate3d(${x}px, ${y}vh, 0px) rotateZ(${rotate}deg)`;
+            card.style.transform = transform;
+        } else {
+            // Interpolated values
+            const x = interpolate(25 - (15 * i), 25 - (15 * i), progress);
+            const y = interpolate(-2 - (1 * i), -100, progress);
+            const rotate = interpolate(i, -90, progress);
+
+            const transform = `translate3d(${x}px, ${y}vh, 0px) rotateZ(${rotate}deg)`;
+            card.style.transform = transform;
+        }
+    });
+});
+
+// Helper function
+function interpolate(start, end, progress) {
+    return start + (end - start) * progress;
+}
+
+function applyTransform(element, index) {
+    if (mediaQuery.matches) {
+        element.style.transform = `translate3d(${25 - (10 * index)}px, ${-2 - (1 * index)}vh, 0px) rotateZ(${0 - (0.6 * index)}deg)`;
+    } else {
+        element.style.transform = `translate3d(${25 - (15 * index)}px, ${-2 - (1 * index)}vh, 0px) rotateZ(${index}deg)`;
+    }
+    element.style.zIndex = 20 - index;
+}
+
+
+
+
+//
