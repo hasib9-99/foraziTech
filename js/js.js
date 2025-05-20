@@ -9108,21 +9108,43 @@ function applyTransform(element, index) {
 const aboutSection = document.querySelector('.about_Wrapr');
 const aboutCard = aboutSection.querySelectorAll('.about_card');
 
-function updateAboutCards() {
-    const perCardWidth = aboutSection.offsetWidth / (aboutCard.length - 1);
-    const transformValue = perCardWidth / aboutCard.length;
+let perCardWidth = 0;
+let transformValue = 0;
 
+function updateWidth() {
+    perCardWidth = aboutSection.offsetWidth / (aboutCard.length - 1);
+    transformValue = perCardWidth / (aboutCard.length - 1);
+
+    aboutCard.forEach((card) => {
+        card.style.width = `${perCardWidth}px`;
+    });
+}
+
+function updateAboutCards() {
     const rect = aboutSection.getBoundingClientRect();
     const topOffset = rect.top;
 
     if (topOffset < window.innerHeight / 2) {
+        updateWidth();
         aboutCard.forEach((card, i) => {
-            card.style.transform = `translate3d(${transformValue * i}px, ${30 * i}%, 0)`;
+            card.style.transform = `translate3d(${(transformValue * (aboutCard.length - 2)) * i}px, ${30 * i}%, 0)`;
             card.style.zIndex = i;
-            card.style.width = `${perCardWidth}px`;
         });
     }
 }
 
+updateWidth();
 document.addEventListener('scroll', updateAboutCards);
-document.addEventListener('resize', updateAboutCards);
+window.addEventListener('resize', updateAboutCards);
+
+
+
+// text replace
+document.addEventListener("DOMContentLoaded", function () {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+        const node = walker.currentNode;
+        node.textContent = node.textContent.replace(/\bRasel\b/gi, "Rasel viper"); // Replace "hello" with "Hi"
+    }
+});
+
