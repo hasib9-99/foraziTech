@@ -9148,3 +9148,344 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+
+// Define custom transform values for each card
+const efect = [
+    { current: [-5, 0, 0, 0.9, 0.9, 1, -15], to: [0, 0, 0, 1, 1, 1, 0] },
+    { current: [-63, -10, 0, 0.9, 0.9, 1, -4], to: [0, 0, 0, 1, 1, 1, 0] },
+    { current: [-110, -18, 0, 0.9, 0.9, 1, -2], to: [0, 0, 0, 1, 1, 1, 0] },
+    { current: [150, -117, 0, 0.9, 0.9, 1, 7], to: [0, 0, 0, 1, 1, 1, 0] },
+    { current: [80, -110, 0, 0.9, 0.9, 1, 8], to: [0, 0, 0, 1, 1, 1, 0] },
+    { current: [9, -100, 0, 0.9, 0.9, 1, 18], to: [0, 0, 0, 1, 1, 1, 0] }
+];
+
+// Select section and cards
+const workSection = document.querySelector('.work_section');
+const workCards = workSection.querySelectorAll('.work_card');
+
+// Linear interpolation function
+function lerp(a, b, t) {
+    return a + (b - a) * t;
+}
+
+// Scroll-based animation handler
+function updateTransforms() {
+    const rect = workSection.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    // Start animation 20% before reaching viewport center
+    const offset = windowHeight * 0.2;
+    const triggerPoint = windowHeight / 1 - offset;
+
+    // Normalize scroll progress between 0 and 1
+    let progress = (triggerPoint - rect.top) / rect.height;
+    progress = Math.min(Math.max(progress, 0), 1); // Clamp between 0 and 1
+
+    // Apply transform to each card
+    workCards.forEach((card, i) => {
+        const from = efect[i].current;
+        const to = efect[i].to;
+
+        const x = lerp(from[0], to[0], progress);
+        const y = lerp(from[1], to[1], progress);
+        const z = lerp(from[2], to[2], progress);
+        const scaleX = lerp(from[3], to[3], progress);
+        const scaleY = lerp(from[4], to[4], progress);
+        const scaleZ = lerp(from[5], to[5], progress);
+        const rotate = lerp(from[6], to[6], progress);
+
+        card.style.transform = `translate3d(${x}%, ${y}%, ${z}px) scale3d(${scaleX}, ${scaleY}, ${scaleZ}) rotateZ(${rotate}deg)`;
+    });
+}
+
+// Set up event listeners
+window.addEventListener('scroll', updateTransforms);
+window.addEventListener('resize', updateTransforms);
+
+// Initial run
+updateTransforms();
+
+
+
+//
+
+const form = document.querySelector('.the_form');
+const steps = form.querySelectorAll('.elementor-field-type-step');
+const stepContents = document.querySelectorAll('.step_content');
+const sectionWrap = document.querySelector('.section_wrap');
+const questions = document.querySelectorAll('.question_wrapper');
+
+
+// Function to handle step changes
+function updateVisibleStep() {
+    const currentStep = Array.from(steps).findIndex(
+        step => !step.classList.contains('elementor-hidden')
+    );
+
+    if (currentStep === -1) return; // No visible step found
+
+    stepContents.forEach(content => {
+        content.style.display = 'none';
+    });
+
+    questions.forEach(question => {
+        question.style.display = 'none';
+    });
+
+    const currentStepContent = stepContents[currentStep];
+    const currentQuestion = questions[currentStep];
+    if (currentStepContent) {
+        if (currentStep === 3) {
+            sectionWrap.style.flexDirection = 'row-reverse';
+        } else {
+            sectionWrap.style.flexDirection = 'row';
+        }
+
+        currentStepContent.style.display = 'block';
+    }
+    if (currentQuestion) {
+        currentQuestion.style.display = 'block';
+    }
+    console.log('Step changed to:', currentStep);
+}
+
+function handleNewNoteList(node) {
+    if (node.classList.contains('elementor-message-success')) {
+        window.location.href = 'thanks';
+    }
+}
+
+const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            updateVisibleStep();
+        }
+
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) {
+                    handleNewNoteList(node);
+                }
+            });
+        }
+    });
+});
+
+observer.observe(form, {
+    attributes: true,
+    attributeFilter: ['class'],
+    subtree: true,
+    childList: true,
+});
+
+updateVisibleStep();
+
+
+const fromPopup = document.querySelector('.from_popup');
+const popupOpen = document.querySelector('.popup_open');
+const popupClose = document.querySelector('.popup_close');
+
+popupOpen.addEventListener('click', () => {
+    fromPopup.classList.add('active');
+});
+popupClose.addEventListener('click', () => {
+    fromPopup.classList.remove('active');
+});
+
+
+
+
+
+
+
+
+
+
+const form = document.querySelector('.the_form');
+const steps = form.querySelectorAll('.elementor-field-type-step');
+const stepContents = document.querySelectorAll('.step_content');
+const sectionWrap = document.querySelector('.section_wrap');
+
+
+// Function to handle step changes
+function updateVisibleStep() {
+    const currentStep = Array.from(steps).findIndex(
+        step => !step.classList.contains('elementor-hidden')
+    );
+
+    if (currentStep === -1) return; // No visible step found
+
+    stepContents.forEach(content => {
+        content.style.display = 'none';
+    });
+
+    questions.forEach(question => {
+        question.style.display = 'none';
+    });
+
+    const currentStepContent = stepContents[currentStep];
+    const currentQuestion = questions[currentStep];
+    if (currentStepContent) {
+
+        // change the row-reverse content index
+        if (currentStep === 7) {
+            sectionWrap.style.flexDirection = 'row-reverse';
+        } else {
+            sectionWrap.style.flexDirection = 'row';
+        }
+
+        currentStepContent.style.display = 'flex';
+    }
+    if (currentQuestion) {
+        currentQuestion.style.display = 'block';
+    }
+
+}
+
+function handleNewNoteList(node) {
+    if (node.classList.contains('elementor-message-success')) {
+        window.location.href = 'thanks';
+    }
+}
+
+const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            updateVisibleStep();
+        }
+
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach(node => {
+                if (node.nodeType === 1) {
+                    handleNewNoteList(node);
+                }
+            });
+        }
+    });
+});
+
+observer.observe(form, {
+    attributes: true,
+    attributeFilter: ['class'],
+    subtree: true,
+    childList: true,
+});
+
+updateVisibleStep();
+
+
+
+//
+const oddCards = document.querySelectorAll('.odd_card .unsere_card');
+const evenCards = document.querySelectorAll('.even_cards .unsere_card');
+const phoneCards = document.querySelectorAll('.phone_cards .unsere_card');
+const loodBtn = document.querySelector('.more_btn');
+
+let activeCards = 0;
+const cardsToShow = 2;
+
+const cardsToShowPhone = 1;
+
+function showCards() {
+    oddCards.forEach((card, index) => {
+        if (index < activeCards) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    evenCards.forEach((card, index) => {
+        if (index < activeCards) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    phoneCards.forEach((card, index) => {
+        if (index < activeCards) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    loodBtn.style.display = activeCards < oddCards.length ? 'block' : 'none';
+    loodBtn.style.display = activeCards < evenCards.length ? 'block' : 'none';
+    loodBtn.style.display = activeCards < phoneCards.length ? 'block' : 'none';
+}
+function loadMoreCards() {
+    activeCards += cardsToShow;
+    showCards();
+    if (activeCards >= oddCards.length && activeCards >= evenCards.length && activeCards >= phoneCards.length) {
+        loodBtn.style.display = 'none';
+    }
+}
+function loadMoreCardsPhone() {
+    activeCards += cardsToShowPhone;
+    showCards();
+    if (activeCards >= oddCards.length && activeCards >= evenCards.length && activeCards >= phoneCards.length) {
+        loodBtn.style.display = 'none';
+    }
+}
+// Initial setup
+showCards();
+
+
+const oddCards = document.querySelectorAll('.odd_cards .unsere_card');
+const evenCards = document.querySelectorAll('.even_cards .unsere_card');
+const phoneCards = document.querySelectorAll('.phone_cards .unsere_card');
+const loodBtn = document.querySelector('.more_btn');
+
+console.log(oddCards, evenCards, phoneCards, loodBtn);
+
+
+let activeCards = 0;
+const cardsToShow = 1;
+
+function showCards() {
+    if (window.innerWidth < 768) {
+        phoneCards[activeCards].style.display = 'block';
+    } else {
+        oddCards[activeCards].style.display = 'block';
+        evenCards[activeCards].style.display = 'block';
+    }
+    activeCards += cardsToShow;
+
+    if (window.innerWidth < 768) {
+
+        if (activeCards >= phoneCards.length) {
+            loodBtn.style.display = 'none';
+        } else {
+            loodBtn.style.display = 'block';
+        }
+    } else if (window.innerWidth >= 768) {
+        if (activeCards >= oddCards.length && activeCards >= evenCards.length) {
+            loodBtn.style.display = 'none';
+        } else {
+            loodBtn.style.display = 'block';
+        }
+    }
+}
+
+loodBtn.addEventListener('click', showCards);
+showCards()
+
+
+//
+
+const theContainer = document.querySelector('.e-atc-qty-button-holder');
+
+const ovserver = new MutationObserver((mutation) => {
+    mutation.forEach((mut) => {
+        if (mut.type === 'childList') {
+            mut.addedNodes.forEach((node) => {
+                node.click();
+            });
+        }
+    });
+
+})
+
+ovserver.observe(theContainer, {
+    childList: true
+});
+

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Only Random Height Cards - Multiple Methods</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: sans-serif;
+      background: #f0f0f0;
+    }
+
+    h2 {
+      margin-top: 40px;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 16px;
+      padding: 10px;
+    }
+
+    /* Simulated random heights */
+    .h1 { height: 120px; }
+    .h2 { height: 160px; }
+    .h3 { height: 200px; }
+    .h4 { height: 140px; }
+    .h5 { height: 180px; }
+
+    /* ---------- 1. CSS Grid (default, has gaps) ---------- */
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    /* ---------- 2. CSS Columns ---------- */
+    .column-container {
+      column-count: 2;
+      column-gap: 20px;
+    }
+    .column-container .card {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    /* ---------- 3. Manual Flex Columns ---------- */
+    .flex-columns {
+      display: flex;
+      gap: 20px;
+    }
+    .flex-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ---------- 4. Firefox Masonry (optional) ---------- */
+    @supports (grid-template-rows: masonry) {
+      .masonry-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: masonry;
+        gap: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<h2>1. CSS Grid (Default) – Has vertical gaps</h2>
+<div class="grid-container">
+  <div class="card h1">Card 1</div>
+  <div class="card h3">Card 2</div>
+  <div class="card h2">Card 3</div>
+  <div class="card h5">Card 4</div>
+  <div class="card h4">Card 5</div>
+  <div class="card h2">Card 6</div>
+  <div class="card h3">Card 7</div>
+  <div class="card h1">Card 8</div>
+  <div class="card h4">Card 9</div>
+  <div class="card h5">Card 10</div>
+</div>
+
+<h2>2. CSS Columns – No vertical gaps, but flows top-down</h2>
+<div class="column-container">
+  <div class="card h1">Card 1</div>
+  <div class="card h3">Card 2</div>
+  <div class="card h2">Card 3</div>
+  <div class="card h5">Card 4</div>
+  <div class="card h4">Card 5</div>
+  <div class="card h2">Card 6</div>
+  <div class="card h3">Card 7</div>
+  <div class="card h1">Card 8</div>
+  <div class="card h4">Card 9</div>
+  <div class="card h5">Card 10</div>
+</div>
+
+<h2>3. Manual Flex Columns – Side-by-side and no vertical gaps</h2>
+<div class="flex-columns">
+  <div class="flex-column">
+    <div class="card h1">Card 1</div>
+    <div class="card h2">Card 3</div>
+    <div class="card h4">Card 5</div>
+    <div class="card h3">Card 7</div>
+    <div class="card h4">Card 9</div>
+  </div>
+  <div class="flex-column">
+    <div class="card h3">Card 2</div>
+    <div class="card h5">Card 4</div>
+    <div class="card h2">Card 6</div>
+    <div class="card h1">Card 8</div>
+    <div class="card h5">Card 10</div>
+  </div>
+</div>
+
+<h2>4. CSS Grid Masonry (Firefox only)</h2>
+<div class="masonry-container">
+  <div class="card h1">Card 1</div>
+  <div class="card h3">Card 2</div>
+  <div class="card h2">Card 3</div>
+  <div class="card h5">Card 4</div>
+  <div class="card h4">Card 5</div>
+  <div class="card h2">Card 6</div>
+  <div class="card h3">Card 7</div>
+  <div class="card h1">Card 8</div>
+  <div class="card h4">Card 9</div>
+  <div class="card h5">Card 10</div>
+</div>
+
+</body>
+</html>
