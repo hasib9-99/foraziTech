@@ -9489,3 +9489,22 @@ ovserver.observe(theContainer, {
     childList: true
 });
 
+
+// dual card image effect
+
+const cardImage = document.querySelectorAll('.prodact_card');
+cardImage.forEach((card) => {
+    if (card.querySelector('.second_image')) {
+        const firstImage = card.querySelector('.frist_image');
+        const secondImage = card.querySelector('.second_image');
+        card.addEventListener('mouseover', () => {
+            firstImage.style.opacity = '0';
+            secondImage.style.opacity = '1';
+        });
+        card.addEventListener('mouseout', () => {
+            firstImage.style.opacity = '1';
+            secondImage.style.opacity = '0';
+        });
+    }
+})
+
