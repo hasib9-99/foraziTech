@@ -9508,3 +9508,73 @@ cardImage.forEach((card) => {
     }
 })
 
+
+
+
+
+
+
+// custom menu efect
+
+const mainMenu = document.querySelector('.main_menu')
+const menuIcon = mainMenu.querySelector('.burger-menu');
+const menuPopup = document.querySelector('.menu_popup');
+const menuItems = menuPopup.querySelectorAll('.menu_list h2');
+const subMenu = menuPopup.querySelectorAll('.sub_menu');
+const mainPopup = document.querySelector('.main_popup');
+const backBtn = document.querySelectorAll('.back_btn');
+
+
+// set submenu attribute
+subMenu.forEach((item, i) => {
+    const attributeValue = menuItems[i].textContent;
+    item.setAttribute('data-submenu', attributeValue);
+});
+
+
+//menu toggle function
+function menuTogole() {
+    menuIcon.classList.toggle('active');
+    menuPopup.classList.toggle('active');
+    handleScroling()
+    
+    if (!menuPopup.classList.contains('active')) {
+        resetMenu(); // Reset submenu when menu is closed
+    }
+}
+
+//handle Scroling
+function handleScroling() {
+    document.body.style.overflow = menuPopup.classList.contains('active') ? 'hidden' : 'auto'; // Disable scrolling when menu is active
+}
+
+// menu item click event
+menuItems.forEach((item) => {
+    subMenu.forEach((item) => {
+        item.classList.remove('active');
+    });
+    item.addEventListener('click', () => {
+        const content = item.textContent;
+        subMenu.forEach((sub) => {
+            if (sub.getAttribute('data-submenu') === content) {
+                sub.classList.toggle('active');
+                mainPopup.classList.add('disable');
+            }
+        });
+    });
+});
+
+
+// reset menu
+function resetMenu() {
+    subMenu.forEach((sub) => {
+        sub.classList.remove('active');
+    });
+    mainPopup.classList.remove('disable');
+}
+
+
+backBtn.forEach((btn) => {
+    btn.addEventListener('click', resetMenu);
+});
+menuIcon.addEventListener('click', menuTogole);
