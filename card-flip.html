@@ -2,60 +2,74 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Wavy Hover Effect</title>
-  <style>
-    body {
-      background: #111;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-
-    .wavy-hover img {
-      width: 300px;
-      height: auto;
-      transition: filter 0.3s ease;
-    }
-
-    .wavy-hover img:hover {
-      filter: url(#wavy);
-    }
-
-    svg {
-      position: absolute;
-      width: 0;
-      height: 0;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
 </head>
 <body>
-  <div class="wavy-hover">
-    <img src="https://janssenstaalwerk.nl/wp-content/uploads/2024/03/Home-Janssen-Staalwerk-section3.1.1.jpg.webp" alt="Wavy Image">
-    <svg xmlns="http://www.w3.org/2000/svg"  shape-rendering="geometricPrecision" width="700" height="400">
-      <link href="https://fonts.googleapis.com/css?family=Oswald:600" rel="stylesheet"/>
-
-<defs>
-  <!-- define styles -->
-  <style type="text/css">
-    @import url('https://fonts.googleapis.com/css?family=Oswald:600');
-
-    #svg_7 {
-      filter: url(#waterTexture);
-      font-size: 140px;
-      font-family: 'Oswald', sans-serif;
+  <style>
+    .menu_con{
+      padding: 10px;
+      border: 1px solid #000;
+      border-radius: 50px;
+      display: inline-block;
     }
+    .burger-menu{
+        height: 20px;
+        width: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+    }
+    .bar{
+        position: absolute;
+        width: 75%;
+        height: 2px;
+        transition: transform 250ms cubic-bezier(.2,.6,.3,1), width 250ms cubic-bezier(.2,.6,.3,1);
+        will-change: transform, width;
+        background: #000;
+    }
+    /**/
+    .burger-menu .top-bun{
+        top: 0
+    }
+    .burger-menu .patty{
+        top: calc(50% - 1px);
+        right: 0;
+    }
+    .burger-menu .bottom-bun{
+        bottom: 0
+    }
+    
+    /**/
+    .burger-menu.active .top-bun{
+        transform: rotate(-135deg);
+        top: 50%;
+        width: 100%;
+    }
+    .burger-menu.active .patty{
+        transform: scale(0);
+        top: 50%;
+    }
+    .burger-menu.active .bottom-bun{
+        transform: rotate(135deg);
+        top: 50%;
+        width: 100%;
+    }
+    </style>
+    
+    
+    <div class="menu_con">
+      <div class="burger-menu">
+        <div class="bar top-bun"></div>
+        <div class="bar patty"></div>
+        <div class="bar bottom-bun"></div>
+      </div>
+    </div>
 
-  </style>
 
-  <!-- define water texture filter -->
-  <filter id="wavy" >
-
-
-    <img src="/demo/0.jpg" alt="">
-
-</svg>
-  </div>
+    <script>
+    
+    </script>
 </body>
 </html>
