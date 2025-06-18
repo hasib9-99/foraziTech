@@ -9697,11 +9697,11 @@ window.addEventListener('scroll', () => {
     if (!target) return;
 
     const scrollY = window.scrollY;
-    const start = 0;        
-    const end = 600;        
+    const start = 0;
+    const end = 600;
 
     let ratio = (scrollY - start) / (end - start);
-    ratio = Math.min(Math.max(ratio, 0), 1); 
+    ratio = Math.min(Math.max(ratio, 0), 1);
 
     const minAlpha = 0.2;
     const maxAlpha = 1;
@@ -9709,3 +9709,219 @@ window.addEventListener('scroll', () => {
 
     target.style.backgroundColor = `rgba(42, 75, 188, ${alpha})`;
 });
+
+//
+const paragraph = document.querySelector('.more_less');
+const toggleBtn = document.querySelector('.toggle_btn');
+
+toggleBtn.addEventListener('click', () => {
+    paragraph.classList.toggle('short');
+    toggleBtn.textContent = paragraph.classList.contains('short') ? 'Read more' : 'Read less';
+});
+
+
+//
+const resgisterBtn = document.querySelector('.regi_btn');
+
+
+//
+
+const dValue = {
+    desktop: "M-1.0044999999999997, 0.886 L-1.0044999999999997, 0.943 c0.25075,-0.07296000000000001 0.25075,-0.07296000000000001 0.5015,0 s0.25075,0.07296000000000001 0.5015,0c0.25075,-0.07296000000000001 0.25075,-0.07296000000000001 0.5015,0 s0.25075,0.07296000000000001 0.5015,0c0.25075,-0.07296000000000001 0.25075,-0.07296000000000001 0.5015,0 s0.25075,0.07296000000000001 0.5015,0 L1, -1 L0, -1 z",
+    tablet: "M-1.012, 0.924 L-1.012, 0.962 c0.252,-0.04864 0.252,-0.04864 0.504,0 s0.252,0.04864 0.504,0c0.252,-0.04864 0.252,-0.04864 0.504,0 s0.252,0.04864 0.504,0c0.252,-0.04864 0.252,-0.04864 0.504,0 s0.252,0.04864 0.504,0 L1, -1 L0, -1 z",
+    mobile: "M-1.0284999999999997, 0.968 L-1.0284999999999997, 0.984 c0.25475,-0.02048 0.25475,-0.02048 0.5095,0 s0.25475,0.02048 0.5095,0c0.25475,-0.02048 0.25475,-0.02048 0.5095,0 s0.25475,0.02048 0.5095,0c0.25475,-0.02048 0.25475,-0.02048 0.5095,0 s0.25475,0.02048 0.5095,0 L1, -1 L0, -1 z"
+}
+const path = document.querySelector('#section-divider path');
+const stockPath = document.querySelectorAll('.section-divider-svg-stroke path');
+
+function updatePath() {
+    const width = window.innerWidth;
+    const d =
+        width >= 1024 ? dValue.desktop :
+            width >= 768 ? dValue.tablet :
+                dValue.mobile;
+
+    path.setAttribute('d', d);
+    stockPath.forEach(p => p.setAttribute('d', d));
+}
+
+window.addEventListener('resize', updatePath);
+updatePath();
+
+//
+const GallerySection = document.querySelector('.image_gelary .pgcsimplygalleryblock-justified-content');
+const images = GallerySection.querySelectorAll('.pgcsimplygalleryblock-justified-item.pgc-image');
+
+// ovserver node list the gallery section and and console log the images
+const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+            const newImages = mutation.addedNodes;
+            newImages.forEach((node) => {
+                if (node.nodeType === 1 && node.classList.contains('pgc-image')) {
+                    console.log('New image added:', node);
+                    images.push(node);
+                }
+            });
+        }
+    });
+});
+observer.observe(GallerySection, {
+    childList: true,
+    subtree: true
+});
+//
+
+
+
+const GallerySection = document.querySelector('.image_gelary .pgcsimplygalleryblock-justified-content');
+
+function update() {
+    const images = GallerySection.querySelectorAll('.pgcsimplygalleryblock-justified-item.pgc-image');
+    const beforeLastImageWidth = images[images.length - 2].style.innerWidth;
+    images[images.length - 1].style.width = `calc(100% - ${beforeLastImageWidth}px)`;
+}
+
+if (GallerySection) {
+
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'childList') {
+                update()
+            }
+        });
+    });
+
+    observer.observe(GallerySection, {
+        childList: true,
+        subtree: true
+    });
+} else {
+    console.log('Gallery section not found.');
+}
+update()
+window.addEventListener('resize', update);
+
+
+//
+const GallerySection = document.querySelector('.image_gelary .pgcsimplygalleryblock-justified-content');
+
+function update() {
+    if (!GallerySection) return;
+
+    const images = GallerySection.querySelectorAll('.pgcsimplygalleryblock-justified-item.pgc-image');
+    if (images.length < 2) return;
+
+    const beforeLastImage = images[images.length - 2];
+    const lastImage = images[images.length - 1];
+
+    const beforeLastImageWidth = beforeLastImage.getBoundingClientRect().width;
+
+    setTimeout(() => {
+        lastImage.style.width = `calc(100% - ${beforeLastImageWidth}px)`;
+    }, 200); // Give layout time to stabilize if needed
+}
+
+if (GallerySection) {
+    const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'childList') {
+                update();
+
+            }
+        }
+    });
+
+    observer.observe(GallerySection, {
+        childList: true,
+        subtree: true
+    });
+
+    update();
+    window.addEventListener('resize', update);
+}
+
+
+
+
+const GallerySection = document.querySelector('.image_gelary .pgcsimplygalleryblock-justified-content');
+
+function update() {
+
+    const images = GallerySection.querySelectorAll('.pgcsimplygalleryblock-justified-item.pgc-image');
+    if (images.length < 2) return;
+
+    const beforeLastImage = images[images.length - 2];
+    const lastImage = images[images.length - 1];
+
+    const beforeLastImageWidth = beforeLastImage.getBoundingClientRect().width;
+    setTimeout(() => {
+        lastImage.style.width = `calc(100% - ${beforeLastImageWidth}px)`;
+        console.log('size updated');
+    }, 300);
+
+}
+
+if (GallerySection) {
+    const observer = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            if (mutation.type === 'childList') {
+                update();
+                console.log('menord call');
+                
+            }
+        }
+    });
+
+    observer.observe(GallerySection, {
+        childList: true,
+        subtree: true
+    });
+
+    update();
+    window.addEventListener('resize', update);
+}
+
+
+console.log('Script loaded successfully!');
+
+
+setTimeout(() => {
+    const GallerySection = document.querySelector('.image_gelary .pgcsimplygalleryblock-justified-content');
+
+    function update() {
+
+        const images = GallerySection.querySelectorAll('.pgcsimplygalleryblock-justified-item.pgc-image');
+        if (images.length < 2) return;
+
+        const beforeLastImage = images[images.length - 2];
+        const lastImage = images[images.length - 1];
+
+        const beforeLastImageWidth = beforeLastImage.getBoundingClientRect().width;
+        setTimeout(() => {
+            lastImage.style.width = `calc(100% - ${beforeLastImageWidth}px)`;
+            console.log('size updated');
+        }, 300);
+
+    }
+
+    if (GallerySection) {
+        const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList') {
+                    update();
+                    console.log('menord call');
+
+                }
+            }
+        });
+
+        observer.observe(GallerySection, {
+            childList: true,
+            subtree: true
+        });
+
+        update();
+        window.addEventListener('resize', update);
+    }
+}, 300);
