@@ -9952,3 +9952,44 @@ document.addEventListener("DOMContentLoaded", function () {
     if (timeField) timeField.value = time;
     if (urlField) urlField.value = url;
 });
+
+
+// cstom gallery slider
+
+const gallery = document.querySelector('.custom_gallery');
+const leftBtn = document.querySelector('.left_btn');
+const rightBtn = document.querySelector('.right_btn');
+const galleryItems = gallery.querySelectorAll('.e-gallery-item');
+const galleryContainer = gallery.querySelector('.elementor-gallery__container');
+
+let sumWidth = 0;
+
+galleryItems.forEach((item) => {
+    const itemWidth = item.offsetWidth + 10; 
+    sumWidth += itemWidth;
+});
+
+const visibleWidth = gallery.offsetWidth;
+const totalWidth = sumWidth / 2; 
+const maxScroll = totalWidth - visibleWidth;
+
+let currentScroll = 0;
+const scrollStep = 200;
+
+function updateGalleryPosition() {
+    galleryContainer.style.transform = `translateX(-${currentScroll}px)`;
+
+    leftBtn.style.display = currentScroll > 0 ? 'block' : 'none';
+    rightBtn.style.display = currentScroll < maxScroll ? 'block' : 'none';
+}
+updateGalleryPosition();
+
+rightBtn.addEventListener('click', () => {
+    currentScroll = Math.min(currentScroll + scrollStep, maxScroll);
+    updateGalleryPosition();
+});
+
+leftBtn.addEventListener('click', () => {
+    currentScroll = Math.max(currentScroll - scrollStep, 0);
+    updateGalleryPosition();
+});
