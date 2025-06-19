@@ -9868,7 +9868,7 @@ if (GallerySection) {
             if (mutation.type === 'childList') {
                 update();
                 console.log('menord call');
-                
+
             }
         }
     });
@@ -9925,3 +9925,30 @@ setTimeout(() => {
         window.addEventListener('resize', update);
     }
 }, 300);
+
+
+// step form data update
+document.addEventListener("DOMContentLoaded", function () {
+    // Get current date and time
+    const now = new Date();
+
+    // Format date as DD-MM-YYYY
+    const date = now.toLocaleDateString('nl-NL'); // or use 'en-GB' for DD/MM/YYYY
+    // Format time as HH:MM AM/PM
+    const time = now.toLocaleTimeString('nl-NL', {
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    // Get full URL
+    const url = window.location.href;
+
+    // Set values to corresponding hidden fields
+    const dateField = document.getElementById('form-field-submission_date');
+    const timeField = document.getElementById('form-field-submission_time');
+    const urlField = document.getElementById('form-field-page_url');
+
+    if (dateField) dateField.value = date;
+    if (timeField) timeField.value = time;
+    if (urlField) urlField.value = url;
+});
