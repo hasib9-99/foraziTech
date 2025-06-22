@@ -2,74 +2,51 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>SVG Scroll Fill</title>
+  <style>
+    body {
+      margin: 0;
+      height: 300vh; /* simulate vertical scroll */
+      overflow-y: scroll;
+      background: #111;
+    }
+
+    svg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 800px;
+      height: auto;
+    }
+  </style>
 </head>
 <body>
-  <style>
-    .menu_con{
-      padding: 10px;
-      border: 1px solid #000;
-      border-radius: 50px;
-      display: inline-block;
-    }
-    .burger-menu{
-        height: 20px;
-        width: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-    }
-    .bar{
-        position: absolute;
-        width: 75%;
-        height: 2px;
-        transition: transform 250ms cubic-bezier(.2,.6,.3,1), width 250ms cubic-bezier(.2,.6,.3,1);
-        will-change: transform, width;
-        background: #000;
-    }
-    /**/
-    .burger-menu .top-bun{
-        top: 0
-    }
-    .burger-menu .patty{
-        top: calc(50% - 1px);
-        right: 0;
-    }
-    .burger-menu .bottom-bun{
-        bottom: 0
-    }
-    
-    /**/
-    .burger-menu.active .top-bun{
-        transform: rotate(-135deg);
-        top: 50%;
-        width: 100%;
-    }
-    .burger-menu.active .patty{
-        transform: scale(0);
-        top: 50%;
-    }
-    .burger-menu.active .bottom-bun{
-        transform: rotate(135deg);
-        top: 50%;
-        width: 100%;
-    }
-    </style>
-    
-    
-    <div class="menu_con">
-      <div class="burger-menu">
-        <div class="bar top-bun"></div>
-        <div class="bar patty"></div>
-        <div class="bar bottom-bun"></div>
-      </div>
-    </div>
 
+<svg viewBox="0 0 1647 210" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="scrollFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#364C63" />
+      <stop offset="0%" stop-color="#F7D300" />
+    </linearGradient>
+  </defs>
+  <path d="M1646.82 1.8833C1402.34 132.186 1204.99 186.203 1039.51 199.513C874.029 212.823 740.48 185.418 623.641 152.964C506.737 120.493 406.783 83.0506 308.159 76.1069C209.662 69.1722 112.535 92.6816 1.47412 182.279L0.218262 180.722C111.658 90.8194 209.28 67.1413 308.299 74.1128C407.191 81.0754 507.518 118.633 624.176 151.037C740.9 183.458 874.195 210.803 1039.35 197.519C1204.51 184.235 1401.6 130.315 1645.88 0.117676L1646.82 1.8833Z" fill="url(#scrollFill)" />
+</svg>
 
-    <script>
-    
-    </script>
+<script>
+  const gradient = document.querySelector('#scrollFill');
+  const stop1 = gradient.children[0]; // blue
+  const stop2 = gradient.children[1]; // red
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const percent = Math.min(scrollTop / maxScroll, 1) * 100;
+
+    stop1.setAttribute('offset', `${percent}%`);
+    stop2.setAttribute('offset', `${percent}%`);
+  });
+</script>
+
 </body>
 </html>

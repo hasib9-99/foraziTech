@@ -9993,3 +9993,15 @@ leftBtn.addEventListener('click', () => {
     currentScroll = Math.max(currentScroll - scrollStep, 0);
     updateGalleryPosition();
 });
+
+
+// menu item bar
+
+const menuLis = document.querySelectorAll('.custom_menu .elementor-nav-menu--main .elementor-nav-menu > .menu-item');
+menuLis.forEach((item) => {
+    const activeLink = item.querySelector('.current_page_item');
+    if (activeLink) {
+        const link = item.querySelector('a');
+        link.classList.add('elementor-item-active');
+    }
+});
