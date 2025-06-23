@@ -10033,3 +10033,33 @@ if (window.innerWidth >= 768) {
         }
     });
 }
+
+// custom heading animation
+const h2Element = document.querySelector('.custom_heading span');
+const text = h2Element.innerText;
+const words = text.split(' ');
+h2Element.innerHTML = '';
+
+words.forEach((word) => {
+    const wordSpan = document.createElement('span');
+    wordSpan.classList.add('word');
+
+    for (const char of word) {                                                                                                   
+        const charSpan = document.createElement('span');
+        charSpan.classList.add('char');
+        charSpan.textContent = char;
+        wordSpan.appendChild(charSpan);
+    }
+
+    const space = document.createTextNode(' ');
+    h2Element.appendChild(wordSpan);
+    h2Element.appendChild(space);
+});
+
+chars = document.querySelectorAll('.char');
+
+chars.forEach((char, i) => {
+    setTimeout(() => {
+        char.classList.add('active');
+    }, 100 * i);
+});
