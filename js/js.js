@@ -9965,12 +9965,12 @@ const galleryContainer = gallery.querySelector('.elementor-gallery__container');
 let sumWidth = 0;
 
 galleryItems.forEach((item) => {
-    const itemWidth = item.offsetWidth + 10; 
+    const itemWidth = item.offsetWidth + 10;
     sumWidth += itemWidth;
 });
 
 const visibleWidth = gallery.offsetWidth;
-const totalWidth = sumWidth / 2; 
+const totalWidth = sumWidth / 2;
 const maxScroll = totalWidth - visibleWidth;
 
 let currentScroll = 0;
@@ -10004,4 +10004,32 @@ menuLis.forEach((item) => {
         const link = item.querySelector('a');
         link.classList.add('elementor-item-active');
     }
-});
+})
+
+// card sticky and scroll animation
+if (window.innerWidth >= 768) {
+    const mainCon = document.querySelector('.main_con');
+    const cardWraper = document.querySelector('.card_wraper');
+    const cards = cardWraper.querySelectorAll('.card');
+    let cardWidth = 0;
+    let sectionHeight = 0;
+
+    const gap = parseInt(window.getComputedStyle(cardWraper).getPropertyValue('gap'));
+    cards.forEach((card, i) => {
+        sectionHeight += card.offsetWidth + gap;
+        if (i > 0) {
+            cardWidth += card.offsetWidth + gap;
+        }
+    });
+    mainCon.style.height = `${sectionHeight}px`;
+
+    document.addEventListener('scroll', () => {
+        const rect = mainCon.getBoundingClientRect();
+        const topOffset = rect.top;
+        if (-topOffset > 0 && -topOffset < cardWidth) {
+            cardWraper.style.transform = `translateX(${topOffset}px)`;
+            console.log(-topOffset);
+
+        }
+    });
+}
