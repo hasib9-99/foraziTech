@@ -10036,6 +10036,8 @@ if (window.innerWidth >= 768) {
 
 // custom heading animation
 const h2Element = document.querySelector('.custom_heading span');
+const imgWrape = document.querySelector('.image_wrape');
+const img = imgWrape.querySelector('img');
 const text = h2Element.innerText;
 const words = text.split(' ');
 h2Element.innerHTML = '';
@@ -10044,7 +10046,7 @@ words.forEach((word) => {
     const wordSpan = document.createElement('span');
     wordSpan.classList.add('word');
 
-    for (const char of word) {                                                                                                   
+    for (const char of word) {
         const charSpan = document.createElement('span');
         charSpan.classList.add('char');
         charSpan.textContent = char;
@@ -10056,10 +10058,28 @@ words.forEach((word) => {
     h2Element.appendChild(space);
 });
 
-chars = document.querySelectorAll('.char');
+const chars = document.querySelectorAll('.char');
 
 chars.forEach((char, i) => {
     setTimeout(() => {
         char.classList.add('active');
+        if (i === chars.length - 1) {
+            setTimeout(() => {
+                imgWrapeUpdate();
+            }, 100);
+        }
     }, 100 * i);
 });
+
+function imgUpdate() {
+    img.classList.add('active');
+}
+
+function imgWrapeUpdate() {
+    imgWrape.classList.add('active');
+    setTimeout(() => {
+        imgUpdate();
+    }, 1000);
+}
+
+//
