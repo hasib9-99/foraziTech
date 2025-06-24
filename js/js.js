@@ -10101,4 +10101,16 @@ menu.forEach((item, i) => {
     item.appendChild(itemSpan);
 });
 
-//
+// bar efect on scroll
+const barSection = document.querySelector('.bar_con');
+const bar = document.querySelector('.custom_bar');
+
+document.addEventListener('scroll', () => {
+    const rect = barSection.getBoundingClientRect();
+    const topOffset = rect.top;
+    if (topOffset < 0 && topOffset > -1830) { 
+        bar.style.height = `${Math.abs(topOffset)}px`;
+        console.log(Math.abs(topOffset));
+        
+    }
+})
