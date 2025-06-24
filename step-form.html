@@ -18,22 +18,28 @@
                     <tr>
                         <td style="padding: 10px 0;"><strong>Naam:</strong> [field id="name"]</td>
                     </tr>
+                    <br>
                     <tr>
                         <td style="padding: 10px 0;"><strong>E-mailadres:</strong> [field id="email"]</td>
                     </tr>
+                    <br>
                     <tr>
-                        <td style="padding: 10px 0;"><strong>Telefoon:</strong> [field <span zeum4c3="PR_1_0"
-                                data-ddnwab="PR_1_0" aria-invalid="spelling" class="LI ng">id="field_542b267"]</span>
+                        <td style="padding: 10px 0;"><strong>Telefoon:</strong> [field id="field_542b267"]</span>
                         </td>
                     </tr>
+                    <br>
                     <tr>
-                        <td style="padding: 10px 0;"><strong>LinkedIn profiel:</strong> [field <span zeum4c3="PR_2_0"
-                                data-ddnwab="PR_2_0" aria-invalid="spelling" class="LI ng">id="field_082d747"]</span>
+                        <td style="padding: 10px 0;"><strong>LinkedIn profiel:</strong> [field id="field_082d747"]</span>
                         </td>
                     </tr>
+                    <br>
                     <tr>
-                        <td style="padding: 10px 0;"><strong>CV uploaden:</strong> [field <span zeum4c3="PR_3_0"
-                                data-ddnwab="PR_3_0" aria-invalid="spelling" class="LI ng">id="field_1042eea"]</span>
+                        <td style="padding: 10px 0;"><strong>CV uploaden:</strong> [field id="field_1042eea"]</span>
+                        </td>
+                    </tr>
+                    <br>
+                    <tr>
+                        <td style="padding: 10px 0;"><strong>Ik heb jullie gevonden via:</strong> [field id="field_516c484"]</span>
                         </td>
                     </tr>
 
@@ -61,8 +67,7 @@
                     </tr>
 
                     <tr>
-                        <td style="padding: 5px 0;"><strong><span zeum4c3="PR_4_0" data-ddnwab="PR_4_0"
-                                    aria-invalid="spelling" class="LI ng">Inzenddatum:</span></strong> [field id="submission_date"]</td>
+                        <td style="padding: 5px 0;"><strong>Inzenddatum:</span></strong> [field id="submission_date"]</td>
                     </tr>
                     <tr>
                         <td style="padding: 5px 0;"><strong>Tijd:</strong> [field id="submission_time"]</td>
@@ -76,41 +81,3 @@
         </td>
     </tr>
 </tbody>
-
-
-
-
-
-
-
-
-
-
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Get current date and time
-      const now = new Date();
-  
-      // Format date as DD-MM-YYYY
-      const date = now.toLocaleDateString('nl-NL'); // or use 'en-GB' for DD/MM/YYYY
-      // Format time as HH:MM AM/PM
-      const time = now.toLocaleTimeString('nl-NL', {
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-  
-      // Get full URL
-      const url = window.location.href;
-  
-      // Set values to corresponding hidden fields
-      const dateField = document.getElementById('form-field-submission_date');
-      const timeField = document.getElementById('form-field-submission_time');
-      const urlField = document.getElementById('form-field-page_url');
-  
-      if (dateField) dateField.value = date;
-      if (timeField) timeField.value = time;
-      if (urlField) urlField.value = url;
-    });
-  </script>
-  

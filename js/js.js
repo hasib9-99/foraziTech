@@ -10108,9 +10108,50 @@ const bar = document.querySelector('.custom_bar');
 document.addEventListener('scroll', () => {
     const rect = barSection.getBoundingClientRect();
     const topOffset = rect.top;
-    if (topOffset < 0 && topOffset > -1830) { 
+    if (topOffset < 0 && topOffset > -1830) {
         bar.style.height = `${Math.abs(topOffset)}px`;
         console.log(Math.abs(topOffset));
-        
+
     }
+})
+
+//  mega menu
+
+const menu = document.querySelectorAll('.custom_menu .elementor-nav-menu--main ul li');
+const menuInfo = document.querySelectorAll('.info');
+const closeMenuBtn = document.querySelectorAll('.close_menu');
+const subMenuBtn = document.querySelectorAll('.sub_menu [sub-menu-btn]'); // problem
+
+
+menu.forEach((item, i) => {
+    item.addEventListener('click', () => {
+        menuInfo.forEach((info) => {
+            info.style.display = 'none'; // for reset
+        });
+        menuInfo[i].style.display = 'flex';
+    });
+});
+
+//menu colose function
+function closeMenu() {
+    menuInfo.forEach((info) => {
+        info.style.display = 'none';
+    });
+};
+
+closeMenuBtn.forEach((close) => {
+    close.addEventListener('click', closeMenu);
+});
+
+subMenuBtn.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        const subInfo = document.querySelector(`.info[sub_info="${btn.getAttribute('sub-menu-btn')}"]`);
+        if (subInfo) {
+            subInfo.style.display = 'flex';
+            // menuInfo.forEach((info) => {
+            //     if (info !== subInfo) {
+            //         info.style.display = 'none'; // Hide other info sections
+            //     }
+        }
+    });
 })
