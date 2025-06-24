@@ -10082,4 +10082,23 @@ function imgWrapeUpdate() {
     }, 1000);
 }
 
+// menus fntionality
+const menuIcon = document.querySelector('.modal-close-wrapper');
+const menuPopup = document.querySelector('.menu_popup');
+
+menuIcon.addEventListener('click', () => {
+    menuIcon.classList.toggle('active');
+    menuPopup.classList.toggle('active');
+});
+
+//
+
+const menu = document.querySelectorAll('.custom_menu ul li a');
+menu.forEach((item, i) => {
+    const itemSpan = document.createElement('span');
+    itemSpan.classList.add('list_text');
+    itemSpan.textContent = `0${i + 1}.`;
+    item.appendChild(itemSpan);
+});
+
 //
