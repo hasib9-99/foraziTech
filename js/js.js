@@ -2,7 +2,7 @@ const getCard = document.querySelectorAll(".card-001");
 
 for (let singleCard of getCard) {
     singleCard
-        .querySelector(".button-001")
+        .querySelector(".btn-001")
         .addEventListener("click", function (e) {
             e.preventDefault();
             singleCard.querySelector(".over-flow").classList.toggle("max-hight-001");
@@ -10114,21 +10114,47 @@ document.addEventListener('scroll', () => {
 
     }
 })
+//
+const cards = document.querySelectorAll('.profile-toggle-header');
+const cardDatas = document.querySelectorAll('.profile-bio-content');
+const icons = document.querySelectorAll('.arrow-icon');
+
+cards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+        const isActive = cardDatas[i].classList.contains('active');
+
+        // Close all
+        cardDatas.forEach(data => data.classList.remove('active'));
+        icons.forEach(icon => icon.classList.remove('rotate'));
+
+        // Only open if it wasn't already active
+        if (!isActive) {
+            cardDatas[i].classList.add('active');
+            icons[i].classList.add('rotate');
+        }
+    });
+});
 
 //  mega menu
 
 const menu = document.querySelectorAll('.custom_menu .elementor-nav-menu--main ul li');
 const menuInfo = document.querySelectorAll('.info');
 const closeMenuBtn = document.querySelectorAll('.close_menu');
-const subMenuBtn = document.querySelectorAll('.sub_menu [sub-menu-btn]'); // problem
+const subMenuBtns = document.querySelectorAll('[data-type="sub-menu"]');
+const subInfos = document.querySelectorAll('.sub_info');
+const defaultInfo = document.querySelectorAll('.default-info');
+const colorMenus = document.querySelectorAll('.sub_menu ul li');
+
 
 
 menu.forEach((item, i) => {
     item.addEventListener('click', () => {
         menuInfo.forEach((info) => {
             info.style.display = 'none'; // for reset
+            info.classList.remove('active'); // for reset
         });
         menuInfo[i].style.display = 'flex';
+        menuInfo[i].classList.add('active');
     });
 });
 
@@ -10137,21 +10163,47 @@ function closeMenu() {
     menuInfo.forEach((info) => {
         info.style.display = 'none';
     });
+    defaultInfo.forEach((info) => {
+        info.style.display = 'flex';
+    });
+    subInfos.forEach((info) => {
+        info.style.display = 'none';
+    });
 };
 
 closeMenuBtn.forEach((close) => {
     close.addEventListener('click', closeMenu);
 });
 
-subMenuBtn.forEach((btn) => {
-    btn.addEventListener('click', () => {
-        const subInfo = document.querySelector(`.info[sub_info="${btn.getAttribute('sub-menu-btn')}"]`);
-        if (subInfo) {
-            subInfo.style.display = 'flex';
-            // menuInfo.forEach((info) => {
-            //     if (info !== subInfo) {
-            //         info.style.display = 'none'; // Hide other info sections
-            //     }
-        }
+
+subMenuBtns.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = btn.getAttribute('target');
+        menuInfo.forEach((info) => {
+            if (info.classList.contains('active')) {
+                info.querySelector('.default-info').style.display = 'none';
+                info.querySelectorAll('.sub_info').forEach((subInfo) => {
+                    subInfo.style.display = 'none';
+                });
+                subInfos.forEach((subInfo) => {
+                    if (subInfo.getAttribute('sub_info') === target) {
+                        subInfo.style.display = 'flex';
+                    }
+                });
+            }
+        });
     });
-})
+});
+
+colorMenus.forEach((menu) => {
+    menu.addEventListener('click', () => {
+        colorMenus.forEach((menu) => {
+            menu.classList.remove('active');
+        });
+        menu.classList.add('active');
+    });
+});
+
+
+
