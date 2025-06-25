@@ -10144,6 +10144,7 @@ const subMenuBtns = document.querySelectorAll('[data-type="sub-menu"]');
 const subInfos = document.querySelectorAll('.sub_info');
 const defaultInfo = document.querySelectorAll('.default-info');
 const colorMenus = document.querySelectorAll('.sub_menu ul li');
+const megaPopup = document.querySelector('.mega_popup');
 
 
 
@@ -10155,6 +10156,7 @@ menu.forEach((item, i) => {
         });
         menuInfo[i].style.display = 'flex';
         menuInfo[i].classList.add('active');
+        stopScroling();
     });
 });
 
@@ -10169,12 +10171,19 @@ function closeMenu() {
     subInfos.forEach((info) => {
         info.style.display = 'none';
     });
+    document.body.style.overflow = 'auto';
+    megaPopup.style.height = 'auto';
 };
 
 closeMenuBtn.forEach((close) => {
     close.addEventListener('click', closeMenu);
 });
 
+function stopScroling() {
+    document.body.style.overflow = 'hidden';
+    megaPopup.style.height = '100vh';
+
+}
 
 subMenuBtns.forEach((btn) => {
     btn.addEventListener('click', (e) => {
@@ -10204,6 +10213,7 @@ colorMenus.forEach((menu) => {
         menu.classList.add('active');
     });
 });
+
 
 
 
