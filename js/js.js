@@ -10207,3 +10207,21 @@ colorMenus.forEach((menu) => {
 
 
 
+// add checkbox to filter buttons
+const btns = document.querySelectorAll('.search-catag .e-filter-item');
+
+btns.forEach((btn) => {
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.classList.add('filter-checkbox');
+    btn.appendChild(input);
+});
+
+btns.forEach(btn => {
+    const checkbox = btn.querySelector('.filter-checkbox');
+    btn.addEventListener('click', (e) => {
+        if (e.target === checkbox) return;
+        checkbox.checked = !checkbox.checked;
+        btn.setAttribute('aria-pressed', checkbox.checked.toString());
+    });
+});
