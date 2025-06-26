@@ -10242,3 +10242,56 @@ btns.forEach(btn => {
         btn.setAttribute('aria-pressed', checkbox.checked.toString());
     });
 });
+
+
+
+
+
+// load more list
+
+const loadMoreLists = document.querySelectorAll('.custom_list ol li');
+const loadMoreBtn = document.querySelector('.load-more');
+
+loadMoreLists.forEach((list, i) => {
+    if (i > 1) {
+        list.style.display = 'none';
+    }
+});
+
+let visibleItems = 2;
+
+loadMoreBtn.addEventListener('click', () => {
+    const hiddenItems = Array.from(loadMoreLists).filter(item => item.style.display === 'none');
+    if (hiddenItems.length > 0) {
+        hiddenItems.slice(0, visibleItems).forEach(item => {
+            item.style.display = 'block';
+        });
+        if (hiddenItems.length <= visibleItems) {
+            loadMoreBtn.style.display = 'none';
+        }
+    }
+});
+
+
+const customItems = document.querySelectorAll('.custom_item a');
+const itemLordMoreBtn = document.querySelector('.Item_load-more');
+
+customItems.forEach((item, i) => {
+    if (i > 2) {
+        item.style.display = 'none';
+    }
+});
+let visibleItemCount = 4;
+
+itemLordMoreBtn.addEventListener('click', () => {
+    const hiddenItems = Array.from(customItems).filter(item => item.style.display === 'none');
+    if (hiddenItems.length > 0) {
+        hiddenItems.slice(0, visibleItemCount).forEach(item => {
+            item.style.display = 'flex';
+        });
+        if (hiddenItems.length <= visibleItemCount) {
+            itemLordMoreBtn.style.display = 'none';
+        }
+    }
+});
+
