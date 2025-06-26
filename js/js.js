@@ -10135,8 +10135,8 @@ cards.forEach((card, i) => {
     });
 });
 
-//  mega menu
 
+//  mega menu
 const menu = document.querySelectorAll('.custom_menu .elementor-nav-menu--main ul li');
 const menuInfo = document.querySelectorAll('.info');
 const closeMenuBtn = document.querySelectorAll('.close_menu');
@@ -10145,6 +10145,7 @@ const subInfos = document.querySelectorAll('.sub_info');
 const defaultInfo = document.querySelectorAll('.default-info');
 const colorMenus = document.querySelectorAll('.sub_menu ul li');
 const megaPopup = document.querySelector('.mega_popup');
+const customHeader = document.querySelector('.custom_header');
 
 
 
@@ -10156,6 +10157,9 @@ menu.forEach((item, i) => {
         });
         menuInfo[i].style.display = 'flex';
         menuInfo[i].classList.add('active');
+        megaPopup.style.top = `${customHeader.offsetHeight}px`;
+        megaPopup.style.height = `calc(100vh - ${customHeader.offsetHeight}px)`;
+        
         stopScroling();
     });
 });
@@ -10171,6 +10175,9 @@ function closeMenu() {
     subInfos.forEach((info) => {
         info.style.display = 'none';
     });
+    colorMenus.forEach((menu) => {
+        menu.classList.remove('active');
+    });
     document.body.style.overflow = 'auto';
     megaPopup.style.height = 'auto';
 };
@@ -10181,7 +10188,7 @@ closeMenuBtn.forEach((close) => {
 
 function stopScroling() {
     document.body.style.overflow = 'hidden';
-    megaPopup.style.height = '100vh';
+    // megaPopup.style.height = '100vh';
 
 }
 
