@@ -10428,3 +10428,42 @@ document.addEventListener('click', (e) => {
 
 
 
+// loop condition
+const allItems = document.querySelectorAll('.elementor-loop-container.elementor-grid .e-loop-item');
+
+allItems.forEach((item) => {
+    if (notSubscribe = item.querySelector('.hide-this-when-not-subscribe')) {
+        const isSubscribe = item.querySelectorAll('.hide-this-when-subscribe');
+        isSubscribe.forEach((sub) => {
+            sub.style.display = 'none';
+        });
+    }
+});
+
+
+//@ts-check
+const CustomPopup = document.querySelector('.popop_slider');
+const popupOpenBtn = document.querySelector('.popup_btn');
+const closeBtn = document.querySelector('.close_popup_btn');
+
+popupOpenBtn.addEventListener('click', () => {
+    CustomPopup.classList.toggle('active');
+});
+closeBtn.addEventListener('click', () => {
+    CustomPopup.classList.remove('active');
+});
+
+document.addEventListener('click', (e) => {
+    if (!CustomPopup.contains(e.target)) {
+        CustomPopup.classList.remove('active');
+    }
+});
+
+//
+
+const stickyPopup = document.querySelector('.sticy_popup')
+const stickyPopupClose = document.querySelector('.sticy_close')
+
+stickyPopupClose.addEventListener('click', () => {
+    stickyPopup.style.display = 'none'
+})
