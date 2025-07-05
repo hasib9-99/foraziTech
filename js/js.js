@@ -10208,11 +10208,11 @@ subMenuBtns.forEach((btn) => {
         const target = btn.getAttribute('target');
         menuInfo.forEach((info) => {
             if (info.classList.contains('active')) {
-                
+
                 window.innerWidth <= 767
                     ? info.querySelector('.info_list').style.display = 'none'
                     : info.querySelector('.info_list').style.display = 'flex';
-                
+
                 info.querySelector('.default-info').style.display = 'none';
                 info.querySelectorAll('.sub_info').forEach((subInfo) => {
                     subInfo.style.display = 'none';
@@ -10340,4 +10340,91 @@ itemLordMoreBtn.addEventListener('click', () => {
         }
     }
 });
+
+
+// menu animation 
+const mainPopupMenu = document.querySelector('.main_popup');
+const LeftSite = mainPopupMenu.querySelector('.left_site');
+const rightSite = mainPopupMenu.querySelector('.right_site');
+const menuIconOpen = document.querySelector('.menu_icon-open');
+const menuIconClose = document.querySelector('.menu_icon-close');
+const allContents = mainPopupMenu.querySelectorAll('.all_content');
+const menuBarItems = document.querySelectorAll('.menu_bar .Item');
+const theHeader = document.querySelector('.the_header');
+
+const brandContent = document.querySelector('.brand_content');
+const brandBtn = document.querySelector('.brands_btn');
+// const brandCloseBtn = brandContent.querySelector('.brands_close');
+
+let isAnimating = false; // Prevent rapid clicks
+
+menuIconOpen.addEventListener('click', () => {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    mainPopupMenu.style.display = 'flex';
+    menuIconOpen.style.display = 'none';
+    menuIconClose.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Disable scrolling
+
+    setTimeout(() => {
+        LeftSite.style.transform = 'translateX(0%)';
+        rightSite.style.transform = 'translateX(0%)';
+        allContents.forEach(content => {
+            setTimeout(() => {
+                content.style.transform = 'translateY(0)';
+                content.style.opacity = '1';
+            }, 300);
+        });
+    }, 50);
+
+    setTimeout(() => {
+        isAnimating = false;
+    }, 600); // Match with your CSS transition duration
+});
+
+menuIconClose.addEventListener('click', () => {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    LeftSite.style.transform = 'translateX(100%)';
+    rightSite.style.transform = 'translateX(-100%)';
+    allContents.forEach(content => {
+        setTimeout(() => {
+            content.style.transform = 'translateY(30px)';
+            content.style.opacity = '0';
+        }, 300);
+    });
+
+    setTimeout(() => {
+        mainPopupMenu.style.display = 'none';
+        menuIconOpen.style.display = 'block';
+        menuIconClose.style.display = 'none';
+        document.body.style.overflow = 'auto'; // Re-enable scrolling
+        isAnimating = false;
+    }, 1000); // Match with your CSS transition duration
+});
+
+menuBarItems.forEach((item) => {
+    item.addEventListener('mouseover', () => {
+        const itemContent = item.querySelector('.item_content');
+        itemContent.classList.add('active');
+    });
+    item.addEventListener('mouseout', () => {
+        const itemContent = item.querySelector('.item_content');
+        itemContent.classList.remove('active');
+    });
+});
+
+brandBtn.addEventListener('click', () => {
+    brandContent.classList.add('active');
+});
+
+document.addEventListener('click', (e) => {
+    if (!brandContent.contains(e.target) && !brandBtn.contains(e.target)) {
+        brandContent.classList.remove('active');
+    }
+});
+
+
 
