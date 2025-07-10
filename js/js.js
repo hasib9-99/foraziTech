@@ -10467,3 +10467,47 @@ const stickyPopupClose = document.querySelector('.sticy_close')
 stickyPopupClose.addEventListener('click', () => {
     stickyPopup.style.display = 'none'
 })
+
+
+
+if (window.innerWidth > 1024) {
+    function parallax() {
+        var parallax = document.querySelectorAll(".parallax");
+        var speed = 0.1;
+        for (var i = 0; i < parallax.length; i++) {
+            var windowHalfY = window.innerHeight / 7;
+            var parallaxY = parallax[i].getBoundingClientRect().top + windowHalfY;
+            var pos = parallaxY * -speed;
+            parallax[i].style.backgroundPosition = "50% " + pos + "px";
+        }
+    }
+    window.addEventListener("scroll", parallax);
+    
+}
+
+
+// filter
+
+const filterBtns = document.querySelectorAll('.custom_filter_btn .e-filter .e-filter-item');
+const currentLoop = document.querySelector('.current_loop')
+const letestLoop = document.querySelector('.letest_loop')
+
+filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+        currentLoop.style.display = 'none'
+        letestLoop.style.display = 'block'
+    })
+})
+
+
+
+//
+const stickyBtn = document.querySelector('.sticky_btn');
+const stickyPopup = document.querySelector('.sticky_popup');
+
+stickyBtn.addEventListener('click', () => {
+    stickyPopup.classList.toggle('open')
+})
+
+
+//
