@@ -10502,12 +10502,22 @@ filterBtns.forEach((btn) => {
 
 
 //
-const stickyBtn = document.querySelector('.sticky_btn');
-const stickyPopup = document.querySelector('.sticky_popup');
+const mainPopup = document.querySelector('.main_popup')
+const stickyBtn = mainPopup.querySelector('.sticky_btn');
+const stickyPopup = mainPopup.querySelector('.sticky_popup');
+
 
 stickyBtn.addEventListener('click', () => {
     stickyPopup.classList.toggle('open')
 })
 
-
-//
+document.addEventListener('scroll', () => {
+    const rect = mainPopup.getBoundingClientRect();
+    console.log(rect.top);
+    if (rect.top <= 600) {
+        stickyPopup.classList.add('attatched')
+    } else {
+        stickyPopup.classList.remove('attatched')
+    }
+    
+})
