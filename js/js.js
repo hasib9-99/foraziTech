@@ -10482,7 +10482,7 @@ if (window.innerWidth > 1024) {
         }
     }
     window.addEventListener("scroll", parallax);
-    
+
 }
 
 
@@ -10519,5 +10519,31 @@ document.addEventListener('scroll', () => {
     } else {
         stickyPopup.classList.remove('attatched')
     }
-    
+
 })
+
+// music feature
+const musicCards = document.querySelectorAll('.music_card')
+const musics = document.querySelectorAll('.music')
+const playIcons = document.querySelectorAll('.play_icon p')
+
+musicCards.forEach((card, i) => {
+    card.addEventListener('click', () => {
+        if (musics[i].paused) {
+            reset()
+            musics[i].play()
+            playIcons[i].textContent = '⏸️'
+        } else {
+            reset()
+        }
+    })
+})
+
+function reset() {
+    musics.forEach((music, i) => {
+        music.pause()
+        playIcons[i].textContent = '▶'
+    })
+}
+
+reset()
