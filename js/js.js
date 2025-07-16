@@ -10583,3 +10583,134 @@ document.addEventListener('scroll', () => {
 popupCloseIcon.addEventListener('click', () => {
     stickyPopup.classList.remove('open');
 });
+
+
+// transform style
+const efect = [
+    { current: 100, to: 0 },
+    { current: 70, to: 0 },
+    { current: 40, to: 0 }
+];
+
+const review = document.querySelector('.review_section');
+const cards = review.querySelectorAll('.card');
+
+// Set initial transform
+function applyInitialPosition() {
+    if (window.innerWidth > 1024) {
+        cards.forEach((card, i) => {
+            card.style.transform = `translateX(${efect[i].current}px)`;
+        });
+    } else {
+        // Reset transform on smaller screens (optional)
+        cards.forEach(card => {
+            card.style.transform = '';
+        });
+    }
+}
+// Run on load
+applyInitialPosition();
+document.addEventListener('resize', applyInitialPosition)
+
+document.addEventListener('scroll', () => {
+    if (window.innerWidth <= 1024) return;
+
+    const rect = review.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+
+    if (rect.top < windowHeight && rect.bottom > -300) {
+        const progress = 1 - rect.top / windowHeight;
+
+        cards.forEach((card, i) => {
+            const start = efect[i].current;
+            const end = efect[i].to;
+
+            // Compute value from start to end based on progress
+            let value = start + (end - start) * progress;
+
+            // Prevent translating left (no negative values)
+            value = Math.max(0, value);
+
+            card.style.transform = `translateX(${value}vw)`;
+        });
+    }
+});
+
+
+
+
+
+// custom menu
+const customMenus = document.querySelectorAll('.custom_menu .elementor-nav-menu--main .menu-item');
+const menuTabs = document.querySelectorAll('.items_popup .item');
+const menuIcons = document.querySelector('.menu_icons')
+const tabMenu = document.querySelector('.tab_popup')
+const menuBar = document.querySelector('.menu_bar');
+const textboxs = document.querySelectorAll('.text_box')
+const textBoxImgs = document.querySelectorAll('.text_box-img')
+
+
+customMenus.forEach((menu, i) => {
+    menu.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent this click from triggering document click
+        customMenus.forEach((item) => {
+            item.classList.remove('active')
+        });
+        menu.classList.add('active')
+
+        menuTabs.forEach((tab) => {
+            tab.style.display = 'none';
+        });
+        menuTabs[i].style.display = 'block';
+
+        imageHover(menuTabs[i])
+    });
+});
+
+// Hide menu tab if clicked outside
+document.addEventListener('click', (e) => {
+    const isMenu = e.target.closest('.custom_menu');
+    const isPopup = e.target.closest('.items_popup');
+
+    if (!isMenu && !isPopup) {
+        menuTabs.forEach((tab) => {
+            tab.style.display = 'none';
+        });
+        customMenus.forEach((item) => {
+            item.classList.remove('active')
+        });
+    }
+});
+
+menuIcons.addEventListener('click', () => {
+    menuIcons.classList.toggle('active')
+    tabMenu.classList.toggle('active')
+    
+    if (tabMenu.classList.contains('active')) {
+        document.body.style.overflow = 'hidden';
+    } else {
+        document.body.style.overflow = 'auto';
+    }
+})
+
+function tabMenuTop() {
+    tabMenu.style.top = `${menuBar.offsetHeight}px`
+}
+
+
+
+function imageHover(currentItem) {
+    const textboxs = currentItem.querySelectorAll('.text_box')
+    const textBoxImgs = currentItem.querySelectorAll('.text_box-img')
+
+    textboxs.forEach((text, i) => {
+        text.addEventListener('mouseenter', () => {
+            textBoxImgs.forEach((img) => img.classList.remove('active'));
+            textBoxImgs[i].classList.add('active');
+        });
+    });
+
+}
+
+tabMenuTop()
+window.addEventListener('resize', tabMenuTop)
