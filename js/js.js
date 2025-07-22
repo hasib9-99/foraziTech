@@ -10973,3 +10973,56 @@ setTimeout(() => {
 
 }, 1000)
 
+
+
+//
+setTimeout(() => {
+    const theSliders = document.querySelectorAll('.custom_slider');
+
+    theSliders.forEach((slider) => {
+        const funtionSliderSection = slider.querySelectorAll('.funtion_slider');
+        const theSliderDots = slider.querySelectorAll('.swiper-pagination-bullet')
+
+        funtionSliderSection.forEach((section) => {
+            const artistnames = section.querySelectorAll('.artist_name');
+            const artistImg = section.querySelectorAll('.artist_img');
+            artistnames.forEach((item, i) => {
+                item.addEventListener('click', () => {
+                    theSliderDots[i + 1].click();
+                })
+            });
+            artistnames.forEach((item, i) => {
+                item.addEventListener('mouseenter', () => {
+                    artistImg.forEach((img) => img.classList.remove('active'));
+                    artistImg[i].classList.add('active');
+                })
+            });
+        });
+    })
+}, 100);
+
+
+const theSliders = document.querySelectorAll('.custom_slider');
+
+theSliders.forEach((slider) => {
+    const funtionSliderSection = slider.querySelectorAll('.funtion_slider');
+    const theSliderDots = slider.querySelectorAll('.swiper-pagination-bullet')
+
+    funtionSliderSection.forEach((section) => {
+        const artistnames = section.querySelectorAll('.artist_name');
+        const artistImg = section.querySelectorAll('.artist_img');
+        artistnames.forEach((item, i) => {
+            item.addEventListener('click', () => {
+                theSliderDots[i + 1].click();
+            })
+        });
+        artistnames.forEach((item, i) => {
+            item.addEventListener('mouseenter', () => {
+                artistImg.forEach((img) => img.classList.remove('active'));
+                artistImg[i].classList.add('active');
+            })
+        });
+    });
+})
+
+
