@@ -1,7 +1,0 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="h-[32px] w-[32px] md:hidden text-primary-color" width="38.492"  height="38.434" ><defs><symbol id="sprite-i-e" viewBox="0 0 38.492 38.434"><title>sprite-i-e</title>
-  <g id="Group_173" data-name="Group 173" transform="translate(50.764 25.305)">
-    <path id="Path_57" fill="currentcolor" d="M-12.272-6.117a19.244 19.244 0 0 0-17.814-19.188l-6.038 37.876a19.293 19.293 0 0 0 4.606.559A19.246 19.246 0 0 0-12.272-6.117M-18.5 4.145h-10.348v-20.524H-18.5v3.021h-6.756v5.645h6.19v2.936h-6.19v5.9h6.756Zm-14.883-29.417A19.246 19.246 0 0 0-50.764-6.117a19.245 19.245 0 0 0 11.518 17.626Zm-7.766 29.417h-3.591v-20.524h3.592Z" data-name="Path 57"></path>
-  </g>
-</symbol></defs>
-<use xlink:href="#sprite-i-e"></use>
-</svg>

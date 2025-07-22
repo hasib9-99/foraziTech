@@ -1,3 +1,0 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" class="text-secondary-color max-w-[15px] max-h-[78px] md:max-w-[21px] md:max-h-[113px]" width="22"  height="114" ><defs><symbol id="sprite-separator" viewBox="0 0 22 114"><title>sprite-separator</title><path d="M20 2 2 112" stroke="currentcolor" stroke-width="3.3px" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path></symbol></defs>
-        <use xlink:href="#sprite-separator"></use>
-    </svg>
