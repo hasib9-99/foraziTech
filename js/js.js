@@ -11073,3 +11073,47 @@ reviews.forEach(review => {
     });
 });
 
+
+// loading animation
+const loader = document.querySelector(".pageLoader");
+loader.classList.add("active");
+window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(() => {
+        loader.classList.add("fade-out");
+
+        setTimeout(() => {
+            loader.remove();
+        }, 1000);
+    }, 500);
+});
+
+
+//
+const cards = document.querySelectorAll('.custom_loop .e-loop-item');
+
+cards.forEach((card) => {
+    const random = Math.floor(Math.random() * 25);
+    card.style.order = random;
+});
+
+//
+
+const reviews = document.querySelector('.review_section');
+const reviewWraper = document.querySelector('.review_wraper');
+const reviewCards = document.querySelectorAll('.card');
+
+let totalWidth = 0;
+
+reviewCards.forEach((card) => {
+    cardWidth = card.offsetWidth + 25;
+    totalWidth += cardWidth;
+});
+
+reviews.style.height = totalWidth + 'px';
+
+document.addEventListener('scroll', () => {
+    const rect = reviews.getBoundingClientRect();
+    console.log(rect.top);
+
+});
+
