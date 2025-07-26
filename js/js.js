@@ -11117,3 +11117,31 @@ document.addEventListener('scroll', () => {
 
 });
 
+
+// card sticky and scroll animation
+if (window.innerWidth >= 360) {
+    const mainCon = document.querySelector('.review_section');
+    const cardWraper = document.querySelector('.review_wraper');
+    const cardAll = cardWraper.querySelectorAll('.card');
+    let cardWidth = 0;
+    let sectionHeight = 0;
+
+    const gap = parseInt(window.getComputedStyle(cardWraper).getPropertyValue('gap'));
+    cardAll.forEach((card, i) => {
+        sectionHeight += card.offsetWidth + gap;
+        if (i > 2) {
+            cardWidth += card.offsetWidth + gap;
+        }
+    });
+    mainCon.style.height = `${sectionHeight}px`;
+
+    document.addEventListener('scroll', () => {
+        const rect = mainCon.getBoundingClientRect();
+        const topOffset = rect.top;
+        if (-topOffset > 0 && -topOffset < cardWidth) {
+            cardWraper.style.transform = `translateX(${topOffset}px)`;
+            console.log(-topOffset);
+
+        }
+    });
+}
