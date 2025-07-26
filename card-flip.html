@@ -1,48 +1,75 @@
-<tbody>
-  <tr>
-      <td align="center">
-          <table width="" cellpadding="0" cellspacing="0" border="0"
-          style="background-color: #ffffff;padding: 30px;border-radius: 8px;box-shadow: 0 0 10px rgb(0 0 0 / 10%);width: 100%;">
-              <tbody>
-                  <tr>
-                      <td style="font-size: 28px; color: rgb(55, 55, 156); font-weight: 700; ">Mail of app gerust
-                      </td>
-                  </tr>
-                  <tr>
-                      <td style="font-size: 24px; font-weight: 600; padding: 20px 0px">
-                        E-mail
-                      </td>
-                  </tr>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="review_section">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+    </div>
+    <div class="review_section">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+    </div>
+    <div class="review_section">
+        <div class="card"></div>
+        <div class="card"></div>
+        <div class="card"></div>
+    </div>
 
-                  <tr>
-                      <td style="padding: 10px 0;"><strong>Naam:</strong> [field id="name"]</td>
-                  </tr>
-                  <br>
-                  <tr>
-                      <td style="padding: 10px 0;"><strong>E-mailadres:</strong> [field id="email"]</td>
-                  </tr>
-                  <br>
-                  <tr>
-                      <td style="padding: 10px 0;"><strong>Ik solliciteer naar de functie van:</strong>[field id="field_231f0fa"]</td>
-                  </tr>
-                  <tr>
-                      <td>
-                          <hr style="border: none; border-top: 1px solid #ccc; margin: 30px 0;">
-                      </td>
-                  </tr>
+    <script>
 
-                  <tr>
-                      <td style="font-size: 24px; font-weight: 600; padding-bottom: 10px;">
-                        Vraag en of opmerking
-                      </td>
-                  </tr> 
-                  <tr>
-                      <td style="padding: 10px 0;">
-                        [field id="message"]
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
-      </td>
-  </tr>
-</tbody>
+const efect = [
+    { current: 100, to: 0 },
+    { current: 70, to: 0 },
+    { current: 40, to: 0 }
+];
+
+const reviews = document.querySelectorAll('.review_section');
+
+reviews.forEach(review => {
+    const cards = review.querySelectorAll('.card');
+
+    function applyInitialPosition() {
+        if (window.innerWidth > 1024) {
+            cards.forEach((card, i) => {
+                card.style.transform = `translateX(${efect[i].current}px)`;
+            });
+        } else {
+            cards.forEach(card => {
+                card.style.transform = '';
+            });
+        }
+    }
+    applyInitialPosition();
+    document.addEventListener('resize', applyInitialPosition)
+
+    document.addEventListener('scroll', () => {
+        if (window.innerWidth <= 1024) return;
+
+        const rect = review.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        if (rect.top < windowHeight && rect.bottom > -300) {
+            const progress = 1 - rect.top / windowHeight;
+
+            cards.forEach((card, i) => {
+                const start = efect[i].current;
+                const end = efect[i].to;
+                let value = start + (end - start) * progress;
+
+                value = Math.max(0, value);
+                card.style.transform = `translateX(${value}vw)`;
+            });
+        }
+    });
+});
+    </script>
+</body>
+</html>

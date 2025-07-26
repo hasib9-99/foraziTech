@@ -1,52 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-
 <body>
-    <style>
-        selector .elementor-form-fields-wrapper.elementor-labels-above {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: repeat(5, 70px);
-            /* gap: 20px; */
+    
+
+<style>
+.song-image_one {
+    /*display: none;*/
+    object-fit: cover;
+    object-position: 50% 50%;
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+}
+
+#dropzone_one {
+    display: block;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    max-height:70%;
+}
+
+#_canvas_one {
+    display:none;
+}
+</style>
+
+
+<div id="dropzone_one">
+    <canvas id="canvas_one"></canvas>
+    <canvas id="_canvas_one"></canvas>
+</div>
+<img crossorigin="anonymous" class='song-image_one' src="https://setsomnisdegaudi.com/wp-content/uploads/2025/07/Vidrieras-de-Sagrada-Familia-24_vitrallsbonet.jpg" width="500" height="500"/>
+
+
+
+
+
+
+
+
+    <script>
+    (function () {
+        // colader scop
+        const rad = Math.PI / 180;
+        let requestId = null;
+        let r = window.innerWidth <= 1024 ? 150 : 300;
+        let n = 16;
+        let a = 360 * rad / n;
+        let W = 2 * Math.abs(Math.sin(a / 2)) * r;
+        let H = Math.abs(Math.cos(a / 2)) * r;
+        let rot = 0;
+        const speed = 0.5;
+
+        const dropzone = document.querySelector("#dropzone_one");
+        const htmlImg = document.querySelector(".song-image_one");
+        let w = htmlImg.getAttribute("width");
+        let h = htmlImg.getAttribute("height");
+
+        const canvas = document.querySelector("#canvas_one");
+        const _canvas = document.querySelector("#_canvas_one");
+        const ctx = canvas.getContext("2d");
+        const _ctx = _canvas.getContext("2d");
+
+        let cw = canvas.width = r * 2,
+            cx = cw / 2;
+        let ch = canvas.height = r * 2,
+            cy = ch / 2;
+        let _cw = _canvas.width = W,
+            _cx = _cw / 2;
+        let _ch = _canvas.height = H,
+            _cy = _ch / 2;
+
+        // Drag & Drop Handlers
+        dropzone.addEventListener("dragenter", e => {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        dropzone.addEventListener("dragover", e => {
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        dropzone.addEventListener("drop", e => {
+            e.stopPropagation();
+            e.preventDefault();
+            const data = e.dataTransfer;
+            const files = data.files;
+            handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            for (const file of files) {
+                if (!/^image\//.test(file.type)) continue;
+
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = function () {
+                    w = img.width;
+                    h = img.height;
+                    htmlImg.setAttribute("src", img.src);
+                    htmlImg.setAttribute("width", w);
+                    htmlImg.setAttribute("height", h);
+                    URL.revokeObjectURL(this.src);
+                };
+            }
         }
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div {
-            width: 100% !important;
+        // Draw sector clipping path
+        function oPath(ctx, W, H) {
+            ctx.beginPath();
+            ctx.moveTo(W / 2, 0);
+            ctx.lineTo(W, H);
+            ctx.lineTo(0, H);
+            ctx.closePath();
         }
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div:nth-child(1) {
-            grid-area: 1 / 1 / 2 / 2;
+        // Rotate image and draw in _canvas
+        function rotateImg(img, rot) {
+            _ctx.clearRect(0, 0, _cw, _ch);
+            _ctx.save();
+            _ctx.translate(_cx, _cy);
+            _ctx.rotate(rot);
+            _ctx.drawImage(img, -w / 2, -h / 2);
+            _ctx.restore();
         }
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div:nth-child(2) {
-            grid-area: 1 / 2 / 2 / 2;
+        function Draw() {
+            requestId = requestAnimationFrame(Draw);
+            rot += speed * rad;
+            rotateImg(htmlImg, rot);
+
+            ctx.clearRect(0, 0, cw, ch);
+
+            for (let i = 0; i < n; i++) {
+                const sc = i % 2 === 0 ? -1 : 1;
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.scale(sc, 1);
+                ctx.rotate(a * i);
+                ctx.drawImage(_canvas, -_cx, 0);
+                ctx.restore();
+            }
         }
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div:nth-child(3) {
-            grid-area: 2 / 1 / 3 / 2;
-        }
+        function Init() {
+            if (requestId) {
+                cancelAnimationFrame(requestId);
+                requestId = null;
+            }
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div:nth-child(4) {
-            grid-area: 2 / 2 / 4 / 3;
-        }
+            a = 360 * rad / n;
+            W = 2 * Math.abs(Math.sin(a / 2)) * r;
+            H = Math.abs(Math.cos(a / 2)) * r;
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div:nth-child(5) {
-            grid-area: 3 / 1 / 4 / 2;
-        }
+            cw = canvas.width = r * 2;
+            cx = cw / 2;
+            ch = canvas.height = r * 2;
+            cy = ch / 2;
+            _cw = _canvas.width = W;
+            _cx = _cw / 2;
+            _ch = _canvas.height = H;
+            _cy = _ch / 2;
 
-        selector .elementor-form-fields-wrapper.elementor-labels-above>div:nth-child(6) {
-            grid-area: 5 / 1 / 4 / 3;
-            align-content: flex-start !important;
-        }
-    </style>
+            _ctx.clearRect(0, 0, _cw, _ch);
+            oPath(_ctx, W, H);
+            _ctx.clip();
 
-    <audio id="audio-4" src="https://website-audios.s3.eu-north-1.amazonaws.com/Lucas-5-little-ducks.mp4"></audio>
+            Draw();
+
+        }
+        Init()
+    })();
+    </script>
 </body>
-
 </html>

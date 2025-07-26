@@ -11026,3 +11026,50 @@ theSliders.forEach((slider) => {
 })
 
 
+// transform style
+const efect = [
+    { current: 100, to: 0 },
+    { current: 70, to: 0 },
+    { current: 40, to: 0 }
+];
+
+const reviews = document.querySelectorAll('.review_section');
+
+reviews.forEach(review => {
+    const cards = review.querySelectorAll('.card');
+
+    function applyInitialPosition() {
+        if (window.innerWidth > 1024) {
+            cards.forEach((card, i) => {
+                card.style.transform = `translateX(${efect[i].current}px)`;
+            });
+        } else {
+            cards.forEach(card => {
+                card.style.transform = '';
+            });
+        }
+    }
+    applyInitialPosition();
+    document.addEventListener('resize', applyInitialPosition)
+
+    document.addEventListener('scroll', () => {
+        if (window.innerWidth <= 1024) return;
+
+        const rect = review.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        if (rect.top < windowHeight && rect.bottom > -300) {
+            const progress = 1 - rect.top / windowHeight;
+
+            cards.forEach((card, i) => {
+                const start = efect[i].current;
+                const end = efect[i].to;
+                let value = start + (end - start) * progress;
+
+                value = Math.max(0, value);
+                card.style.transform = `translateX(${value}vw)`;
+            });
+        }
+    });
+});
+
