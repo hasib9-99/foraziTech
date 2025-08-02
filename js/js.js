@@ -11291,3 +11291,166 @@ customMenu.forEach((menu) => {
     })
 })
 
+
+
+
+//
+
+const menuItemsList = document.querySelectorAll('.your-menu-class ul li');
+menuItemsList.forEach((item) => {
+    item.addEventListener('click', () => {
+        document.querySelector('.e-off-canvas__overlay').click();
+    });
+});
+
+
+
+
+
+// header
+
+let currentIndex = 0;
+const audio = document.querySelector('.audio');
+const musicSection = document.querySelector('.the_music-section')
+const songTitle = document.querySelector('.song-title h5');
+const songContent = document.querySelector('.song-content h5');
+const songImage = document.querySelector('.song-image');
+const playBtn = document.querySelector('.play-btn');
+const muteBtn = document.querySelector('.mute-btn');
+const songNav = document.querySelector('.song_nav .e-con-inner');
+const currentTimeEl = document.querySelector('.current-time p');
+
+musicData.forEach((song, i) => {
+    const item = document.createElement('div');
+    const h4 = document.createElement('h4');
+    const p = document.createElement('p');
+    const number = document.createElement('p');
+
+    h4.textContent = song.title;
+    p.textContent = song.subTitle;
+    number.textContent = i + 1
+
+    item.classList.add('song_item');
+    h4.classList.add('song_title');
+    p.classList.add('song_subtitle');
+    number.classList.add('item_number')
+
+    item.appendChild(h4);
+    item.appendChild(p);
+    item.appendChild(number);
+    songNav.appendChild(item);
+});
+
+const songItem = document.querySelectorAll('.song_item')
+
+function loadSong(index) {
+    const song = musicData[index];
+    musicSection.style.backgroundColor = song.backgroundColor
+    songTitle.textContent = song.title;
+    songContent.textContent = song.subTitle
+    songImage.src = song.image;
+    audio.src = song.songUrl;
+    audio.load();
+
+    //reset nev
+    songItem.forEach((song) => {
+        song.classList.remove('active')
+    })
+    songItem[index].classList.add('active');
+}
+
+songItem.forEach((item, i) => {
+    item.addEventListener('click', () => {
+        loadSong(i)
+        // audio.play();
+        playBtn.classList.remove('paused');
+        Init();
+        currentIndex = i;
+    })
+})
+
+
+
+function togglePlay() {
+    if (audio.paused) {
+        audio.play();
+        playBtn.classList.add('paused');
+        Init();
+    } else {
+        audio.pause();
+        playBtn.classList.remove('paused');
+        // cancelAnimationFrame(requestId);
+    }
+}
+
+function toggleMute() {
+    audio.muted = !audio.muted;
+    muteBtn.classList.toggle('muted', audio.muted);
+}
+
+function nextSong() {
+    currentIndex = (currentIndex + 1) % musicData.length;
+    loadSong(currentIndex);
+    // audio.play();
+    playBtn.classList.remove('paused');
+    Init();
+}
+
+function prevSong() {
+    currentIndex = (currentIndex - 1 + musicData.length) % musicData.length;
+    loadSong(currentIndex);
+    // audio.play();
+    playBtn.classList.remove('paused');
+    Init();
+}
+
+// Event Listeners
+playBtn.addEventListener('click', togglePlay);
+muteBtn.addEventListener('click', toggleMute);
+document.querySelector('.next-btn').addEventListener('click', nextSong);
+document.querySelector('.prev-btn').addEventListener('click', prevSong);
+audio.addEventListener('ended', nextSong);
+
+// Initial Load
+loadSong(currentIndex);
+
+Init();
+
+
+
+function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec < 10 ? '0' : ''}${sec}`;
+}
+
+function updateTime() {
+    if (!isNaN(audio.duration)) {
+        const remaining = audio.duration - audio.currentTime;
+        currentTimeEl.textContent = formatTime(remaining);
+    }
+}
+
+audio.addEventListener('timeupdate', updateTime);
+audio.addEventListener('loadedmetadata', updateTime);
+
+// setTimeout(() => {
+//     cancelAnimationFrame(requestId);
+// }, 100);
+
+
+
+
+const headerText = document.querySelector('.header_text');
+const firstSection = document.querySelector('.first_section');
+
+window.addEventListener('scroll', () => {
+    const sectionBottom = firstSection.getBoundingClientRect().bottom;
+    console.log(sectionBottom);
+
+    if (sectionBottom <= 0) {
+        headerText.classList.add('hidden');
+    } else {
+        headerText.classList.remove('hidden');
+    }
+});
