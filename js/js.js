@@ -11454,3 +11454,277 @@ window.addEventListener('scroll', () => {
         headerText.classList.remove('hidden');
     }
 });
+
+//
+
+
+
+let yearsData = [
+    {
+        "title": "2005",
+        "content": "\n<p>Began Bachelor’s degree in Theater, Film, and Literature at Xiamen<br>University, China, building expertise in storytelling.</p>\n"
+    },
+    {
+        "title": "2009",
+        "content": "\n<p>Graduated and planned to pursue advanced studies in Germany.</p>\n"
+    },
+    {
+        "title": "2010",
+        "content": "\n<p>Relocated to Germany, developing a cross-cultural filmmaking<br>perspective.</p>\n"
+    },
+    {
+        "title": "2016",
+        "content": "",
+        subPosts: [
+            {
+                "title": "Feb 2016",
+                "content": "\n<p>Completed a Master’s thesis on the impact of digital technology on<br>cinema, exploring the evolution of film production and distribution in the<br>digital age.</p>\n"
+            },
+            {
+                "title": "Jun 2016",
+                "content": "\n<p>Worked as a freelance editor and producer, collaborating with various<br>production companies in Germany, honing technical skills and understanding<br>the local film industry.</p>\n",
+            }
+        ]
+    },
+    {
+        "title": "2023",
+        "content": "\n<p>Worked as inhouse producer at a German production company, managing<br>post-production for projects tailored for German public broadcasters, gaining<br>deep insight into their technical requirements and operational needs.</p>\n"
+    },
+    {
+        "title": "2024",
+        "content": "\n<p>Initiated independent film projects focused on global issues and<br>cross-cultural narratives, leveraging deep insights into Eastern and Western<br>cultures, refined editing expertise, and strong post-production leadership while<br>delivering impactful freelance work.</p>\n"
+    }
+]
+
+
+const barWraper = document.querySelector('.bar_wraper');
+const bar = document.querySelector('.bar');
+const theContent = document.querySelector('.the_content h2');
+const yearTitle = document.querySelector('.year_title h2');
+const nextBtn = document.querySelector('.next_btn');
+const prevBtn = document.querySelector('.prev_btn');
+const innerBar = document.querySelector('.bar_inner');
+
+let currentIndexDot = 0;
+
+
+// Month lookup for partial dates
+const monthMap = {
+    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+    Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+};
+
+// Convert string title to date object
+function parseDate(title) {
+    if (typeof (title) !== 'string') {
+        title = title.toString();
+    }
+    const parts = title.split(' ');
+    if (parts.length === 2) {
+        const month = monthMap[parts[0]] ?? 0;
+        const year = parseInt(parts[1]);
+        return new Date(year, month);
+    } else {
+        return new Date(parseInt(title), 0); // January
+    }
+}
+
+// Convert to months since start
+const startDate = parseDate(yearsData[0].title);
+const monthDiffs = yearsData.map(item => {
+    const date = parseDate(item.title);
+    return (date.getFullYear() - startDate.getFullYear()) * 12 + (date.getMonth() - startDate.getMonth());
+});
+
+const maxMonths = Math.max(...monthDiffs); // for % calculation
+
+yearsData.forEach((year, i) => {
+    const percent = (monthDiffs[i] / maxMonths) * 100;
+
+
+    // Generate subPost title blocks if they exist
+    const subPostTitles = year.subPosts
+        ? year.subPosts.map(sub => `<p class="monthly_post">${sub.title}</p>`).join('')
+        : '';
+
+    const monthlyPosts = year.subPosts
+        ? `<div class="monthly_posts">${subPostTitles}</div>`
+        : '';
+
+    const dotHTML = `
+        <div class="dot_wraper" style="position: absolute; left: ${percent}%;">
+            <div class="dot"></div>
+            <h2 class="year_text">${year.title}</h2>
+            ${monthlyPosts}
+        </div>
+    `;
+
+    barWraper.insertAdjacentHTML('beforeend', dotHTML);
+});
+
+
+
+const dotWraper = document.querySelectorAll('.dot_wraper');
+dotWraper.forEach((wraper, i) => {
+    wraper.querySelector(".dot").addEventListener('click', () => {
+        stopAutoplayIfActive();
+        dotWraper.forEach((item) => {
+            item.classList.remove('active');
+        });
+        wraper.classList.add('active');
+        theContent.innerHTML = yearsData[i].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+        yearTitle.textContent = yearsData[i].title;
+        innerbarUpdate(i)
+        currentIndexDot = i;
+        isSubPost()
+    });
+});
+
+nextBtn.addEventListener('click', () => {
+    stopAutoplayIfActive();
+    currentIndexDot = (currentIndexDot + 1) % dotWraper.length;
+    dotWraper.forEach((item) => {
+        item.classList.remove('active');
+    });
+    theContent.innerHTML = yearsData[currentIndexDot].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+    yearTitle.textContent = yearsData[currentIndexDot].title;
+    innerbarUpdate(currentIndexDot)
+    dotWraper[currentIndexDot].classList.add('active');
+    isSubPost();
+});
+prevBtn.addEventListener('click', () => {
+    stopAutoplayIfActive();
+    currentIndexDot = (currentIndexDot - 1 + dotWraper.length) % dotWraper.length;
+    dotWraper.forEach((item) => {
+        item.classList.remove('active');
+    });
+    theContent.innerHTML = yearsData[currentIndexDot].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+    yearTitle.textContent = yearsData[currentIndexDot].title;
+    innerbarUpdate(currentIndexDot)
+    dotWraper[currentIndexDot].classList.add('active');
+    isSubPost();
+});
+
+const months = document.querySelectorAll('.monthly_post');
+
+months.forEach((month, i) => {
+    month.addEventListener('click', () => {
+        months.forEach((m) => m.classList.remove('active'));
+        month.classList.add('active');
+
+        const currentYear = yearsData[currentIndexDot];
+        if (currentYear.subPosts && currentYear.subPosts[i]) {
+            theContent.innerHTML = currentYear.subPosts[i].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+            yearTitle.textContent = currentYear.subPosts[i].title;
+        }
+    });
+});
+
+
+function innerbarUpdate(i) {
+    const barPresent = (monthDiffs[i] / maxMonths) * 100;
+    innerBar.style.width = `${barPresent}%`;
+}
+
+function isSubPost() {
+    if (yearsData[currentIndexDot].subPosts !== undefined) {
+        theContent.innerHTML = yearsData[currentIndexDot].subPosts[0].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+        yearTitle.textContent = yearsData[currentIndexDot].subPosts[0].title;
+    }
+    const monthDovs = document.querySelectorAll('.monthly_posts');
+    monthDovs.forEach((month) => {
+        const monthTitle = month.querySelectorAll('p');
+        monthTitle.forEach((title) => {
+            title.classList.remove('active');
+        });
+        monthTitle[0].classList.add('active');
+    })
+}
+
+
+
+const playBtn = document.querySelector('.play_btn');
+const playing = document.querySelector('.playing');
+let isPlaying = false;
+let playIndex = 0;
+let subIndex = 0;
+let currentTimeout = null;
+
+// Handle year dot click with optional subPost skip
+function handleDotClick(index, skipSubPost = false) {
+    dotWraper.forEach((item) => item.classList.remove('active'));
+    dotWraper[index].classList.add('active');
+
+    theContent.innerHTML = yearsData[index].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+    yearTitle.textContent = yearsData[index].title;
+    innerbarUpdate(index);
+    currentIndexDot = index;
+
+    if (!skipSubPost) {
+        isSubPost();
+    }
+}
+
+// Play timeline step-by-step
+function playTimeline() {
+    if (playIndex >= yearsData.length) {
+        isPlaying = false;
+        playBtn.classList.toggle('Play');
+        playing.classList.toggle('active');
+        return;
+    }
+
+    const currentYear = yearsData[playIndex];
+    const currentDot = dotWraper[playIndex];
+
+    // First load the year (without subPost auto-click)
+    handleDotClick(playIndex, true);
+
+    // If subPosts exist, go through them first
+    if (currentYear.subPosts && subIndex < currentYear.subPosts.length) {
+        const monthlyPosts = currentDot.querySelectorAll('.monthly_post');
+        if (monthlyPosts[subIndex]) {
+            monthlyPosts[subIndex].click(); // Manually click each subPost
+        }
+        subIndex++;
+        currentTimeout = setTimeout(playTimeline, 3000); // Wait 5 sec for next subPost
+    } else {
+        // Move to next year
+        playIndex++;
+        subIndex = 0;
+        currentTimeout = setTimeout(playTimeline, 3000); // Wait 5 sec for next year
+    }
+}
+
+// Pause playback
+function pauseTimeline() {
+    clearTimeout(currentTimeout);
+    isPlaying = false;
+    playBtn.classList.toggle('Play');
+    playing.classList.toggle('active');
+}
+
+// Button click toggle
+playBtn.addEventListener('click', () => {
+    if (!isPlaying) {
+        isPlaying = true;
+        playBtn.classList.toggle('Play');
+        playing.classList.toggle('active');
+        playIndex = 0;
+        subIndex = 0;
+        playTimeline();
+    } else {
+        pauseTimeline();
+    }
+});
+
+function stopAutoplayIfActive() {
+    if (isPlaying) {
+        clearTimeout(currentTimeout);
+        isPlaying = false;
+        playBtn.classList.toggle('Play');
+        playing.classList.toggle('active');
+    }
+}
+
+

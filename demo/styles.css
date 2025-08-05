@@ -1,0 +1,24 @@
+.monthly_posts {
+    position: absolute;
+    top: -60px;
+    /* width: 10rem; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    left: -4rem;
+    background: #1f2937f2;
+    gap: 20px;
+    border-radius: 4px
+}
+
+.monthly_posts .monthly_post{
+    color: #fff;
+    font-family: roboto;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    padding: 8px 12px
+    
+}
