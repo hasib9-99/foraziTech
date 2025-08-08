@@ -11515,7 +11515,7 @@ const monthMap = {
 };
 
 // Convert string title to date object
-function parseDate(title) {
+function parseDate(title) { 
     if (typeof (title) !== 'string') {
         title = title.toString();
     }
@@ -11842,6 +11842,89 @@ function endDrag() {
     document.removeEventListener('touchmove', onDrag);
     document.removeEventListener('touchend', endDrag);
 }
+
+
+
+
+// section slide and scale
+const feaSliderWraper = document.querySelector('.section_wraper');
+const stickySection = document.querySelector('.sticky_section');
+const barInner = document.querySelector('.bar_inner');
+const webflowSec = document.querySelector('.webflow_sec');
+const scaleSection = document.querySelector('.scale_section');
+const sectionContent = document.querySelector('.section_content')
+
+// Define scroll ranges
+const scrollRange = window.innerHeight;         // 100vh (translate)
+const opacityRange = window.innerHeight * 0.1;  // 10vh (fade)
+const scaleRange = window.innerHeight * 1.9;    // 190vh (scale from 110vh to 300vh)
+
+function onScroll() {
+    const rect = stickySection.getBoundingClientRect();
+    const scrollY = -rect.top; // now scrollY is negative when section is not sticky yet
+
+    if (rect.top > 0) {
+        // Before everything
+        feaSliderWraper.style.transform = 'translateX(0%)';
+        barInner.style.width = '0%';
+        webflowSec.style.opacity = '1';
+        sectionContent.style.opacity = '0';
+        scaleSection.style.transform = `scale3d(0.36, 0.36, 1)`; // reset
+        console.log('Before everything');
+        return;
+    }
+
+    // Slide animation from 0vh to 100vh
+    if (scrollY >= 0 && scrollY <= scrollRange) {
+        const percentage = (scrollY / scrollRange) * 100;
+
+        feaSliderWraper.style.transform = `translateX(${-percentage}%)`;
+        barInner.style.width = `${percentage}%`;
+        webflowSec.style.opacity = '1';
+        sectionContent.style.opacity = '0';
+        scaleSection.style.transform = `scale3d(0.36, 0.36, 1)`; // initial scale
+        console.log('0vh to 100vh');
+    }
+
+    // Fade from 100vh to 110vh
+    else if (scrollY > scrollRange && scrollY <= scrollRange + opacityRange) {
+        feaSliderWraper.style.transform = `translateX(-100%)`;
+        barInner.style.width = `100%`;
+        const opacityProgress = (scrollY - scrollRange) / opacityRange;
+        webflowSec.style.opacity = `${1 - opacityProgress}`;
+        sectionContent.style.opacity = `${opacityProgress}`;
+        scaleSection.style.transform = `scale3d(0.36, 0.36, 1)`; // still initial
+        console.log('100vh to 110vh');
+    }
+
+    // Scale from 110vh to 300vh
+    else if (scrollY > scrollRange + opacityRange && scrollY <= scrollRange + opacityRange + scaleRange) {
+        feaSliderWraper.style.transform = `translateX(-100%)`;
+        barInner.style.width = `100%`;
+        webflowSec.style.opacity = '0';
+        sectionContent.style.opacity = '1';
+
+        const scaleProgress = (scrollY - scrollRange - opacityRange) / scaleRange;
+        const scaleValue = 0.36 + scaleProgress * (1 - 0.36); // 0.36 → 1
+        scaleSection.style.transform = `scale3d(${scaleValue}, ${scaleValue}, 1)`;
+        console.log('110vh to 300vh');
+    }
+
+    // After 300vh
+    else if (scrollY > scrollRange + opacityRange + scaleRange) {
+        barInner.style.width = `100%`;
+        webflowSec.style.opacity = '0';
+        scaleSection.style.transform = `scale3d(1, 1, 1)`; // final scale
+        console.log('After 300vh');
+    }
+}
+
+
+// Optimize scroll performance
+document.addEventListener('scroll', () => {
+    requestAnimationFrame(onScroll);
+});
+
 
 
 
