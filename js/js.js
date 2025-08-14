@@ -11515,7 +11515,7 @@ const monthMap = {
 };
 
 // Convert string title to date object
-function parseDate(title) { 
+function parseDate(title) {
     if (typeof (title) !== 'string') {
         title = title.toString();
     }
@@ -11925,6 +11925,390 @@ document.addEventListener('scroll', () => {
     requestAnimationFrame(onScroll);
 });
 
+let yearsData = [
+    {
+        "title": "year",
+        "content": "",
+        "postDate": "2019-08-08 10:13:00",
+        "video_url": "",
+        "poster_image": "https://weidenhuegelfilms.de/wp-content/uploads/2025/08/MV5BNzhkN2EzMGQtMjVhOS00MWJlLWIxMDktZjUwZjhmZTRiZjJhXkEyXkFqcGc@._V1_.jpg"
+    },
+    {
+        "title": "The Rest (Post-Production Coordinator and Trailer editor)",
+        "content": "",
+        "postDate": "2018-01-08 10:10:00",
+        "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/Ax5L-cLPJwY?si=ddK-yQSoMuqJELwe\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+        "poster_image": false
+    },
+    {
+        "title": "Human Flow (Post-Production Coordinator)",
+        "content": "",
+        "postDate": "2017-01-08 10:08:00",
+        "video_url": "<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/DVZGyTdk_BY?si=6kXfww-omFkBT4be\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>",
+        "poster_image": false
+    }
+]
+
+[
+    [
+        projectName: "",
+        projectDescription: "",
+        items: [
+            {
+                "title": "",
+                "content": "",
+                "video_url": "",
+                "poster_image": ""
+            },
+            {
+                "title": "",
+                "content": "",
+                "video_url": "",
+                "poster_image": ""
+            }
+        ]
+    ],
+[
+    projectName: "",
+    projectDescription: "",
+    items: [
+        {
+            "title": "",
+            "content": "",
+            "video_url": "",
+            "poster_image": ""
+        },
+        {
+            "title": "",
+            "content": "",
+            "video_url": "",
+            "poster_image": ""
+        }
+    ]
+]
+
+]
 
 
 
+//
+
+//
+const barWraper = document.querySelector('.bar_wraper');
+const bar = document.querySelector('.bar');
+const theContent = document.querySelector('.the_content h2');
+const yearTitle = document.querySelector('.year_title h2');
+const nextBtn = document.querySelector('.next_btn');
+const prevBtn = document.querySelector('.prev_btn');
+const innerBar = document.querySelector('.bar_inner');
+const postVideoWrapper = document.querySelector('.post_videos')
+const postVideo = postVideoWrapper.querySelector('iframe')
+const PostImage = document.querySelector('.post_image img')
+
+let currentIndexDot = 0;
+
+
+// Month lookup for partial dates
+const monthMap = {
+    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+    Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+};
+
+// Reverse lookup function
+function getMonthByNumber(num) {
+    return Object.keys(monthMap).find(key => monthMap[key] === num);
+}
+
+// Convert string title to date object
+function parseDate(title) {
+    if (typeof (title) !== 'string') {
+        title = title.toString();
+    }
+    const parts = title.split(' ');
+    if (parts.length === 2) {
+        const month = monthMap[parts[0]] ?? 0;
+        const year = parseInt(parts[1]);
+        return new Date(year, month);
+    } else {
+        return new Date(parseInt(title), 0); // January
+    }
+}
+
+// Convert to months since start
+const startDate = parseDate(new Date(yearsData[0].postDate).getFullYear());
+
+const monthDiffs = yearsData.map(item => {
+    const date = parseDate(new Date(item.postDate).getFullYear());
+    return (date.getFullYear() - startDate.getFullYear()) * 12 + (date.getMonth() - startDate.getMonth());
+});
+
+
+const maxMonths = Math.max(...monthDiffs); // for % calculation
+
+yearsData.forEach((year, i) => {
+    const percent = (monthDiffs[i] / maxMonths) * 100;
+
+
+    // Generate subPost title blocks if they exist
+    const subPostTitles = year.subPosts
+        ? year.subPosts.map(sub => `<p class="monthly_post">${new Date(sub.postDate).getDate()} - ${getMonthByNumber(new Date(sub.postDate).getMonth())}</p>`).join('')
+        : '';
+
+    const monthlyPosts = year.subPosts
+        ? `<div class="monthly_posts">${subPostTitles}</div>`
+        : '';
+
+    const yearValue = year.postDate
+        ? new Date(year.postDate).getFullYear()
+        : new Date(year.subPosts?.[0]?.postDate).getFullYear();
+
+    // Check if year.content is non-empty (remove HTML tags and trim)
+    const cleanContent = year.content
+        ? year.content.replace(/<\/?p>/g, '').trim()
+        : '';
+
+    const yearContent = cleanContent
+        ? `<div class='year_content'><p>${cleanContent}</p></div>`
+        : '';
+
+    const dotHTML = `
+        <div class="dot_wraper" style="position: absolute; left: ${percent}%;">
+            <div class="dot"></div>
+            <h2 class="year_text">${yearValue}</h2>
+            ${monthlyPosts}
+            ${yearContent}
+        </div>
+    `;
+
+    barWraper.insertAdjacentHTML('beforeend', dotHTML);
+});
+
+// embed the youteb src
+function extractYouTubeEmbedSrc(perPost) {
+    if (perPost.videoUrl === undefined) {
+        const subPostVideoUrl = perPost.subPosts[0].videoUrl;
+        let srcMatch = subPostVideoUrl.match(/src="([^"]*)"/);
+        return srcMatch ? srcMatch[1] : '';
+    }
+    let srcMatch = perPost.videoUrl.match(/src="([^"]*)"/);
+    return srcMatch ? srcMatch[1] : '';
+}
+
+
+const dotWraper = document.querySelectorAll('.dot_wraper');
+dotWraper.forEach((wraper, i) => {
+    wraper.querySelector(".dot").addEventListener('click', () => {
+        stopAutoplayIfActive();
+        dotWraper.forEach((item) => {
+            item.classList.remove('active');
+        });
+        wraper.classList.add('active');
+        theContent.innerHTML = yearsData[i].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+        yearTitle.textContent = yearsData[i].title;
+        innerbarUpdate(i)
+        if (extractYouTubeEmbedSrc(yearsData[i]) !== '') {
+            postVideo.src = extractYouTubeEmbedSrc(yearsData[i]);
+            postVideoWrapper.style.display = 'block';
+            PostImage.style.display = 'none';
+
+        } else {
+            PostImage.src = yearsData[i].posterImage;
+            PostImage.style.display = 'block';
+            postVideoWrapper.style.display = 'none';
+        }
+        currentIndexDot = i;
+        isSubPost()
+    });
+});
+
+nextBtn.addEventListener('click', () => {
+    stopAutoplayIfActive();
+    currentIndexDot = (currentIndexDot + 1) % dotWraper.length;
+    dotWraper.forEach((item) => {
+        item.classList.remove('active');
+    });
+    theContent.innerHTML = yearsData[currentIndexDot].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+    yearTitle.textContent = yearsData[currentIndexDot].title;
+
+    if (extractYouTubeEmbedSrc(yearsData[currentIndexDot]) !== '') {
+        postVideo.src = extractYouTubeEmbedSrc(yearsData[currentIndexDot]);
+        postVideoWrapper.style.display = 'block';
+        PostImage.style.display = 'none';
+
+    } else {
+        PostImage.src = yearsData[currentIndexDot].posterImage;
+        PostImage.style.display = 'block';
+        postVideoWrapper.style.display = 'none';
+    }
+
+    innerbarUpdate(currentIndexDot)
+    dotWraper[currentIndexDot].classList.add('active');
+    isSubPost();
+});
+prevBtn.addEventListener('click', () => {
+    stopAutoplayIfActive();
+    currentIndexDot = (currentIndexDot - 1 + dotWraper.length) % dotWraper.length;
+    dotWraper.forEach((item) => {
+        item.classList.remove('active');
+    });
+    theContent.innerHTML = yearsData[currentIndexDot].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+    yearTitle.textContent = yearsData[currentIndexDot].title;
+
+    if (extractYouTubeEmbedSrc(yearsData[currentIndexDot]) !== '') {
+        postVideo.src = extractYouTubeEmbedSrc(yearsData[currentIndexDot]);
+        postVideoWrapper.style.display = 'block';
+        PostImage.style.display = 'none';
+
+    } else {
+        PostImage.src = yearsData[currentIndexDot].posterImage;
+        PostImage.style.display = 'block';
+        postVideoWrapper.style.display = 'none';
+    }
+
+    innerbarUpdate(currentIndexDot)
+    dotWraper[currentIndexDot].classList.add('active');
+    isSubPost();
+});
+
+const months = document.querySelectorAll('.monthly_post');
+
+months.forEach((month, i) => {
+    month.addEventListener('click', () => {
+        months.forEach((m) => m.classList.remove('active'));
+        month.classList.add('active');
+        const currentYear = yearsData[currentIndexDot];
+        if (currentYear.subPosts && currentYear.subPosts[i]) {
+            theContent.innerHTML = currentYear.subPosts[i].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+            yearTitle.textContent = currentYear.subPosts[i].title;
+            if (extractYouTubeEmbedSrc(currentYear.subPosts[i]) !== '') {
+                postVideo.src = extractYouTubeEmbedSrc(currentYear.subPosts[i]);
+                postVideoWrapper.style.display = 'block';
+                PostImage.style.display = 'none';
+            } else {
+                PostImage.src = currentYear.subPosts[i].posterImage;
+                PostImage.style.display = 'block';
+                postVideoWrapper.style.display = 'none';
+            }
+        }
+    });
+});
+
+
+function innerbarUpdate(i) {
+    const barPresent = (monthDiffs[i] / maxMonths) * 100;
+    innerBar.style.width = `${barPresent}%`;
+}
+
+function isSubPost() {
+    if (yearsData[currentIndexDot].subPosts !== undefined) {
+        theContent.innerHTML = yearsData[currentIndexDot].subPosts[0].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+        yearTitle.textContent = yearsData[currentIndexDot].subPosts[0].title;
+        if (extractYouTubeEmbedSrc(yearsData[currentIndexDot].subPosts[0]) !== '') {
+            postVideo.src = extractYouTubeEmbedSrc(yearsData[currentIndexDot].subPosts[0]);
+            postVideoWrapper.style.display = 'block';
+            PostImage.style.display = 'none';
+
+        } else {
+            PostImage.src = yearsData[currentIndexDot].subPosts[0].posterImage;
+            PostImage.style.display = 'block';
+            postVideoWrapper.style.display = 'none';
+        }
+    }
+    const monthDovs = document.querySelectorAll('.monthly_posts');
+    monthDovs.forEach((month) => {
+        const monthTitle = month.querySelectorAll('p');
+        monthTitle.forEach((title) => {
+            title.classList.remove('active');
+        });
+        monthTitle[0].classList.add('active');
+    })
+}
+
+
+
+const playBtn = document.querySelector('.play_btn');
+const playing = document.querySelector('.playing');
+let isPlaying = false;
+let playIndex = 0;
+let subIndex = 0;
+let currentTimeout = null;
+
+// Handle year dot click with optional subPost skip
+function handleDotClick(index, skipSubPost = false) {
+    dotWraper.forEach((item) => item.classList.remove('active'));
+    dotWraper[index].classList.add('active');
+
+    theContent.innerHTML = yearsData[index].content.replace(/<\/?p>/g, '').replace(/<br>/g, '').replace(/\n/g, '');
+    yearTitle.textContent = yearsData[index].title;
+    innerbarUpdate(index);
+    currentIndexDot = index;
+
+    if (!skipSubPost) {
+        isSubPost();
+    }
+}
+
+// Play timeline step-by-step
+function playTimeline() {
+    if (playIndex >= yearsData.length) {
+        isPlaying = false;
+        playBtn.classList.toggle('Play');
+        playing.classList.toggle('active');
+        return;
+    }
+
+    const currentYear = yearsData[playIndex];
+    const currentDot = dotWraper[playIndex];
+
+    // First load the year (without subPost auto-click)
+    handleDotClick(playIndex, true);
+
+    // If subPosts exist, go through them first
+    if (currentYear.subPosts && subIndex < currentYear.subPosts.length) {
+        const monthlyPosts = currentDot.querySelectorAll('.monthly_post');
+        if (monthlyPosts[subIndex]) {
+            monthlyPosts[subIndex].click(); // Manually click each subPost
+        }
+        subIndex++;
+        currentTimeout = setTimeout(playTimeline, 3000); // Wait 5 sec for next subPost
+    } else {
+        // Move to next year
+        playIndex++;
+        subIndex = 0;
+        currentTimeout = setTimeout(playTimeline, 3000); // Wait 5 sec for next year
+    }
+}
+
+// Pause playback
+function pauseTimeline() {
+    clearTimeout(currentTimeout);
+    isPlaying = false;
+    playBtn.classList.toggle('Play');
+    playing.classList.toggle('active');
+}
+
+// Button click toggle
+playBtn.addEventListener('click', () => {
+    if (!isPlaying) {
+        isPlaying = true;
+        playBtn.classList.toggle('Play');
+        playing.classList.toggle('active');
+        playIndex = 0;
+        subIndex = 0;
+        playTimeline();
+    } else {
+        pauseTimeline();
+    }
+});
+
+function stopAutoplayIfActive() {
+    if (isPlaying) {
+        clearTimeout(currentTimeout);
+        isPlaying = false;
+        playBtn.classList.toggle('Play');
+        playing.classList.toggle('active');
+    }
+}
+
+
+dotWraper[0].querySelector(".dot").click();

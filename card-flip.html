@@ -1,78 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-    <div class="review_section">
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
+<div class="year" style="position: absolute; left: ${percent}%;">
+    <h2 class="year_text">${yearValue}</h2>
+    <div class="year_dot"></div>
+    <div class="project_content">
+        <h2 class="contetnt">${yearContent}</h2>
+        <div class="dot_wraper">
+            <div class="project_dot"></div>
+        </div>
     </div>
-    <div class="review_section">
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-    </div>
-    <div class="review_section">
-        <div class="card"></div>
-        <div class="card"></div>
-        <div class="card"></div>
-    </div>
-
-    <script>
-
-const efect = [
-    { current: 100, to: 0 },
-    { current: 70, to: 0 },
-    { current: 40, to: 0 }
-];
-
-const reviews = document.querySelectorAll('.review_section');
-
-reviews.forEach(review => {
-    const cards = review.querySelectorAll('.card');
-
-    function applyInitialPosition() {
-        if (window.innerWidth > 1024) {
-            cards.forEach((card, i) => {
-                card.style.transform = `translateX(${efect[i].current}px)`;
-            });
-        } else {
-            cards.forEach(card => {
-                card.style.transform = '';
-            });
-        }
-    }
-    applyInitialPosition();
-    document.addEventListener('resize', applyInitialPosition)
-
-    document.addEventListener('scroll', () => {
-        if (window.innerWidth <= 1024) return;
-
-        const rect = review.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-
-        if (rect.top < windowHeight && rect.bottom > -300) {
-            const progress = 1 - rect.top / windowHeight;
-
-            cards.forEach((card, i) => {
-                const start = efect[i].current;
-                const end = efect[i].to;
-                let value = start + (end - start) * progress;
-
-                value = Math.max(0, value);
-                card.style.transform = `translateX(${value}vw)`;
-            });
-        }
-    });
-});
-    </script>
-</body>
-</html>
-
-
-
+</div>
