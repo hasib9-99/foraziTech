@@ -12312,3 +12312,36 @@ function stopAutoplayIfActive() {
 
 
 dotWraper[0].querySelector(".dot").click();
+
+
+
+// menu popup
+
+const menuPopup = document.querySelector('.menu_popup');
+const menuBtn = document.querySelector('.menu_btn .hamburger');
+const body = document.body;
+
+menuBtn.addEventListener('click', () => {
+    menuPopup.classList.toggle('active');
+    menuBtn.classList.toggle('active');
+
+    // Toggle body scroll
+    if (menuPopup.classList.contains('active')) {
+        body.style.overflow = 'hidden';
+    } else {
+        body.style.overflow = '';
+    }
+});
+
+// Close on outside click
+document.addEventListener('click', (e) => {~
+    if (
+        menuPopup.classList.contains('active') &&
+        !menuPopup.contains(e.target) &&
+        !menuBtn.contains(e.target)
+    ) {
+        menuPopup.classList.remove('active');
+        menuBtn.classList.remove('active');
+        body.style.overflow = '';
+    }
+});
