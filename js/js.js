@@ -11968,24 +11968,24 @@ let yearsData = [
             }
         ]
     ],
-[
-    projectName: "",
-    projectDescription: "",
-    items: [
-        {
-            "title": "",
-            "content": "",
-            "video_url": "",
-            "poster_image": ""
-        },
-        {
-            "title": "",
-            "content": "",
-            "video_url": "",
-            "poster_image": ""
-        }
+    [
+        projectName: "",
+        projectDescription: "",
+        items: [
+            {
+                "title": "",
+                "content": "",
+                "video_url": "",
+                "poster_image": ""
+            },
+            {
+                "title": "",
+                "content": "",
+                "video_url": "",
+                "poster_image": ""
+            }
+        ]
     ]
-]
 
 ]
 
@@ -12334,7 +12334,8 @@ menuBtn.addEventListener('click', () => {
 });
 
 // Close on outside click
-document.addEventListener('click', (e) => {~
+document.addEventListener('click', (e) => {
+    ~
     if (
         menuPopup.classList.contains('active') &&
         !menuPopup.contains(e.target) &&
@@ -12624,3 +12625,70 @@ if (years[0].querySelector('.monthly_post')) {
 nextBtn.addEventListener('click', () => { stopAutoplay(); next(); });
 prevBtn.addEventListener('click', () => { stopAutoplay(); prev(); });
 playBtn.addEventListener('click', () => { startAutoplay(); });
+
+
+
+
+
+// custom slider
+const slides = document.querySelectorAll('.slide_image');
+let currentIndex = 0;
+let isAnimating = false;
+
+// Setup initial classes and backgrounds
+slides.forEach((item, i) => {
+    const classes = ['left', 'right', 'top'];
+    const URL = item.querySelector('img').src;
+    item.style.setProperty('--before-bg', `url("${URL}")`);
+    item.classList.add(classes[i % classes.length]);
+    item.style.zIndex = 0; // default z-index
+});
+
+// Initial active slide
+slides[currentIndex].classList.add('active');
+slides[currentIndex].style.zIndex = 2; // current on top
+
+function sliderUpdate(nextIndex) {
+    if (isAnimating) return; // prevent overlapping animations
+    isAnimating = true;
+
+    const currentSlide = slides[nextIndex];
+    const previousSlide = slides[currentIndex];
+
+    // Set z-index: current slide on top
+    currentSlide.style.zIndex = 2;
+    previousSlide.style.zIndex = 1;
+
+    // Activate next slide
+    currentSlide.style.transition = "all 1s ease";
+    currentSlide.classList.add('active');
+
+    // 🔹 Add "revars" class 0.4s later
+    setTimeout(() => {
+        currentSlide.classList.add('revars');
+    }, 500);
+
+    // Remove previous slide after transition completes
+    const removePrev = () => {
+        previousSlide.classList.remove('active', 'revars'); // cleanup
+        previousSlide.style.transition = "none";
+        previousSlide.style.zIndex = 0; // reset z-index
+        previousSlide.removeEventListener('transitionend', removePrev);
+        isAnimating = false;
+    };
+
+    currentSlide.addEventListener('transitionend', removePrev);
+    // Fallback if transitionend doesn’t fire
+    setTimeout(() => {
+        if (previousSlide.classList.contains('active')) {
+            removePrev();
+        }
+    }, 2000);
+    currentIndex = nextIndex;
+}
+
+// Auto slide every 2 seconds
+setInterval(() => {
+    const nextIndex = (currentIndex + 1) % slides.length;
+    sliderUpdate(nextIndex);
+}, 3000);
