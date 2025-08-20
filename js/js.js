@@ -12692,3 +12692,82 @@ setInterval(() => {
     const nextIndex = (currentIndex + 1) % slides.length;
     sliderUpdate(nextIndex);
 }, 3000);
+
+
+//
+
+const popupBtn = document.querySelector('.lines');
+const mainPopup = document.querySelector('.menu_popup');
+const sosalLogos = mainPopup.querySelectorAll('.custom_logo .elementor-grid-item');
+const listBtns = mainPopup.querySelectorAll('.popup_btn-list');
+const closebtn = mainPopup.querySelector('.popup_close-btn');
+const menuList = mainPopup.querySelectorAll('.custom_menu-list .elementor-nav-menu--main .elementor-nav-menu > .menu-item')
+
+popupBtn.addEventListener('click', () => {
+    mainPopup.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+
+    // logo animation
+    sosalLogos.forEach((logo, i) => {
+        setTimeout(() => {
+            logo.classList.add('animated');
+        }, 200 * i); 
+    });
+
+    // list animation
+    listBtns.forEach((list, i) => {
+        setTimeout(() => {
+            list.classList.add('animated');
+        }, 200 * i);
+    });
+
+    //close btn animation 
+    setTimeout(() => {
+        closebtn.classList.add('animated')
+    }, 300); 
+
+    // menu animation
+    menuList.forEach((item, i) => {
+        setTimeout(() => {
+            item.classList.add('animated')
+        }, 200 * i);
+    })
+});
+
+
+closebtn.addEventListener('click', () => {
+    // logo animation
+    sosalLogos.forEach((logo, i) => {
+        setTimeout(() => {
+            logo.classList.remove('animated');
+        }, 200 * i);
+    });
+
+    // list animation
+    listBtns.forEach((list, i) => {
+        setTimeout(() => {
+            list.classList.remove('animated');
+        }, 200 * i);
+    });
+
+    //close btn animation 
+    setTimeout(() => {
+        closebtn.classList.remove('animated')
+    }, 300);
+
+    // menu animation
+    menuList.forEach((item, i) => {
+        setTimeout(() => {
+            item.classList.remove('animated')
+        }, 200 * i);
+    })
+
+    setTimeout(() => {
+        mainPopup.style.display = 'none';
+        document.body.style.overflow = 'scroll';
+    }, 1000);
+})
+
+
+
+popupBtn.click()
