@@ -38,5 +38,206 @@
     <div class="line"></div>
     <div class="line"></div>
 </div>
+
+
+
+<div class="years" style="position: absolute; left: 25%; width: 16px; height: 16px;">
+        <div class="year_dot"></div>
+        <h2 class="year_text">2019</h2>
+        <div class="project_content">
+            <div class="dot_wraper">
+                <div class="monthly_post"></div>
+                <div class="monthly_post"></div>
+                <div class="monthly_post"></div>
+            </div>
+            <div class="year_content">
+                <p>Restoration of 19 old documentaries (Project manager)</p>
+            </div>
+        </div>
+    </div>
+<script>
+
+yearsData.forEach((year, i) => {
+    const percent = (monthDiffs[i] / maxMonths) * 100;
+
+    // description (cleaning HTML)
+    const cleanDescription = year.projectDescription 
+        ? year.projectDescription.replace(/<[^>]*>/g, '').trim() 
+        : '';
+
+    const descriptionBlock = cleanDescription
+        ? `<li>
+                <p>description</p>
+                <span>${cleanDescription}</span>
+           </li>`
+        : '';
+
+    // project list
+    const projectItems = (year.subPosts && year.subPosts.length > 0)
+        ? year.subPosts.map((item) => `<li><p>${item.title}</p></li>`).join('')
+        : '';
+
+    const projectBlock = projectItems
+        ? `<li>
+                <p>project</p>
+                <ul>${projectItems}</ul>
+           </li>`
+        : '';
+
+    // final HTML
+    const dotHTML = `
+    <div class="years" style="position: absolute; left:${percent}%; width: 16px; height: 16px;">
+        <div class="year_dot"></div>
+        <h2 class="year_text">${year.projectName || ''}</h2>
+        <div class="post-content">
+            <ul>
+                ${descriptionBlock}
+                ${projectBlock}
+            </ul>
+        </div>
+    </div>
+    `;
+
+    barWraper.insertAdjacentHTML('beforeend', dotHTML);
+});
+
+</script>
+
+
+    <div class="years" style="position: absolute; width: 16px; height: 16px;">
+        <div class="year_dot"></div>
+        <h2 class="year_text">${yearValue}</h2>
+        <div class="post-content">
+        <ul>
+            <li>
+                <p>description</p>
+                <span>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod, iusto!</span>
+            </li>
+            <li>
+                <p>project</p>
+                <ul>
+                    <li><p>project 1</p></li>
+                    <li><p>project 2</p></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    </div>
+
+
+
+
+<style>
+    .menu_icon{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .line{
+        display: block;
+        height: 2px;
+        background-color: white;
+        transition: all 0.3s ease;
+    }
+    .menu_icon.active ._1{
+        transform: translateY(10px) translateY(-50%) rotate(-45deg);
+    }
+    .menu_icon.active ._2{
+        opacity: 0;
+    }
+    .menu_icon.active ._3{
+        transform: translateY(-10px) translateY(50%) rotate(45deg);
+    }
+</style>
+
+<div class="menu_icon">
+    <span class="line _1"></span>
+    <span class="line _2"></span>
+    <span class="line _3"></span>
+</div>
+
+<script>
+    const menuIcon = document.querySelector('.menu_icon');
+    const menuPopup = document.querySelector('.menu_popup');
+    const popupInner = menuPopup.querySelector('.popup_inner');
+    menuIcon.addEventListener('click', () => {
+        menuIcon.classList.toggle('active');
+        menuPopup.classList.toggle('active');
+        if (menuPopup.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!popupInner.contains(e.target) && !menuIcon.contains(e.target)) {
+            menuIcon.classList.remove('active');
+            menuPopup.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+    });
+</script>
+
+
+
+<div class="Outer">
+    <div class="Inner">
+        <div class="bar_wraper">
+            <div class="years" style="position: absolute; left:0%; width: 16px; height: 16px;">
+                <div class="year_dot"></div>
+                <h2 class="year_text">2005</h2>
+                <div class="post-content">
+                    <ul>
+                        <span>Started Bachelor’s in Theater, Film, and Literature at Xiamen University, China.</span>
+                        
+                    </ul>
+        </div>
+    </div>
+            <div class="years">
+                <div class="year_description">
+                    <span>Tooltip content here</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<style>
+    .hubbargen{
+        width: 50px;
+        height: 50px;
+        background-color: blue;
+    }
+    .hubbargen::after,
+    .hubbargen::before{
+        content: '';
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        background-color: red;
+        border-radius: 50%;
+        animation: hubbargen 1s linear infinite;
+    }
+</style>
+<div class="hubbargen">
+</div>
+
+
+
+
+
+
+
+
 </body>
 </html>
