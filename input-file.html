@@ -1,183 +1,230 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Infinite Left Slider</title>
+<style>
+  
+  :root{
+    --gap: 16px;
+    --speed-px-per-sec: 100; /* change to go faster/slower */
+  }
+
+  body{
+    font-family: system-ui, sans-serif;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background: #0f172a;
+    color: #e6eef8;
+  }
+
+  .slider_wrap{
+    width: min(1100px, 96%);
+    border-radius: 10px;
+    overflow: hidden;
+    background: linear-gradient(180deg,#08102a 0%, #0b1530 100%);
+    padding: 12px;
+    box-shadow: 0 8px 30px rgba(5,10,20,0.6);
+  }
+
+  /* viewport that will be scrolled via scrollLeft */
+  .slider{
+    overflow: hidden;           /* hide overflow */
+    white-space: nowrap;        /* keep slides inline */
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+  }
+
+  /* the track holds inline-block slides */
+  .track{
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .slide{
+    display: inline-block;     /* important: inline-block keeps them inline */
+    width: 260px;              /* slide width (change as needed) */
+    height: 160px;
+    margin-right: var(--gap);
+    border-radius: 8px;
+    background: linear-gradient(135deg,#334155,#0f172a);
+    color: #fff;
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    text-align: center;
+    line-height: 160px;
+    font-weight: 600;
+    user-select: none;
+  }
+
+  .slide img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    vertical-align: middle;
+  }
+
+  .controls{
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .controls button{
+    background: #152238;
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #cfe3ff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .hint{font-size:13px; opacity:.8; text-align:center; margin-top:8px}
+</style>
 </head>
 <body>
-    
 
-<style>
-.song-image_one {
-    /*display: none;*/
-    object-fit: cover;
-    object-position: 50% 50%;
-    position: absolute;
-    visibility: hidden;
-    opacity: 0;
-}
+<div class="slider_wrap">
+  <div class="slider" id="slider" aria-label="Infinite left slider">
+    <div class="track" id="track">
+      <!-- slides: you can replace content with images or any HTML -->
+      <div class="slide">Slide 1</div>
+      <div class="slide">Slide 2</div>
+      <div class="slide">Slide 3</div>
+      <div class="slide">Slide 4</div>
+      <div class="slide">Slide 5</div>
+      <div class="slide">Slide 6</div>
+    </div>
+  </div>
 
-#dropzone_one {
-    display: block;
-}
+  <!-- <div class="controls">
+    <button id="faster">Faster</button>
+    <button id="slower">Slower</button>
+    <button id="toggle">Pause</button>
+  </div> -->
 
-canvas {
-    display: block;
-    margin: 0 auto;
-    max-height:70%;
-}
-
-#_canvas_one {
-    display:none;
-}
-</style>
-
-
-<div id="dropzone_one">
-    <canvas id="canvas_one"></canvas>
-    <canvas id="_canvas_one"></canvas>
+  <div class="hint">Hover to pause. Drag to scroll manually. Uses scrollLeft (no translateX).</div>
 </div>
-<img crossorigin="anonymous" class='song-image_one' src="https://setsomnisdegaudi.com/wp-content/uploads/2025/07/Vidrieras-de-Sagrada-Familia-24_vitrallsbonet.jpg" width="500" height="500"/>
 
+<script>
+/*
+  Infinite left slider using scrollLeft.
+  - Duplicates track content so we can loop seamlessly
+  - Uses requestAnimationFrame for smooth motion
+  - No translateX, no flex; slides are inline-block
+*/
 
+(() => {
+  const slider = document.querySelector('.custom_slider');
+  const track  = document.querySelector('.track');
 
+  // duplicate slides for seamless loop
+  function duplicateContent() {
+    const html = track.innerHTML;
+    track.insertAdjacentHTML('beforeend', html);
+  }
 
+  duplicateContent();
 
+  // After duplication, original width is half of track.scrollWidth
+  let originalWidth = null;
+  function refreshWidths(){
+    // small delay to ensure layout settled
+    requestAnimationFrame(() => {
+      originalWidth = track.scrollWidth / 2;
+    });
+  }
+  refreshWidths();
+  // speed in pixels per second (change root var or JS var)
+  let speed = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--speed-px-per-sec')) || 100;
 
+  let rafId = null;
+  let lastTS = null;
+  let running = true;
 
+  function step(ts){
+    if (!lastTS) lastTS = ts;
+    const dt = ts - lastTS; // ms
+    lastTS = ts;
 
-    <script>
-    (function () {
-        // colader scop
-        const rad = Math.PI / 180;
-        let requestId = null;
-        let r = window.innerWidth <= 1024 ? 150 : 300;
-        let n = 16;
-        let a = 360 * rad / n;
-        let W = 2 * Math.abs(Math.sin(a / 2)) * r;
-        let H = Math.abs(Math.cos(a / 2)) * r;
-        let rot = 0;
-        const speed = 0.5;
+    if (running) {
+      // advance scrollLeft to the left (increasing scrollLeft moves content left)
+      slider.scrollLeft += (speed * dt / 1000); // px
 
-        const dropzone = document.querySelector("#dropzone_one");
-        const htmlImg = document.querySelector(".song-image_one");
-        let w = htmlImg.getAttribute("width");
-        let h = htmlImg.getAttribute("height");
+      // when we've scrolled past the width of original content, loop back
+      if (slider.scrollLeft >= originalWidth) {
+        // subtract originalWidth to seamlessly wrap
+        slider.scrollLeft -= originalWidth;
+      }
+    }
 
-        const canvas = document.querySelector("#canvas_one");
-        const _canvas = document.querySelector("#_canvas_one");
-        const ctx = canvas.getContext("2d");
-        const _ctx = _canvas.getContext("2d");
+    rafId = requestAnimationFrame(step);
+  }
 
-        let cw = canvas.width = r * 2,
-            cx = cw / 2;
-        let ch = canvas.height = r * 2,
-            cy = ch / 2;
-        let _cw = _canvas.width = W,
-            _cx = _cw / 2;
-        let _ch = _canvas.height = H,
-            _cy = _ch / 2;
+  // start animation
+  rafId = requestAnimationFrame(step);
 
-        // Drag & Drop Handlers
-        dropzone.addEventListener("dragenter", e => {
-            e.stopPropagation();
-            e.preventDefault();
-        });
-        dropzone.addEventListener("dragover", e => {
-            e.stopPropagation();
-            e.preventDefault();
-        });
-        dropzone.addEventListener("drop", e => {
-            e.stopPropagation();
-            e.preventDefault();
-            const data = e.dataTransfer;
-            const files = data.files;
-            handleFiles(files);
-        });
+  // Pause on hover
+  slider.addEventListener('mouseenter', () => running = true);
+  slider.addEventListener('mouseleave', () => { running = true; lastTS = null; });
 
-        function handleFiles(files) {
-            for (const file of files) {
-                if (!/^image\//.test(file.type)) continue;
+  // simple drag-to-scroll
+  let isDown = false;
+  let startX, startScroll;
+  slider.addEventListener('mousedown', (e) => {
+    isDown = true;
+    slider.classList.add('dragging');
+    startX = e.pageX;
+    startScroll = slider.scrollLeft;
+    running = false; // pause autoplay while dragging
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    const dx = e.pageX - startX;
+    slider.scrollLeft = startScroll - dx;
+  });
+  window.addEventListener('mouseup', () => {
+    if (!isDown) return;
+    isDown = false;
+    running = true;
+  });
 
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
-                img.onload = function () {
-                    w = img.width;
-                    h = img.height;
-                    htmlImg.setAttribute("src", img.src);
-                    htmlImg.setAttribute("width", w);
-                    htmlImg.setAttribute("height", h);
-                    URL.revokeObjectURL(this.src);
-                };
-            }
-        }
+  // Make sure widths recompute on resize (important for responsiveness)
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      refreshWidths();
+    }, 120);
+  });
 
-        // Draw sector clipping path
-        function oPath(ctx, W, H) {
-            ctx.beginPath();
-            ctx.moveTo(W / 2, 0);
-            ctx.lineTo(W, H);
-            ctx.lineTo(0, H);
-            ctx.closePath();
-        }
+  // controls
+  // document.getElementById('faster').addEventListener('click', () => { speed = Math.min(1000, speed + 30); });
+  // document.getElementById('slower').addEventListener('click', () => { speed = Math.max(10, speed - 30); });
+  // const toggleBtn = document.getElementById('toggle');
+  // toggleBtn.addEventListener('click', () => {
+  //   running = !running;
+  //   toggleBtn.textContent = running ? 'Pause' : 'Play';
+  //   if (running) lastTS = null; // reset delta to avoid jump
+  // });
 
-        // Rotate image and draw in _canvas
-        function rotateImg(img, rot) {
-            _ctx.clearRect(0, 0, _cw, _ch);
-            _ctx.save();
-            _ctx.translate(_cx, _cy);
-            _ctx.rotate(rot);
-            _ctx.drawImage(img, -w / 2, -h / 2);
-            _ctx.restore();
-        }
+  // // Accessibility: allow keyboard to pause
+  // slider.tabIndex = 0;
+  // slider.addEventListener('focus', () => running = false);
+  // slider.addEventListener('blur', () => running = true);
 
-        function Draw() {
-            requestId = requestAnimationFrame(Draw);
-            rot += speed * rad;
-            rotateImg(htmlImg, rot);
+  // // ensure initial scrollLeft aligned
+  slider.scrollLeft = 0;
 
-            ctx.clearRect(0, 0, cw, ch);
+})();
+</script>
 
-            for (let i = 0; i < n; i++) {
-                const sc = i % 2 === 0 ? -1 : 1;
-                ctx.save();
-                ctx.translate(cx, cy);
-                ctx.scale(sc, 1);
-                ctx.rotate(a * i);
-                ctx.drawImage(_canvas, -_cx, 0);
-                ctx.restore();
-            }
-        }
-
-        function Init() {
-            if (requestId) {
-                cancelAnimationFrame(requestId);
-                requestId = null;
-            }
-
-            a = 360 * rad / n;
-            W = 2 * Math.abs(Math.sin(a / 2)) * r;
-            H = Math.abs(Math.cos(a / 2)) * r;
-
-            cw = canvas.width = r * 2;
-            cx = cw / 2;
-            ch = canvas.height = r * 2;
-            cy = ch / 2;
-            _cw = _canvas.width = W;
-            _cx = _cw / 2;
-            _ch = _canvas.height = H;
-            _cy = _ch / 2;
-
-            _ctx.clearRect(0, 0, _cw, _ch);
-            oPath(_ctx, W, H);
-            _ctx.clip();
-
-            Draw();
-
-        }
-        Init()
-    })();
-    </script>
 </body>
 </html>
+
+

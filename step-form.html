@@ -1,83 +1,464 @@
-<tbody>
-    <tr>
-        <td align="center">
-            <table width="" cellpadding="0" cellspacing="0" border="0"
-                style="background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
-                <tbody>
-                    <tr>
-                        <td style="font-size: 28px; color: rgb(55, 55, 156); font-weight: 700; ">
-                            Nieuwe sollicitatie ontvangen
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="font-size: 24px; font-weight: 600; padding: 20px 0px">
-                            Persoonlijke gegevens
-                        </td>
-                    </tr>
+<style>
+  .location_cat_name {
+    cursor: pointer;
+  }
 
-                    <tr>
-                        <td style="padding: 10px 0;"><strong>Naam:</strong> [field id="name"]</td>
-                    </tr>
-                    <br>
-                    <tr>
-                        <td style="padding: 10px 0;"><strong>E-mailadres:</strong> [field id="email"]</td>
-                    </tr>
-                    <br>
-                    <tr>
-                        <td style="padding: 10px 0;"><strong>Telefoon:</strong> [field id="field_542b267"]</span>
-                        </td>
-                    </tr>
-                    <br>
-                    <tr>
-                        <td style="padding: 10px 0;"><strong>LinkedIn profiel:</strong> [field id="field_082d747"]</span>
-                        </td>
-                    </tr>
-                    <br>
-                    <tr>
-                        <td style="padding: 10px 0;"><strong>CV uploaden:</strong> [field id="field_1042eea"]</span>
-                        </td>
-                    </tr>
-                    <br>
-                    <tr>
-                        <td style="padding: 10px 0;"><strong>Ik heb jullie gevonden via:</strong> [field id="field_516c484"]</span>
-                        </td>
-                    </tr>
+  .location_items {
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.5s ease-in-out;
+    cursor: pointer;
+  }
 
-                    <tr>
-                        <td>
-                            <hr style="border: none; border-top: 1px solid #ccc; margin: 30px 0;">
-                        </td>
-                    </tr>
+  .location_items.active {
+    max-height: 600px;
 
-                    <tr>
-                        <td style="font-size: 24px; font-weight: 600; padding-bottom: 10px;">
-                            Korte motivatie
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 10px 0;">
-                            [field id="message"]
-                        </td>
-                    </tr>
+  }
+</style>
 
-                    <tr>
-                        <td>
-                            <hr style="border: none; border-top: 1px solid #ccc; margin: 30px 0;">
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td style="padding: 5px 0;"><strong>Inzenddatum:</span></strong> [field id="submission_date"]</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 0;"><strong>Tijd:</strong> [field id="submission_time"]</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 5px 0;"><strong>Vacaturepagina:</strong> [field id="page_url"]</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </td>
-    </tr>
-</tbody>
+<div id="style-selector-control" class="map-control" style="opacity:0;">
+  <select id="style-selector" class="selector-control" aria-label="Map style">
+    <option value="default">Default</option>
+    <option value="silver">Silver</option>
+    <option value="night">Night mode</option>
+    <option value="silver" selected="selected">Retro</option>
+    <option value="hiding">Hide features</option>
+  </select>
+</div>
+<div id="map" style="height: 800px; width: 100%;"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCIEGIOt2MO-wr_3PZTTsal94rbazcEtFc" defer></script>
+
+
+<script>
+  var stylesArray = [
+    {
+      "featureType": "landscape",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#f0f0f0"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "visibility": "on"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#f0f0f0"
+        }
+      ]
+    },
+    {
+      "featureType": "landscape.man_made",
+      "elementType": "geometry.stroke",
+      "stylers": [
+        {
+          "visibility": "off"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#f0f0f0"
+        }
+      ]
+    },
+    {
+      "featureType": "poi",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "visibility": "on"
+        }
+      ]
+    },
+    {
+      "featureType": "poi.park",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#f0f0f0"
+        }
+      ]
+    },
+    {
+      "featureType": "road",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "visibility": "on"
+        }
+      ]
+    },
+    {
+      "featureType": "road.highway",
+      "stylers": [
+        {
+          "color": "#ebebeb"
+        }
+      ]
+    },
+    {
+      "featureType": "road.local",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#ffffff"
+        }
+      ]
+    },
+    {
+      "featureType": "transit",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "color": "#ffffff"
+        },
+        {
+          "visibility": "simplified"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "geometry.fill",
+      "stylers": [
+        {
+          "color": "#d0dce7"
+        }
+      ]
+    },
+    {
+      "featureType": "water",
+      "elementType": "labels",
+      "stylers": [
+        {
+          "color": "#ffffff"
+        }
+      ]
+    }
+  ]
+
+  const styles = {
+    default: [],
+    silver: [
+      {
+        elementType: "geometry",
+        stylers: [{ color: "#242424" }],
+      },
+      {
+        elementType: "labels.icon",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        elementType: "labels.icon",
+        elementType: "labels.text.stroke",
+        stylers: [{ "visibility": "off" }],
+      },
+      {
+        elementType: "labels.text",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        elementType: "labels.text.stroke",
+        stylers: [{ color: "#f5f5f5" }],
+      },
+      {
+        featureType: "administrative.land_parcel",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [{ color: "#242424" }],
+      },
+      {
+        featureType: "poi",
+        elementType: "labels.text.stroke",
+        stylers: [{ "visibility": "off" }],
+      },
+      {
+        featureType: "poi",
+        elementType: "labels.text",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "geometry",
+        stylers: [{ color: "#B3B766" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.stroke",
+        stylers: [{ "visibility": "off" }],
+      },
+      {
+        featureType: "poi.park",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ color: "#000000" }],
+      },
+      {
+        featureType: "road.arterial",
+        elementType: "labels.text.stroke",
+        stylers: [{ "visibility": "off" }],
+      },
+      {
+        featureType: "road.arterial",
+        elementType: "labels.text",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "labels.text.stroke",
+        stylers: [{ "visibility": "off" }],
+      },
+      {
+        featureType: "road.highway",
+        elementType: "labels.text",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        featureType: "road.local",
+        elementType: "labels.text",
+        stylers: [{ color: "#ffffff" }],
+      },
+      {
+        featureType: "road.local",
+        elementType: "labels.text.stroke",
+        stylers: [{ "visibility": "off" }],
+      },
+      {
+        featureType: "transit.line",
+        elementType: "geometry",
+        stylers: [{ color: "#e5e5e5" }],
+      },
+      {
+        featureType: "transit.station",
+        elementType: "geometry",
+        stylers: [{ color: "#eeeeee" }],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ color: "#3D94BC" }],
+      },
+      {
+        featureType: "water",
+        elementType: "labels.text.fill",
+        stylers: [{ color: "#616161" }],
+      },
+    ],
+
+  };
+
+  //window.initMap = initMap;
+
+
+</script>
+<script>
+  let map;
+  let markers = []; // store active markers
+
+  function initMap() {
+    const crossings = { lat: 40.82703710227426, lng: -73.92508416311576};
+
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: crossings,
+      zoom: 12,
+      mapTypeControl: false,
+      styles: stylesArray // your default styles array
+    });
+
+    // 🔹 Style selector logic
+    const styleControl = document.getElementById("style-selector-control");
+    styleControl.style.display = "none"; // hide the original
+
+    // Clone and push into map controls
+    const styleControlClone = styleControl.cloneNode(true);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(styleControlClone);
+
+    // Use the cloned selector
+    const clonedSelector = styleControlClone.querySelector("#style-selector");
+
+    // Apply initial style
+    map.setOptions({ styles: styles[clonedSelector.value] });
+
+    // Update map style on change
+    clonedSelector.addEventListener("change", () => {
+      map.setOptions({ styles: styles[clonedSelector.value] });
+    });
+
+    // 🔹 Setup event handlers
+    setupCategoryClick();
+    setupLocationClick();
+  }
+
+  // Clear old markers
+  function clearMarkers() {
+    markers.forEach(marker => marker.setMap(null));
+    markers = [];
+  }
+
+  // defult marker 
+
+function defaultMarkar() {
+    const marker = new google.maps.Marker({
+            position: { lat: 40.820466852211574, lng: -73.92836973204615 },
+            icon: {
+              url: 'https://cdn.prod.website-files.com/68bd12b95797d3ea778d2b5e/68c6700181e827ca40ad99fe_683b28e6629a46401ada251f_inkwell-marker.png',
+              scaledSize: new google.maps.Size(150, 71)
+            },
+          map
+        });
+
+  markers.push(marker);
+}
+  // Category click
+  function setupCategoryClick() {
+    const locationCats = document.querySelectorAll('.location_cat_item');
+    locationCats.forEach(cat => {
+      cat.querySelector('.location_cat_name').addEventListener('click', () => {
+        const allLocationsItemsCont = document.querySelectorAll('.location_items');
+        allLocationsItemsCont.forEach(cont => cont.classList.remove('active'));
+        cat.querySelector('.location_items').classList.add('active');
+        clearMarkers();
+
+        const locationItems = cat.querySelectorAll('.location_name');
+
+        // Create ONE InfoWindow (reuse it for all markers)
+        const infoWindow = new google.maps.InfoWindow();
+
+        locationItems.forEach(item => {
+          const lat = parseFloat(item.getAttribute('lat'));
+          const lng = parseFloat(item.getAttribute('lng'));
+
+          if (!lat || !lng) return;
+
+          // Create marker
+          const marker = new google.maps.Marker({
+            position: { lat, lng },
+            icon: {
+              url: 'https://cdn.prod.website-files.com/68bd12b95797d3ea778d2b5e/68c6547b5c347e99a3a43ea1_google-maps-marker-inkwell.svg',
+              scaledSize: new google.maps.Size(150, 71)
+            },
+            map
+          });
+
+          // Store markers
+          markers.push(marker);
+
+          // Get content for InfoWindow (from your DOM element)
+          const content = `
+          <div style="font-size:14px; line-height:1.4; color: #000;">
+            <strong>${item.querySelector('.location_title').textContent}</strong><br>
+            <p>${item.querySelector('.location_content').textContent}</p><br>
+          </div>
+        `;
+
+          // Show InfoWindow when marker clicked
+          marker.addListener("click", () => {
+            infoWindow.setContent(content);
+            infoWindow.open({
+              anchor: marker,
+              map,
+              shouldFocus: false,
+            });
+          });
+        });
+
+        // Auto-center to fit category markers
+        if (markers.length > 0) {
+          const bounds = new google.maps.LatLngBounds();
+          markers.forEach(m => bounds.extend(m.getPosition()));
+          map.fitBounds(bounds);
+        }
+
+        defaultMarkar()
+      });
+    });
+  }
+
+
+  // Location click
+  function setupLocationClick() {
+    const locations = document.querySelectorAll('.location_name');
+    const infoWindow = new google.maps.InfoWindow(); // reuse a single InfoWindow
+
+    locations.forEach(item => {
+      item.addEventListener('click', () => {
+        clearMarkers();
+
+        const lat = parseFloat(item.getAttribute('lat'));
+        const lng = parseFloat(item.getAttribute('lng'));
+
+        if (!lat || !lng) return;
+
+        const marker = new google.maps.Marker({
+          position: { lat, lng },
+          icon: {
+            url: 'https://cdn.prod.website-files.com/68bd12b95797d3ea778d2b5e/68c6547b5c347e99a3a43ea1_google-maps-marker-inkwell.svg',
+            scaledSize: new google.maps.Size(150, 71)
+          },
+          map
+        });
+
+        markers.push(marker);
+
+        // InfoWindow content from the DOM
+        const content = `
+        <div style="font-size:14px; line-height:1.4; color:#000;">
+          <strong>${item.querySelector('.location_title').textContent}</strong><br>
+          <p>${item.querySelector('.location_content').textContent}</p><br>
+        </div>
+      `;
+
+        // Open InfoWindow immediately on click
+        infoWindow.setContent(content);
+        infoWindow.open({
+          anchor: marker,
+          map,
+          shouldFocus: false,
+        });
+
+        // Also re-open if marker clicked again
+        marker.addListener("click", () => {
+          infoWindow.setContent(content);
+          infoWindow.open({
+            anchor: marker,
+            map,
+            shouldFocus: false,
+          });
+        });
+
+        // Center on the clicked marker
+        map.setCenter({ lat, lng });
+        map.setZoom(15);
+        defaultMarkar()
+      });
+    });
+  }
+
+
+  document.addEventListener('DOMContentLoaded', initMap);
+</script>

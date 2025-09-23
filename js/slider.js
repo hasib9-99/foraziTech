@@ -1,152 +1,353 @@
+const barWraper = document.querySelector('.bar_wraper');
+const bar = document.querySelector('.bar');
+const yearTitle = document.querySelector('.year_title h2');
+const nextBtn = document.querySelector('.next_btn');
+const prevBtn = document.querySelector('.prev_btn');
+const playBtn = document.querySelector('.play_btn'); // added play button
+const innerBar = document.querySelector('.bar_inner');
+const PostImage = document.querySelector('.post_image img');
+const imdb = document.querySelector('.imdb a');
 
-const sliderContainer = document.querySelector('.slider_container');
-const sliders = sliderContainer.querySelectorAll('.custom_slider');
-const nextSlide = sliderContainer.querySelector('.next_arrow');
-const prevSlide = sliderContainer.querySelector('.prev_arrow');
+let postVideoWrapper = document.querySelector('.post_videos'); // safe early query
+let postVideo = postVideoWrapper ? postVideoWrapper.querySelector('iframe') : null;
 
-const sliderContent = sliderContainer.querySelector('.slider_contant');
-const headingElements = sliderContent.querySelector('.slider_heading h2');
-const titleElements = sliderContent.querySelector('.slider_title h2');
+document.addEventListener('DOMContentLoaded', () => {
+    // Ensure variables exist if iframe is added later
+    postVideoWrapper = document.querySelector('.post_videos');
+    postVideo = postVideoWrapper ? postVideoWrapper.querySelector('iframe') : null;
+});
 
-const dataArray = [
-    {
-        heading: 'Boho Bliss',
-        title: 'Welcome to Glasi, where artistry meets functionality in the world of interior.'
-    },
-    {
-        heading: 'Vrty pro tepelná čerpadla',
-        title: 'Efektivní vrty pro tepelná čerpadla zajišťující úsporu energie a spolehlivý provoz.'
-    },
-    {
-        heading: 'Boho Bliss',
-        title: 'Welcome to Glasi, where artistry meets functionality in the world of interior.'
+let currentIndexDot = 0;
+let currentYearIndex = 0;
+let currentSubIndex = null; // null = year view
+
+let autoplayInterval = null; // autoplay timer
+
+// Month lookup
+const monthMap = {
+    Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+    Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+};
+
+// Parse date helpers
+function parseDate(title) {
+    if (typeof title !== 'string') title = title.toString();
+    const parts = title.split(' ');
+    if (parts.length === 2) {
+        const month = monthMap[parts[0]] ?? 0;
+        const year = parseInt(parts[1]);
+        return new Date(year, month);
     }
-];
+    return new Date(parseInt(title), 0);
+}
 
-let newZIndex = 3;
-let currentIndex = 0;
+const startDate = parseDate(yearsData[0].projectName);
+const monthDiffs = yearsData.map(item => {
+    const date = parseDate(item.projectName);
+    return (date.getFullYear() - startDate.getFullYear()) * 12 + (date.getMonth() - startDate.getMonth());
+});
+const maxMonths = Math.max(...monthDiffs);
 
+// Build timeline dots
+yearsData.forEach((year, i) => {
+    const percent = (monthDiffs[i] / maxMonths) * 100;
+
+    // description (cleaning HTML)
+    const cleanDescription = year.projectDescription
+        ? year.projectDescription.replace(/<[^>]*>/g, '').trim()
+        : '';
+
+
+    // project list
+    const projectItems = (year.subPosts && year.subPosts.length > 0)
+        ? year.subPosts.map((item) => `<li class="subpost_title"><p>${item.title}</p></li>`).join('')
+        : '';
+
+    // get project or projects
+    const projectQuantity = year.subPosts ? year.subPosts.length : 0;
+    console.log(projectQuantity);
+
+
+    const projectBlock = projectItems
+        ? `<li class="year_project">
+                <p>Project${projectQuantity !== 1 ? 's' : ''}</p>
+                <ul>${projectItems}</ul>
+            </li>`
+        : '';
+
+
+    const descriptionBlock = cleanDescription && projectItems ? `<li class="year_description"> <p>Description</p> <span>${cleanDescription}</span> </li>`
+        : cleanDescription ? `<span>${cleanDescription}</span>`
+            : '';
+
+    // final HTML
+    const dotHTML = `
+    <div class="years" style="position: absolute; left:${percent}%; width: 16px; height: 16px;">
+        <div class="year_dot"></div>
+        <h2 class="year_text">${year.projectName || ''}</h2>
+        <div class="post-content">
+            <ul>
+                ${descriptionBlock}
+                ${projectBlock}
+            </ul>
+        </div>
+    </div>
+    `;
+
+    barWraper.insertAdjacentHTML('beforeend', dotHTML);
+});
+
+function innerbarUpdate(i) {
+    const barPresent = (monthDiffs[i] / maxMonths) * 100;
+    innerBar.style.width = `${barPresent}%`;
+}
+
+const years = document.querySelectorAll('.years');
+const months = document.querySelectorAll('.monthly_post');
+
+function extractYouTubeEmbedSrc(perPost) {
+    let srcMatch = perPost.video_url.match(/src="([^"]*)"/);
+    return srcMatch ? srcMatch[1] : '';
+}
+
+function yearEvent(yearIndex) {
+    years.forEach(item => item.classList.remove('active'));
+    if (window.innerWidth < 767) {
+        years[yearIndex].classList.add('active');
+    }
+}
+
+function resetData() {
+    yearTitle.innerHTML = '';
+    if (postVideoWrapper) postVideoWrapper.style.display = 'none';
+    if (postVideo) postVideo.src = '';
+    if (PostImage) {
+        PostImage.src = '';
+        PostImage.style.display = 'none';
+    }
+}
+
+// Helpers
+function showYearView(yIndex) {
+    resetData();
+    months.forEach(m => m.classList.remove('active'));
+    yearEvent(yIndex);
+    innerbarUpdate(yIndex);
+}
+
+function showSubpost(yIndex, sIndex) {
+    const yearData = yearsData[yIndex];
+    const sub = (yearData && yearData.subPosts) ? yearData.subPosts[sIndex] : null;
+    if (!sub) return;
+
+    months.forEach(m => m.classList.remove('active'));
+    const posts = years[yIndex].querySelectorAll('.subpost_title');
+    if (posts[sIndex]) posts[sIndex].classList.add('active');
+
+    yearTitle.innerHTML = `<span>${sub.title}</span>` || '';
+
+    const videoSrc = extractYouTubeEmbedSrc(sub);
+    if (videoSrc && postVideo) {
+        postVideo.src = videoSrc;
+        setTimeout(() => {
+            postVideoWrapper.style.display = 'block';
+        }, 200);
+        PostImage.style.display = 'none';
+    } else {
+        PostImage.src = sub.poster_image;
+        PostImage.setAttribute('srcset', sub.poster_image);
+        setTimeout(() => {
+            PostImage.style.display = 'block';
+        }, 200);
+        if (postVideoWrapper) postVideoWrapper.style.display = 'none';
+    }
+
+
+    yearEvent(yIndex);
+    innerbarUpdate(yIndex);
+}
+
+// Navigation
 function next() {
-    if (currentIndex >= sliders.length) {
-        currentIndex = 0;
+    const totalYears = yearsData.length;
+    if (!totalYears) return;
+
+    if (currentSubIndex === null) {
+        const yearData = yearsData[currentYearIndex];
+        const hasSubs = yearData && Array.isArray(yearData.subPosts) && yearData.subPosts.length > 0;
+
+        if (hasSubs) {
+            currentSubIndex = 0;
+            showSubpost(currentYearIndex, currentSubIndex);
+        } else {
+            currentYearIndex = (currentYearIndex + 1) % totalYears;
+            currentSubIndex = null;
+            showYearView(currentYearIndex);
+        }
+        return;
     }
 
-    // Apply transition and zIndex to the current slider in the next animation frame
-    requestAnimationFrame(() => {
-        sliders[currentIndex].style.transition = 'all 1s ease-in-out';
-        sliders[currentIndex].style.zIndex = newZIndex;
-        sliders[currentIndex].classList.add('active');
-    });
+    currentSubIndex += 1;
+    const yearData = yearsData[currentYearIndex];
+    if (yearData.subPosts && currentSubIndex < yearData.subPosts.length) {
+        showSubpost(currentYearIndex, currentSubIndex);
+        return;
+    }
 
-    // Update data for the current slide
-    setData(dataArray, currentIndex, contentAnimated);
+    if (currentYearIndex === totalYears - 1) {
+        stopAutoplay();
+        return;
+    }
 
-    // Increment zIndex and currentIndex
-    newZIndex++;
-    currentIndex++;
-
-    // Wait for the transition to complete, then reset the previous slides
-    setTimeout(resetThisSlides, 1000);
+    currentYearIndex++;
+    currentSubIndex = null;
+    showYearView(currentYearIndex);
 }
-
-
-function resetThisSlides() {
-    // Calculate the previous index
-    const prevIndex = (currentIndex === 0) ? sliders.length - 1 : currentIndex - 1;
-
-    // Reset the previous slider
-    sliders[prevIndex].style.transition = 'none';
-
-    // Set the zIndex lower than the active slide but higher than the rest
-    sliders[prevIndex].style.zIndex = newZIndex - 2;
-
-    // Remove the active class from the previous slider
-    sliders[prevIndex].classList.remove('active');
-}
-
-
 
 function prev() {
+    const totalYears = yearsData.length;
+    if (!totalYears) return;
 
-}
-
-
-
-function prevReset(i) {
-
-}
-
-function setData(data, i, callback) {
-    if (callback) {
-        if (i != 3) {
-            callback(sliderContent)
-            headingElements.textContent = data[i].heading;
-            titleElements.textContent = data[i].title;
+    if (currentSubIndex !== null) {
+        currentSubIndex -= 1;
+        if (currentSubIndex >= 0) {
+            showSubpost(currentYearIndex, currentSubIndex);
         } else {
-            callback(sliderContent)
-            headingElements.textContent = data[0].heading;
-            titleElements.textContent = data[0].title;
+            currentSubIndex = null;
+            showYearView(currentYearIndex);
         }
+        return;
+    }
+
+    currentYearIndex -= 1;
+    if (currentYearIndex < 0) currentYearIndex = totalYears - 1;
+
+    const prevYear = yearsData[currentYearIndex];
+    const hasSubs = prevYear && Array.isArray(prevYear.subPosts) && prevYear.subPosts.length > 0;
+
+    if (hasSubs) {
+        currentSubIndex = prevYear.subPosts.length - 1;
+        showSubpost(currentYearIndex, currentSubIndex);
+    } else {
+        currentSubIndex = null;
+        showYearView(currentYearIndex);
     }
 }
 
-function contentAnimated(content) {
-    content.style = 'transition: all 1s ease-in-out; transform: translate3d(0px, 24px, 0px) scale3d(0.8, 0.8, 1); transform-style: preserve-3d; opacity: 0;'
-    setTimeout(() => {
-        content.style = 'transition: all 1s ease-in-out; transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1); transform-style: preserve-3d; opacity: 1;'
-    }, 800);
+// Autoplay
+function startAutoplay() {
+    playBtn.classList.add('active');
+    stopAutoplay();
+    autoplayInterval = setInterval(() => {
+        next();
+    }, 5000);
 }
 
-nextSlide.addEventListener('click', next);
-prevSlide.addEventListener('click', prev);
+function stopAutoplay() {
+    if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        playBtn.classList.remove('active');
+        autoplayInterval = null;
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-function windLoadFun() {
-    function loadMoreFung(mainConCl, incHt) {
-        const getSliderMainCon = mainConCl;
-        const getLoadContainer = getSliderMainCon.querySelector('.load-more-con');
-        const getLoadMoreBtn = getSliderMainCon.querySelector('.load-more');
-        const getLoadBtnMoreCon = getSliderMainCon.querySelector('.load-more-btn-con');
-        getLoadContainer.style.maxHeight = "unset";
-
-        let conMaxHeight = getLoadContainer.clientHeight;
-        let currentMaxHeight = 0;
-        let incressAbleHegit = incHt;
-
-        function maxHeightSet() {
-            currentMaxHeight += incressAbleHegit;
-            getLoadContainer.style.maxHeight = `${currentMaxHeight}px`;
+// Event Listeners
+years.forEach((yearDot, i) => {
+    yearDot.querySelector('.year_text').addEventListener('click', () => {
+        stopAutoplay();
+        imdb.style.display = 'none';
+        months.forEach(m => m.classList.remove('active'));
+        if (window.innerWidth < 767) {
+            years.forEach(item => item.classList.remove('active'));
+            years[i].classList.add('active');
         }
-        maxHeightSet()
-        getLoadMoreBtn.addEventListener('click', function () {
-            maxHeightSet();
-            if (currentMaxHeight >= conMaxHeight) {
-                getLoadBtnMoreCon.style.display = "none";
+        innerbarUpdate(i);
+        resetData();
+        currentYearIndex = i;
+        currentSubIndex = null;
+    });
+});
+
+years.forEach((yearElement, yearIndex) => {
+    const monthlyPosts = yearElement.querySelectorAll('.subpost_title');
+    monthlyPosts.forEach((month, monthIndex) => {
+        month.addEventListener('click', () => {
+            stopAutoplay();
+            resetData();
+            months.forEach(m => m.classList.remove('active'));
+            month.classList.add('active');
+
+            const currentYear = yearsData[yearIndex];
+            if (currentYear.subPosts && currentYear.subPosts[monthIndex]) {
+                yearTitle.innerHTML = `<span>${currentYear.subPosts[monthIndex].title}</span>`;
+                const videoSrc = extractYouTubeEmbedSrc(currentYear.subPosts[monthIndex]);
+                if (videoSrc === '' && currentYear.subPosts[monthIndex].poster_image === '') {
+                    PostImage.style.display = 'none';
+                    postVideoWrapper.style.display = 'none';
+                } else if (videoSrc && postVideo) {
+                    postVideo.src = videoSrc;
+                    setTimeout(() => {
+                        postVideoWrapper.style.display = 'block';
+
+                    }, 200);
+                    PostImage.style.display = 'none';
+                } else {
+                    PostImage.src = currentYear.subPosts[monthIndex].poster_image;
+                    PostImage.setAttribute('srcset', currentYear.subPosts[monthIndex].poster_image);
+                    setTimeout(() => {
+                        PostImage.style.display = 'block';
+                    }, 200);
+                    if (postVideoWrapper) postVideoWrapper.style.display = 'none';
+                }
+                if (currentYear.subPosts[monthIndex].imdb_link) {
+                    imdb.href = currentYear.subPosts[monthIndex].imdb_link;
+                    imdb.style.display = 'block';
+                } else {
+                    imdb.style.display = 'none';
+                    imdb.href = '';
+                }
             }
+
+            innerbarUpdate(yearIndex);
+            yearEvent(yearIndex);
+            currentYearIndex = yearIndex;
+            currentSubIndex = monthIndex;
         });
-    }
-
-    const allBigCon = document.querySelectorAll('.slider-main-con-001');
-    for (let eachBigCon of allBigCon) {
-        loadMoreFung(eachBigCon, 500);
-    }
-    const allBigCon2 = document.querySelectorAll('.slider-main-con-002');
-    for (let eachBigCon of allBigCon2) {
-        loadMoreFung(eachBigCon, 250);
-    }
-}
+    });
+});
 
 
-window.addEventListener('load', windLoadFun);
+
+// Default start
+// if (years[0].querySelector('.subpost_title')) {
+//     years[0].querySelector('.subpost_title').click();
+// } else {
+//     showYearView(0);
+// }
+
+// Button events
+nextBtn.addEventListener('click', () => { stopAutoplay(); next(); });
+prevBtn.addEventListener('click', () => { stopAutoplay(); prev(); });
+playBtn.addEventListener('click', () => { startAutoplay(); });
+
+
+
+
+const lists = document.querySelectorAll('.year_description, .year_project');
+
+
+lists.forEach((list) => {
+    list.addEventListener('mouseover', () => {
+        list.classList.add('hover');
+    });
+    list.addEventListener('mouseout', () => {
+        list.classList.remove('hover');
+    });
+});
+
+
+document.addEventListener('click', (event) => {
+    if (!event.target.closest('.post-content') && !event.target.closest('.years')) {
+        document.querySelectorAll('.years').forEach(item => item.classList.remove('active'));
+    }
+});

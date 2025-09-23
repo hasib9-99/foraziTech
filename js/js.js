@@ -13297,7 +13297,7 @@ observer.observe(targetBefore, {
     attributes: true,
     attributeFilter: ['style']
 });
-    
+
 function callbackFunction() {
     let match = targetBefore.style.clip.match(/rect\([^,]+,\s*([0-9.]+)px/);
     let rightValue = parseFloat(match[1]);
@@ -13389,3 +13389,70 @@ function xmlToJson(xml) {
 
     return obj;
 }
+
+
+
+    //
+    const customPopup = document.querySelector('.custom_popup');
+    const popupMenu = customPopup.querySelector('.popup_menu');
+    const subMenuItems = popupMenu.querySelectorAll(
+        '.elementor-nav-menu--main .elementor-nav-menu .sub-menu.elementor-nav-menu--dropdown'
+    );
+
+    // Build custom submenus
+    subMenuItems.forEach((subMenu) => {
+        const subMenuDiv = document.createElement('div');
+        subMenuDiv.classList.add('sub_menu_con');
+
+        // Back button
+        const backBtn = document.createElement('h3');
+        backBtn.classList.add('back_btn');
+        backBtn.textContent = 'Back';
+        subMenuDiv.appendChild(backBtn);
+
+        // Move submenu items into custom container
+        subMenu.querySelectorAll('li.menu-item').forEach((item) => {
+            const itemHeading = document.createElement('h3');
+            itemHeading.classList.add('menu_item_heading');
+            itemHeading.innerHTML = item.innerHTML; // keep inner link structure
+            subMenuDiv.appendChild(itemHeading);
+            item.remove(); // remove original
+        });
+
+        customPopup.appendChild(subMenuDiv);
+    });
+
+    // Event bindings
+    const eventItems = popupMenu.querySelectorAll('.elementor-nav-menu--main .menu-item-has-children');
+    const subMenus = customPopup.querySelectorAll('.sub_menu_con');
+    const backBtns = customPopup.querySelectorAll('.back_btn');
+
+    eventItems.forEach((item, index) => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault(); // stop link navigation
+            subMenus.forEach((sm) => sm.classList.remove('active'));
+            if (subMenus[index]) {
+                subMenus[index].classList.add('active');
+            }
+        });
+    });
+
+    backBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            subMenus.forEach((sm) => sm.classList.remove('active'));
+        });
+    });
+
+    
+
+    const menuIcon = document.querySelector('.menu_icon');
+    menuIcon.addEventListener('click', () => {
+        customPopup.classList.toggle('active');
+        menuIcon.classList.toggle('active');
+        subMenus.forEach((sm) => sm.classList.remove('active'));
+        if (customPopup.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
+        }
+    });
