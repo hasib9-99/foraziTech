@@ -13473,3 +13473,96 @@ accordionsContainer.forEach(container => {
     });
 });
 
+
+
+// hero section feature
+const sliderOneData = [
+    { id: 1, img: '/wp-content/uploads/2025/09/remote-camp-modular-buildings-exterior-2-1.jpg', content: 'The most flexible camp<br> management system<br> on the market' },
+    { id: 2, img: '/wp-content/uploads/2025/09/aerial-large-remote-lodge-civeo-oil-sands.jpg', content: 'Maximize room<br> utilization before<br> you buy, build or rent' },
+    { id: 3, img: '/wp-content/uploads/2025/09/camp-room-bed-side-table-chair-1.jpg', content: 'Easy-to-use tools<br> to book and assign<br> rooms at your camp' },
+    { id: 4, img: '/wp-content/uploads/2025/09/camp-attendant-with-towels-in-hallway-1.jpg', content: 'Technology to help<br> your staff turn rooms<br> faster than ever' },
+    { id: 5, img: '/wp-content/uploads/2025/09/man-walking-down-row-between-camp-buildings.png', content: 'Designed to manage<br> camps large or small,<br> in any location' }
+];
+
+const sliderTwoData = [
+    { id: 1, img: '/wp-content/uploads/2025/09/fifo-workers-boarding-charter-plane-tarmac-1-1.jpg', content: 'A single system to book and manage all your FIFO transport' },
+    { id: 2, img: '/wp-content/uploads/2025/09/charter-bus-fifo-workers-passengers-1-1.jpg', content: 'Book and manage<br> charter flights,<br> buses and more' },
+    { id: 3, img: '/wp-content/uploads/2025/09/man-camp-plane-parked-fbo-1-1.jpg', content: 'Manage travel and rooms for your workers in one platform' },
+    { id: 4, img: '/wp-content/uploads/2025/09/aisle-commercial-full-plane-1-scaled.jpg', content: 'Book rich GDS content, all within policy' }
+];
+
+const sliders = document.querySelectorAll('._slide');
+const sliderWrap = document.querySelector('.slide_wraper');
+const sliderOne = document.querySelector('._slide._one');
+const sliderTwo = document.querySelector('._slide._two');
+const SliderBtns = document.querySelectorAll('._btn');
+const sliderCount = document.querySelector('.slider_count');
+const sliderCountBullets = sliderCount.querySelectorAll('._bulet');
+const tabBtnsCon = document.querySelector('.tab_btns');
+const tabBtns = document.querySelectorAll('.tab_btn');
+const tabCons = document.querySelector('._tab_con');
+
+
+// reusable slider logic
+function startSlider(sliderEl, data) {
+    const contentBox = sliderEl.querySelector('._content');
+    const bullets = sliderEl.querySelectorAll('.bullet');
+
+    let index = 0;
+    let interval;
+
+    function showSlide(i) {
+        const item = data[i];
+        bullets.forEach(b => b.classList.remove('active'));
+        if (bullets[i]) bullets[i].classList.add('active');
+
+        sliderEl.style.backgroundImage = `url(${item.img})`;
+        setTimeout(() => {
+            contentBox.classList.add('active');
+        }, 1000);
+        contentBox.querySelector('h2').innerHTML = item.content;
+    }
+
+    function startAuto() {
+        interval = setInterval(() => {
+            index = (index + 1) % data.length;
+            contentBox.classList.remove('active');
+            setTimeout(() => showSlide(index), 100);
+        }, 4000);
+    }
+
+    // bullet click → manual control
+    bullets.forEach((b, i) => {
+        b.addEventListener('click', () => {
+            clearInterval(interval); // stop auto when clicked
+            index = i;
+            showSlide(index);
+            startAuto(); // restart auto
+        });
+    });
+    // init
+    showSlide(index);
+    startAuto();
+}
+function updateTarget(target) {
+    [sliderWrap, sliderCount, tabBtnsCon, tabCons].forEach(el => el.classList.remove('_left', '_right'));
+    [sliderWrap, sliderCount, tabBtnsCon, tabCons].forEach(el => el.classList.add(target));
+}
+SliderBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        updateTarget(btn.getAttribute('act'));
+    });
+});
+sliderCountBullets.forEach((bulet, i) => {
+    bulet.addEventListener('click', () => {
+        updateTarget(bulet.getAttribute('act'));
+    });
+});
+
+tabBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        updateTarget(btn.getAttribute('act'));
+    });
+});
+startSlider(sliderOne, sliderOneData);
+startSlider(sliderTwo, sliderTwoData);
