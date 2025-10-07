@@ -13650,3 +13650,50 @@ popupBtn.addEventListener('click', () => {
         document.body.style.overflow = ''
     }
 })
+
+// slider progres bar;
+const slider = document.querySelector('.custom_slider');
+const slides = slider.querySelectorAll('.swiper-slide');
+const current = document.querySelector('.current-num span');
+const total = document.querySelector('.total-num span');
+const slideLeftBtn = slider.querySelector('.slide_left')
+const slideRightBtn = slider.querySelector('.slide_right')
+
+function updateSlideNumbers() {
+    const activeSlide = slider.querySelector('.swiper-slide-active');
+    if (activeSlide) {
+        const ariaLabel = activeSlide.getAttribute('aria-label');
+        if (ariaLabel) {
+            const parts = ariaLabel.split('/').map(part => part.trim());
+            const currentNum = parts[0].padStart(2, '0');
+            const totalNum = parts[1].padStart(2, '0');
+            current.textContent = currentNum;
+            total.textContent = totalNum;
+        }
+    }
+}
+
+const SliderObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const target = mutation.target;
+            if (target.classList.contains('swiper-slide-active')) {
+                updateSlideNumbers(); 
+            }
+        }
+    });
+});
+
+slides.forEach((item) => {
+    SliderObserver.observe(item, { attributes: true });
+});
+
+slideLeftBtn.addEventListener('click', () => {
+    slider.querySelector('.elementor-swiper-button-prev').click();
+});
+
+slideRightBtn.addEventListener('click', () => {
+    slider.querySelector('.elementor-swiper-button-next').click();
+});
+
+updateSlideNumbers();
