@@ -1,230 +1,105 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Infinite Left Slider</title>
-<style>
-  
-  :root{
-    --gap: 16px;
-    --speed-px-per-sec: 100; /* change to go faster/slower */
-  }
-
-  body{
-    font-family: system-ui, sans-serif;
-    display: grid;
-    place-items: center;
-    min-height: 100vh;
-    margin: 0;
-    background: #0f172a;
-    color: #e6eef8;
-  }
-
-  .slider_wrap{
-    width: min(1100px, 96%);
-    border-radius: 10px;
-    overflow: hidden;
-    background: linear-gradient(180deg,#08102a 0%, #0b1530 100%);
-    padding: 12px;
-    box-shadow: 0 8px 30px rgba(5,10,20,0.6);
-  }
-
-  /* viewport that will be scrolled via scrollLeft */
-  .slider{
-    overflow: hidden;           /* hide overflow */
-    white-space: nowrap;        /* keep slides inline */
-    -webkit-overflow-scrolling: touch;
-    cursor: grab;
-  }
-
-  /* the track holds inline-block slides */
-  .track{
-    display: inline-block;
-    vertical-align: top;
-  }
-
-  .slide{
-    display: inline-block;     /* important: inline-block keeps them inline */
-    width: 260px;              /* slide width (change as needed) */
-    height: 160px;
-    margin-right: var(--gap);
-    border-radius: 8px;
-    background: linear-gradient(135deg,#334155,#0f172a);
-    color: #fff;
-    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-    text-align: center;
-    line-height: 160px;
-    font-weight: 600;
-    user-select: none;
-  }
-
-  .slide img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 8px;
-    vertical-align: middle;
-  }
-
-  .controls{
-    margin-top: 10px;
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-  }
-
-  .controls button{
-    background: #152238;
-    border: 1px solid rgba(255,255,255,0.06);
-    color: #cfe3ff;
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  .hint{font-size:13px; opacity:.8; text-align:center; margin-top:8px}
-</style>
-</head>
-<body>
-
-<div class="slider_wrap">
-  <div class="slider" id="slider" aria-label="Infinite left slider">
-    <div class="track" id="track">
-      <!-- slides: you can replace content with images or any HTML -->
-      <div class="slide">Slide 1</div>
-      <div class="slide">Slide 2</div>
-      <div class="slide">Slide 3</div>
-      <div class="slide">Slide 4</div>
-      <div class="slide">Slide 5</div>
-      <div class="slide">Slide 6</div>
-    </div>
-  </div>
-
-  <!-- <div class="controls">
-    <button id="faster">Faster</button>
-    <button id="slower">Slower</button>
-    <button id="toggle">Pause</button>
-  </div> -->
-
-  <div class="hint">Hover to pause. Drag to scroll manually. Uses scrollLeft (no translateX).</div>
-</div>
-
-<script>
-/*
-  Infinite left slider using scrollLeft.
-  - Duplicates track content so we can loop seamlessly
-  - Uses requestAnimationFrame for smooth motion
-  - No translateX, no flex; slides are inline-block
-*/
-
-(() => {
-  const slider = document.querySelector('.custom_slider');
-  const track  = document.querySelector('.track');
-
-  // duplicate slides for seamless loop
-  function duplicateContent() {
-    const html = track.innerHTML;
-    track.insertAdjacentHTML('beforeend', html);
-  }
-
-  duplicateContent();
-
-  // After duplication, original width is half of track.scrollWidth
-  let originalWidth = null;
-  function refreshWidths(){
-    // small delay to ensure layout settled
-    requestAnimationFrame(() => {
-      originalWidth = track.scrollWidth / 2;
-    });
-  }
-  refreshWidths();
-  // speed in pixels per second (change root var or JS var)
-  let speed = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--speed-px-per-sec')) || 100;
-
-  let rafId = null;
-  let lastTS = null;
-  let running = true;
-
-  function step(ts){
-    if (!lastTS) lastTS = ts;
-    const dt = ts - lastTS; // ms
-    lastTS = ts;
-
-    if (running) {
-      // advance scrollLeft to the left (increasing scrollLeft moves content left)
-      slider.scrollLeft += (speed * dt / 1000); // px
-
-      // when we've scrolled past the width of original content, loop back
-      if (slider.scrollLeft >= originalWidth) {
-        // subtract originalWidth to seamlessly wrap
-        slider.scrollLeft -= originalWidth;
-      }
+  <meta charset="UTF-8">
+  <title>Wedding Slider</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #fff;
+      overflow-x: hidden;
     }
 
-    rafId = requestAnimationFrame(step);
-  }
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      margin: 50px auto;
+      overflow: hidden;
+    }
 
-  // start animation
-  rafId = requestAnimationFrame(step);
+    .slider-track {
+      display: flex;
+      transition: transform 0.6s ease-in-out;
+    }
 
-  // Pause on hover
-  slider.addEventListener('mouseenter', () => running = true);
-  slider.addEventListener('mouseleave', () => { running = true; lastTS = null; });
+    .slide {
+      min-width: 100%;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f9f9f9;
+      padding: 20px;
+    }
 
-  // simple drag-to-scroll
-  let isDown = false;
-  let startX, startScroll;
-  slider.addEventListener('mousedown', (e) => {
-    isDown = true;
-    slider.classList.add('dragging');
-    startX = e.pageX;
-    startScroll = slider.scrollLeft;
-    running = false; // pause autoplay while dragging
-    e.preventDefault();
-  });
-  window.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    const dx = e.pageX - startX;
-    slider.scrollLeft = startScroll - dx;
-  });
-  window.addEventListener('mouseup', () => {
-    if (!isDown) return;
-    isDown = false;
-    running = true;
-  });
+    .slide img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
 
-  // Make sure widths recompute on resize (important for responsiveness)
-  let resizeTimer = null;
-  window.addEventListener('resize', () => {
-    if (resizeTimer) clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      refreshWidths();
-    }, 120);
-  });
+    /* Navigation */
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 18px;
+    }
 
-  // controls
-  // document.getElementById('faster').addEventListener('click', () => { speed = Math.min(1000, speed + 30); });
-  // document.getElementById('slower').addEventListener('click', () => { speed = Math.max(10, speed - 30); });
-  // const toggleBtn = document.getElementById('toggle');
-  // toggleBtn.addEventListener('click', () => {
-  //   running = !running;
-  //   toggleBtn.textContent = running ? 'Pause' : 'Play';
-  //   if (running) lastTS = null; // reset delta to avoid jump
-  // });
+    .prev {
+      left: 10px;
+    }
 
-  // // Accessibility: allow keyboard to pause
-  // slider.tabIndex = 0;
-  // slider.addEventListener('focus', () => running = false);
-  // slider.addEventListener('blur', () => running = true);
+    .next {
+      right: 10px;
+    }
 
-  // // ensure initial scrollLeft aligned
-  slider.scrollLeft = 0;
+    .nav-btn:hover {
+      background: rgba(0,0,0,0.7);
+    }
+  </style>
+</head>
+<body>
+  <div class="slider-container">
+    <div class="slider-track">
+      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+1" alt="Slide 1"></div>
+      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+2" alt="Slide 2"></div>
+      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+3" alt="Slide 3"></div>
+      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+4" alt="Slide 4"></div>
+    </div>
+    <button class="nav-btn prev">&#10094;</button>
+    <button class="nav-btn next">&#10095;</button>
+  </div>
 
-})();
-</script>
+  <script>
+    const track = document.querySelector('.slider-track');
+    const slides = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let index = 0;
 
+    function updateSlide() {
+      track.style.transform = `translateX(-${index * 100}%)`;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      index = (index + 1) % slides.length;
+      updateSlide();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      index = (index - 1 + slides.length) % slides.length;
+      updateSlide();
+    });
+  </script>
 </body>
 </html>
-
-

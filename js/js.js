@@ -13566,3 +13566,87 @@ tabBtns.forEach((btn, i) => {
 });
 startSlider(sliderOne, sliderOneData);
 startSlider(sliderTwo, sliderTwoData);
+
+
+
+// 
+const cards = document.querySelectorAll('._card');
+
+cards.forEach((card,) => {
+    const texts = card.querySelectorAll('._text');
+    card.addEventListener('mouseenter', () => {
+        texts.forEach((text, i) => {
+            setTimeout(() => {
+                text.classList.add('active')
+            }, i * 100);
+        })
+    })
+    card.addEventListener('mouseleave', () => {
+        texts.forEach((text) => {
+            text.classList.remove('active')
+        })
+    })
+})
+
+
+// custom slider
+const customSlider = document.querySelector('.scale_slider');
+const tsSlides = customSlider.querySelectorAll('.swiper-slide');
+
+const content = document.createElement('div');
+content.classList.add('slider_content');
+customSlider.appendChild(content);
+
+const sliderObserver = new MutationObserver((mutationsList) => {
+    mutationsList.forEach(mutation => {
+        if (mutation.type === "attributes" && mutation.attributeName === "class") {
+            const target = mutation.target;
+
+            if (target.classList.contains("swiper-slide-next")) {
+                // console.log("Slide became active:", target);
+
+                // Find elementor widget inside this slide
+                const widget = target.querySelector('.elementor-widget-image');
+                if (widget) {
+                    const shortTitle = widget.getAttribute('short-title') || '';
+                    const title = widget.getAttribute('title') || '';
+                    const textContent = widget.getAttribute('content') || '';
+                    const url = widget.getAttribute('url') || '';
+
+                    // Inject into content div
+                    content.innerHTML = `
+            <h4>${shortTitle}</h4>
+            <h2>${title}</h2>
+            <p>${textContent}</p>
+            ${url ? `<a href="${url}" target="_blank">Learn More</a>` : ''}`
+                }
+            } else {
+                console.log("Slide is no longer active:", target);
+            }
+        }
+    });
+});
+
+tsSlides.forEach((item) => {
+    sliderObserver.observe(item, {
+        attributes: true,
+        attributeFilter: ["class"]
+    });
+});
+
+
+
+
+// popup
+const popupBtn = document.querySelector('.popup_btn');
+const popupContent = document.querySelector('._popup');
+
+popupBtn.addEventListener('click', () => {
+    popupBtn.classList.toggle('active');
+    popupContent.classList.toggle('active')
+    if (popupBtn.classList.contains('active') && popupContent.classList.contains('active')) {
+        document.body.style.overflow = 'hiden'
+    } else{
+        document.body.style.overflow = ''
+    }
+})
