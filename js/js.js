@@ -13646,31 +13646,36 @@ popupBtn.addEventListener('click', () => {
     popupContent.classList.toggle('active')
     if (popupBtn.classList.contains('active') && popupContent.classList.contains('active')) {
         document.body.style.overflow = 'hiden'
-    } else{
+    } else {
         document.body.style.overflow = ''
     }
 })
 
-// slider progres bar;
+
 const slider = document.querySelector('.custom_slider');
 const slides = slider.querySelectorAll('.swiper-slide');
 const current = document.querySelector('.current-num span');
 const total = document.querySelector('.total-num span');
-const slideLeftBtn = slider.querySelector('.slide_left')
-const slideRightBtn = slider.querySelector('.slide_right')
+const slideLeftBtn = document.querySelector('.slide_left');
+const slideRightBtn = document.querySelector('.slide_right');
 
 function updateSlideNumbers() {
     const activeSlide = slider.querySelector('.swiper-slide-active');
-    if (activeSlide) {
-        const ariaLabel = activeSlide.getAttribute('aria-label');
-        if (ariaLabel) {
-            const parts = ariaLabel.split('/').map(part => part.trim());
-            const currentNum = parts[0].padStart(2, '0');
-            const totalNum = parts[1].padStart(2, '0');
-            current.textContent = currentNum;
-            total.textContent = totalNum;
-        }
-    }
+    if (!activeSlide) return;
+
+    const ariaLabel = activeSlide.getAttribute('aria-label');
+    if (!ariaLabel) return;
+
+    const parts = ariaLabel.split('/').map(part => part.trim());
+    const currentNum = parts[0].padStart(2, '0');
+    const totalNum = parts[1].padStart(2, '0');
+
+    current.textContent = currentNum;
+    total.textContent = totalNum;
+}
+
+function delayedUpdate() {
+    setTimeout(updateSlideNumbers, 150);
 }
 
 const SliderObserver = new MutationObserver((mutations) => {
@@ -13678,7 +13683,7 @@ const SliderObserver = new MutationObserver((mutations) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
             const target = mutation.target;
             if (target.classList.contains('swiper-slide-active')) {
-                updateSlideNumbers(); 
+                delayedUpdate();
             }
         }
     });
@@ -13687,13 +13692,44 @@ const SliderObserver = new MutationObserver((mutations) => {
 slides.forEach((item) => {
     SliderObserver.observe(item, { attributes: true });
 });
-
 slideLeftBtn.addEventListener('click', () => {
-    slider.querySelector('.elementor-swiper-button-prev').click();
+    const prevBtn = slider.querySelector('.elementor-swiper-button-prev');
+    if (prevBtn) prevBtn.click();
 });
 
 slideRightBtn.addEventListener('click', () => {
-    slider.querySelector('.elementor-swiper-button-next').click();
+    const nextBtn = slider.querySelector('.elementor-swiper-button-next');
+    if (nextBtn) nextBtn.click();
 });
 
 updateSlideNumbers();
+
+
+
+window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const lines = document.querySelectorAll('.line');
+
+    lines.forEach((line, i) => {
+        const speed = parseFloat(line.dataset.speed);
+        const moveY = scrollY * (speed / 100); // speed controls movement ratio
+
+        line.style.transform = `translateY(${moveY}px)`;
+
+        if (moveY > 1500) {
+            line.style.opacity = 0;
+        } else {
+            line.style.opacity = 1;
+        }
+        if (i === 0 && moveY > 550) {
+            line.style.opacity = 0;
+        } else {
+            line.style.opacity = 1;
+        }
+        if (i === 2 && moveY > 1350) {
+            line.style.opacity = 0;
+        } else {
+            line.style.opacity = 1;
+        }
+    });
+});
