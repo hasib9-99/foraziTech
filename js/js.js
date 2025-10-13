@@ -13733,3 +13733,53 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+
+
+
+const slider = document.querySelector('.custom_slider');
+const slides = slider.querySelectorAll('.swiper-slide');
+const titleContent = document.querySelector('.slider_title h2')
+const descriptionContent = document.querySelector('.slider_description h2')
+const slideLeftBtn = document.querySelector('.slide_left');
+const slideRightBtn = document.querySelector('.slide_right');
+
+function updateSlideNumbers() {
+    const activeSlide = slider.querySelector('.swiper-slide-active');
+    if (!activeSlide) return;
+
+    titleContent.innerHTML = activeSlide.querySelector('.elementor-slide-heading').innerHTML
+    descriptionContent.innerHTML = activeSlide.querySelector('.elementor-slide-description').innerHTML
+}
+
+function delayedUpdate() {
+    setTimeout(updateSlideNumbers, 150);
+}
+
+const SliderObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const target = mutation.target;
+            if (target.classList.contains('swiper-slide-active')) {
+                delayedUpdate();
+            }
+        }
+    });
+});
+
+slides.forEach((item) => {
+    SliderObserver.observe(item, { attributes: true });
+});
+slideLeftBtn.addEventListener('click', () => {
+    const prevBtn = slider.querySelector('.elementor-swiper-button-prev');
+    if (prevBtn) prevBtn.click();
+});
+
+slideRightBtn.addEventListener('click', () => {
+    const nextBtn = slider.querySelector('.elementor-swiper-button-next');
+    if (nextBtn) nextBtn.click();
+});
+
+updateSlideNumbers();
+
+

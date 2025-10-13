@@ -1,105 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Wedding Slider</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #fff;
-      overflow-x: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Stacking Carousel</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:100vh;
+    background:#0f0f0f;
+    overflow:hidden;
+  }
 
-    .slider-container {
-      position: relative;
-      width: 100%;
-      max-width: 1200px;
-      margin: 50px auto;
-      overflow: hidden;
-    }
+  .carousel{
+    position:relative;
+    width:90%;
+    max-width:1100px;
+    aspect-ratio:16/9;
+    perspective:1200px;
+    overflow:visible;
+  }
 
-    .slider-track {
-      display: flex;
-      transition: transform 0.6s ease-in-out;
-    }
+  .carousel-item{
+    position:absolute;
+    top:0;
+    left:50%;
+    transform-style:preserve-3d;
+    transform:translateX(-50%) translateZ(-500px);
+    width:70%;
+    height:100%;
+    border-radius:16px;
+    overflow:hidden;
+    transition:transform 0.9s ease, opacity 0.9s ease, z-index 0.9s ease;
+    cursor:grab;
+  }
+  .carousel-item img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    pointer-events:none;
+  }
 
-    .slide {
-      min-width: 100%;
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: #f9f9f9;
-      padding: 20px;
-    }
+  .carousel-item.active{transform:translateX(-50%) translateZ(0px); z-index:5; opacity:1;}
+  .carousel-item.prev1{transform:translateX(-50%) translateX(-400px) translateZ(-200px); z-index:4; opacity:0.8;}
+  .carousel-item.next1{transform:translateX(-50%) translateX(400px) translateZ(-200px); z-index:4; opacity:0.8;}
+  .carousel-item.prev2{transform:translateX(-50%) translateX(-788px) translateZ(-400px); z-index:3; opacity:0.3;}
+  .carousel-item.next2{transform:translateX(-50%) translateX(788px) translateZ(-400px); z-index:3; opacity:0.3;}
 
-    .slide img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
+  .carousel-item:hover{cursor:grabbing;}
 
-    /* Navigation */
-    .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.5);
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      border-radius: 50%;
-      font-size: 18px;
-    }
+  /* Navigation buttons */
+  .nav{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    width:50px;
+    height:50px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    z-index:10;
+    transition:background 0.3s ease;
+  }
+  .nav:hover{background:rgba(255,255,255,0.25);}
+  .nav img{width:20px;opacity:0.8;}
+  .nav.left{left:-70px;}
+  .nav.right{right:-70px;}
 
-    .prev {
-      left: 10px;
-    }
-
-    .next {
-      right: 10px;
-    }
-
-    .nav-btn:hover {
-      background: rgba(0,0,0,0.7);
-    }
-  </style>
+  @media(max-width:768px){
+    .carousel-item{width:85%;}
+    .carousel-item.prev1{transform:translateX(-50%) translateX(-250px) translateZ(-150px);}
+    .carousel-item.next1{transform:translateX(-50%) translateX(250px) translateZ(-150px);}
+    .carousel-item.prev2{transform:translateX(-50%) translateX(-500px) translateZ(-300px);}
+    .carousel-item.next2{transform:translateX(-50%) translateX(500px) translateZ(-300px);}
+    .nav.left{left:-40px;}
+    .nav.right{right:-40px;}
+  }
+</style>
 </head>
 <body>
-  <div class="slider-container">
-    <div class="slider-track">
-      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+1" alt="Slide 1"></div>
-      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+2" alt="Slide 2"></div>
-      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+3" alt="Slide 3"></div>
-      <div class="slide"><img src="https://via.placeholder.com/1000x400?text=Wedding+Invite+4" alt="Slide 4"></div>
-    </div>
-    <button class="nav-btn prev">&#10094;</button>
-    <button class="nav-btn next">&#10095;</button>
+  <div class="carousel">
+    <div class="nav left"><img src="https://assets.website-files.com/630d95a3bf383e3987abfa12/6321b79100801f02b3f39fb7_Vector%20(2).svg" alt="prev"></div>
+    <div class="nav right"><img src="https://assets.website-files.com/630d95a3bf383e3987abfa12/6321b79129670f058b98ee18_Vector%20(1).svg" alt="next"></div>
+
+    <div class="carousel-item"><img src="https://picsum.photos/id/1015/800/450" alt="1"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1016/800/450" alt="2"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1018/800/450" alt="3"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1016/800/450" alt="2"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1024/800/450" alt="5"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1020/800/450" alt="4"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1024/800/450" alt="5"></div>
+    <div class="carousel-item"><img src="https://picsum.photos/id/1020/800/450" alt="4"></div>
   </div>
 
-  <script>
-    const track = document.querySelector('.slider-track');
-    const slides = document.querySelectorAll('.slide');
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-    let index = 0;
+<script>
+const items=document.querySelectorAll('.carousel-item');
+const leftBtn=document.querySelector('.nav.left');
+const rightBtn=document.querySelector('.nav.right');
+const carousel=document.querySelector('.carousel');
+let current=0;
+let autoplay;
 
-    function updateSlide() {
-      track.style.transform = `translateX(-${index * 100}%)`;
-    }
+// Update classes
+function update(){
+  items.forEach(i=>i.className='carousel-item');
+  const total=items.length;
+  const prev1=(current-1+total)%total;
+  const prev2=(current-2+total)%total;
+  const next1=(current+1)%total;
+  const next2=(current+2)%total;
+  items[current].classList.add('active');
+  items[prev1].classList.add('prev1');
+  items[prev2].classList.add('prev2');
+  items[next1].classList.add('next1');
+  items[next2].classList.add('next2');
+}
 
-    nextBtn.addEventListener('click', () => {
-      index = (index + 1) % slides.length;
-      updateSlide();
-    });
+function next(){
+  current=(current+1)%items.length;
+  update();
+}
+function prev(){
+  current=(current-1+items.length)%items.length;
+  update();
+}
 
-    prevBtn.addEventListener('click', () => {
-      index = (index - 1 + slides.length) % slides.length;
-      updateSlide();
-    });
-  </script>
+rightBtn.addEventListener('click',()=>{stopAutoplay();next();startAutoplay();});
+leftBtn.addEventListener('click',()=>{stopAutoplay();prev();startAutoplay();});
+
+// Autoplay
+function startAutoplay(){autoplay=setInterval(next,4000);}
+function stopAutoplay(){clearInterval(autoplay);}
+carousel.addEventListener('mouseenter',stopAutoplay);
+carousel.addEventListener('mouseleave',startAutoplay);
+
+// Drag/Grab
+let startX=0,currentX=0,isDragging=false;
+const getX=e=>e.type.includes('touch')?e.touches[0].clientX:e.clientX;
+
+function dragStart(e){
+  startX=getX(e);
+  isDragging=true;
+  stopAutoplay();
+}
+function dragMove(e){
+  if(!isDragging) return;
+  currentX=getX(e);
+  const diff=currentX-startX;
+  items.forEach(i=>i.style.transform+=` translateX(${diff/50}px)`);
+}
+function dragEnd(e){
+  if(!isDragging) return;
+  const diff=currentX-startX;
+  isDragging=false;
+  if(diff>60) prev();
+  else if(diff<-60) next();
+  items.forEach(i=>i.style.transform='');
+  startAutoplay();
+}
+
+carousel.addEventListener('mousedown',dragStart);
+window.addEventListener('mousemove',dragMove);
+window.addEventListener('mouseup',dragEnd);
+// carousel.addEventListener('touchstart',dragStart,{passive:true});
+// window.addEventListener('touchmove',dragMove,{passive:true});
+// window.addEventListener('touchend',dragEnd);
+
+update();
+startAutoplay();
+</script>
 </body>
 </html>
