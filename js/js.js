@@ -13930,3 +13930,92 @@ if (isAndroid) {
         fieldDateOfBirth.type = 'hidden';
     }
 }
+
+(() => {
+    const customSlider = document.querySelector('.custom_slider')
+    const sliderWrap = customSlider.querySelector('.slider_wrap');
+    const slides = sliderWrap.querySelectorAll('.slide');
+    const slideNext = customSlider.querySelector('.slide_next')
+    const slidePrev = customSlider.querySelector('.slide_prev')
+
+    let currentSlide = 0;
+
+    function update() {
+        slides.forEach((item) => item.classList.remove('active'));
+        slides[currentSlide].classList.add('active');
+
+        const bgUrl = slides[currentSlide].getAttribute('ima-data');
+        customSlider.style.backgroundImage = `url(${bgUrl})`;
+
+        const slideWidth = slides[0].offsetWidth;
+        const gap = 3.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const middleWidth = window.innerWidth / 2;
+        const totalSlideWidth = slideWidth + gap;
+        const activeCenter = (currentSlide * totalSlideWidth) + (slideWidth / 2);
+        const translateX = middleWidth - activeCenter;
+        sliderWrap.style.transform = `translateX(${translateX}px)`;
+    }
+    update();
+    slideNext.addEventListener('click', () => {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+        } else {
+            currentSlide = 0;
+        }
+        update();
+
+    });
+
+    slidePrev.addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+        } else {
+            currentSlide = slides.length - 1;
+        }
+        update();
+    });
+    document.addEventListener('resize', update)
+})()
+
+//
+
+const svg = document.querySelector('.lend-map svg');
+const paths = svg.querySelectorAll('path');
+const allStates = document.querySelector('.states h2')
+const stats = []
+
+paths.forEach((item) => {
+    const stat = item.getAttribute('data-url') && item.getAttribute('data-url') !== 'false' ? item.id : ''
+    if (stat) stats.push({
+        id: item.id,
+        url: item.getAttribute('data-url')
+    });
+})
+stats.sort((a, b) => a.id.localeCompare(b.id, undefined, { sensitivity: 'base' }));
+
+allStates.textContent = '';
+stats.forEach((item, index) => {
+    const span = document.createElement('span');
+    span.classList.add('local-stats')
+    span.textContent = item.id;
+    allStates.appendChild(span);
+
+    if (index < stats.length - 1) {
+        allStates.append(', ');
+    }
+});
+
+paths.forEach((item) => {
+    item.addEventListener('mouseenter', () => {
+        const statSpan = Array.from(document.querySelectorAll('.local-stats'))
+            .find(span => span.textContent === item.id);
+        if (statSpan) statSpan.classList.add('active');
+    });
+
+    item.addEventListener('mouseleave', () => {
+        const statSpan = Array.from(document.querySelectorAll('.local-stats'))
+            .find(span => span.textContent === item.id);
+        if (statSpan) statSpan.classList.remove('active');
+    });
+});
+

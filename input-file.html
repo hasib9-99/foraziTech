@@ -3,177 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3D Stacking Carousel</title>
+<title>Endless JS Marquee Auto</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    height:100vh;
-    background:#0f0f0f;
-    overflow:hidden;
+  body {
+    margin: 0;
+    padding: 20px;
+    font-family: sans-serif;
+    background: #f5f5f5;
   }
 
-  .carousel{
-    position:relative;
-    width:90%;
-    max-width:1100px;
-    aspect-ratio:16/9;
-    perspective:1200px;
-    overflow:visible;
+  .marquee-container {
+    overflow: hidden;
+    width: 100%;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: relative;
+    height: 120px;
   }
 
-  .carousel-item{
-    position:absolute;
-    top:0;
-    left:50%;
-    transform-style:preserve-3d;
-    transform:translateX(-50%) translateZ(-500px);
-    width:70%;
-    height:100%;
-    border-radius:16px;
-    overflow:hidden;
-    transition:transform 0.9s ease, opacity 0.9s ease, z-index 0.9s ease;
-    cursor:grab;
-  }
-  .carousel-item img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    pointer-events:none;
+  .marquee-track {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
   }
 
-  .carousel-item.active{transform:translateX(-50%) translateZ(0px); z-index:5; opacity:1;}
-  .carousel-item.prev1{transform:translateX(-50%) translateX(-400px) translateZ(-200px); z-index:4; opacity:0.8;}
-  .carousel-item.next1{transform:translateX(-50%) translateX(400px) translateZ(-200px); z-index:4; opacity:0.8;}
-  .carousel-item.prev2{transform:translateX(-50%) translateX(-788px) translateZ(-400px); z-index:3; opacity:0.3;}
-  .carousel-item.next2{transform:translateX(-50%) translateX(788px) translateZ(-400px); z-index:3; opacity:0.3;}
-
-  .carousel-item:hover{cursor:grabbing;}
-
-  /* Navigation buttons */
-  .nav{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    width:50px;
-    height:50px;
-    border-radius:50%;
-    background:rgba(255,255,255,0.1);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    cursor:pointer;
-    z-index:10;
-    transition:background 0.3s ease;
-  }
-  .nav:hover{background:rgba(255,255,255,0.25);}
-  .nav img{width:20px;opacity:0.8;}
-  .nav.left{left:-70px;}
-  .nav.right{right:-70px;}
-
-  @media(max-width:768px){
-    .carousel-item{width:85%;}
-    .carousel-item.prev1{transform:translateX(-50%) translateX(-250px) translateZ(-150px);}
-    .carousel-item.next1{transform:translateX(-50%) translateX(250px) translateZ(-150px);}
-    .carousel-item.prev2{transform:translateX(-50%) translateX(-500px) translateZ(-300px);}
-    .carousel-item.next2{transform:translateX(-50%) translateX(500px) translateZ(-300px);}
-    .nav.left{left:-40px;}
-    .nav.right{right:-40px;}
+  .marquee-track img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 10px;
   }
 </style>
 </head>
 <body>
-  <div class="carousel">
-    <div class="nav left"><img src="https://assets.website-files.com/630d95a3bf383e3987abfa12/6321b79100801f02b3f39fb7_Vector%20(2).svg" alt="prev"></div>
-    <div class="nav right"><img src="https://assets.website-files.com/630d95a3bf383e3987abfa12/6321b79129670f058b98ee18_Vector%20(1).svg" alt="next"></div>
 
-    <div class="carousel-item"><img src="https://picsum.photos/id/1015/800/450" alt="1"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1016/800/450" alt="2"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1018/800/450" alt="3"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1016/800/450" alt="2"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1024/800/450" alt="5"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1020/800/450" alt="4"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1024/800/450" alt="5"></div>
-    <div class="carousel-item"><img src="https://picsum.photos/id/1020/800/450" alt="4"></div>
+<h2>Endless JS Marquee (Calculated)</h2>
+<div class="marquee-container">
+  <div class="marquee-track" id="track">
+    <img src="https://source.unsplash.com/random/150x100?sig=1" alt="">
+    <img src="https://source.unsplash.com/random/150x100?sig=2" alt="">
+    <img src="https://source.unsplash.com/random/150x100?sig=3" alt="">
+    <img src="https://source.unsplash.com/random/150x100?sig=4" alt="">
+    <img src="https://source.unsplash.com/random/150x100?sig=5" alt="">
   </div>
+</div>
 
 <script>
-const items=document.querySelectorAll('.carousel-item');
-const leftBtn=document.querySelector('.nav.left');
-const rightBtn=document.querySelector('.nav.right');
-const carousel=document.querySelector('.carousel');
-let current=0;
-let autoplay;
+const track = document.getElementById('track');
+const container = track.parentElement;
+const speed = 1;
+let x = 0;
 
-// Update classes
-function update(){
-  items.forEach(i=>i.className='carousel-item');
-  const total=items.length;
-  const prev1=(current-1+total)%total;
-  const prev2=(current-2+total)%total;
-  const next1=(current+1)%total;
-  const next2=(current+2)%total;
-  items[current].classList.add('active');
-  items[prev1].classList.add('prev1');
-  items[prev2].classList.add('prev2');
-  items[next1].classList.add('next1');
-  items[next2].classList.add('next2');
+// Duplicate images to fill container width
+function fillImages() {
+  const imgs = Array.from(track.children);
+  let totalWidth = 0;
+  imgs.forEach(img => totalWidth += img.offsetWidth + 10); // image width + margin
+
+  // Repeat images until total width > container width * 2
+  while (totalWidth < container.offsetWidth * 2) {
+    imgs.forEach(img => {
+      const clone = img.cloneNode(true);
+      track.appendChild(clone);
+      totalWidth += clone.offsetWidth + 10;
+    });
+  }
 }
 
-function next(){
-  current=(current+1)%items.length;
-  update();
-}
-function prev(){
-  current=(current-1+items.length)%items.length;
-  update();
-}
+// Run after images load
+window.onload = () => {
+  fillImages();
+  animate();
+};
 
-rightBtn.addEventListener('click',()=>{stopAutoplay();next();startAutoplay();});
-leftBtn.addEventListener('click',()=>{stopAutoplay();prev();startAutoplay();});
+// Infinite scroll
+function animate() {
+  x -= speed;
+  track.style.transform = `translateX(${x}px)`;
 
-// Autoplay
-function startAutoplay(){autoplay=setInterval(next,4000);}
-function stopAutoplay(){clearInterval(autoplay);}
-carousel.addEventListener('mouseenter',stopAutoplay);
-carousel.addEventListener('mouseleave',startAutoplay);
+  // If first image out of view, move it to end
+  const firstImg = track.children[0];
+  if (firstImg.getBoundingClientRect().right < 0) {
+    track.appendChild(firstImg);
+    x += firstImg.offsetWidth + 10;
+  }
 
-// Drag/Grab
-let startX=0,currentX=0,isDragging=false;
-const getX=e=>e.type.includes('touch')?e.touches[0].clientX:e.clientX;
-
-function dragStart(e){
-  startX=getX(e);
-  isDragging=true;
-  stopAutoplay();
-}
-function dragMove(e){
-  if(!isDragging) return;
-  currentX=getX(e);
-  const diff=currentX-startX;
-  items.forEach(i=>i.style.transform+=` translateX(${diff/50}px)`);
-}
-function dragEnd(e){
-  if(!isDragging) return;
-  const diff=currentX-startX;
-  isDragging=false;
-  if(diff>60) prev();
-  else if(diff<-60) next();
-  items.forEach(i=>i.style.transform='');
-  startAutoplay();
+  requestAnimationFrame(animate);
 }
 
-carousel.addEventListener('mousedown',dragStart);
-window.addEventListener('mousemove',dragMove);
-window.addEventListener('mouseup',dragEnd);
-// carousel.addEventListener('touchstart',dragStart,{passive:true});
-// window.addEventListener('touchmove',dragMove,{passive:true});
-// window.addEventListener('touchend',dragEnd);
-
-update();
-startAutoplay();
+// Handle window resize
+window.addEventListener('resize', () => {
+  x = 0;
+  track.style.transform = `translateX(0px)`;
+  fillImages();
+});
 </script>
+
 </body>
 </html>
