@@ -14019,3 +14019,110 @@ paths.forEach((item) => {
     });
 });
 
+
+// custom slider and grab funtionality
+const sliderCon = document.querySelector('.slider_continer')
+const items = document.querySelectorAll('.carousel-item'); 
+const leftBtn = document.querySelector('.nav.left');
+const rightBtn = document.querySelector('.nav.right');
+const carousel = document.querySelector('.custom_carousel');
+const dotsWrap = document.querySelector('.slider_dots')
+let current = 0;
+let autoplay;
+
+
+// navigator 
+items.forEach((item) => {
+    const dot = document.createElement('div');
+    dot.classList.add('dot');
+    dotsWrap.appendChild(dot);
+});
+const dots = dotsWrap.querySelectorAll('.dot')
+
+
+// Update classes
+function update() {
+    items.forEach(i => i.className = 'carousel-item');
+    dots.forEach(dot => dot.className = 'dot')
+    const total = items.length;
+    const prev1 = (current - 1 + total) % total;
+    const prev2 = (current - 2 + total) % total;
+    const next1 = (current + 1) % total;
+    const next2 = (current + 2) % total;
+    items[current].classList.add('active');
+    items[prev1].classList.add('prev1');
+    items[prev2].classList.add('prev2');
+    items[next1].classList.add('next1');
+    items[next2].classList.add('next2');
+
+    dots[current].classList.add('active');
+}
+
+dots.forEach((item, i) => {
+    item.addEventListener('click', () => {
+        current = i;
+        stopAutoplay()
+        update()
+        startAutoplay()
+    })
+})
+
+function next() {
+    current = (current + 1) % items.length;
+    update();
+}
+function prev() {
+    current = (current - 1 + items.length) % items.length;
+    update();
+}
+
+
+
+// rightBtn.addEventListener('click',()=>{stopAutoplay();next();startAutoplay();});
+// leftBtn.addEventListener('click',()=>{stopAutoplay();prev();startAutoplay();});
+
+// Autoplay
+function startAutoplay() { autoplay = setInterval(next, 4000); }
+function stopAutoplay() { clearInterval(autoplay); }
+
+// Drag/Grab
+let startX = 0, currentX = 0, isDragging = false;
+const getX = e => e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+
+function dragStart(e) {
+    startX = getX(e);
+    isDragging = true;
+    stopAutoplay();
+}
+function dragMove(e) {
+    if (!isDragging) return;
+    currentX = getX(e);
+    const diff = currentX - startX;
+    items.forEach(i => i.style.transform += ` translateX(${diff / 50}px)`);
+}
+function dragEnd(e) {
+    if (!isDragging) return;
+    const diff = currentX - startX;
+    isDragging = false;
+    if (diff > 60) prev();
+    else if (diff < -60) next();
+    items.forEach(i => i.style.transform = '');
+    startAutoplay();
+}
+
+
+carousel.addEventListener('pointerdown', dragStart);
+window.addEventListener('pointermove', dragMove);
+window.addEventListener('pointerup', dragEnd);
+
+carousel.addEventListener('touchstart', dragStart, { passive: true });
+window.addEventListener('touchmove', dragMove, { passive: true });
+window.addEventListener('touchend', dragEnd);
+
+sliderCon.addEventListener('mouseenter', stopAutoplay);
+sliderCon.addEventListener('mouseleave', startAutoplay);
+
+
+
+update();
+startAutoplay();
