@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body style="background-color: gray;">
+    
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    .hambar{
+    height: 20px;
+    margin: auto;
+    position: relative;
+    width: 22px;
+    }
+
+    .line {
+    background-color: #ffffff;
+    border-radius: 2px;
+    height: 2px;
+    left: 0;
+    position: absolute;
+    transition: all .25s ease-in-out;
+    width: 100%;
+}
+._2,
+._3{
+    bottom: 0;
+}
+._2 {
+    margin: auto;
+    top: 0;
+}
+.hambar.active ._1{
+    transform: translateY(10px) translateY(-50%) rotate(-45deg);
+}
+.hambar.active ._2{
+    opacity: 0;
+}
+.hambar.active ._3 {
+    transform: translateY(-10px) translateY(50%) rotate(45deg);
+}
+</style>
+<div class="hambar">
+    <span class="line _1"></span>
+    <span class="line _2"></span>
+    <span class="line _3"></span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

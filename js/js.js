@@ -14022,7 +14022,7 @@ paths.forEach((item) => {
 
 // custom slider and grab funtionality
 const sliderCon = document.querySelector('.slider_continer')
-const items = document.querySelectorAll('.carousel-item'); 
+const items = document.querySelectorAll('.carousel-item');
 const leftBtn = document.querySelector('.nav.left');
 const rightBtn = document.querySelector('.nav.right');
 const carousel = document.querySelector('.custom_carousel');
@@ -14122,7 +14122,68 @@ window.addEventListener('touchend', dragEnd);
 sliderCon.addEventListener('mouseenter', stopAutoplay);
 sliderCon.addEventListener('mouseleave', startAutoplay);
 
-
-
 update();
 startAutoplay();
+
+// hero section
+const videos = document.querySelector('.videos_con');
+const videoText = document.querySelector('.video_text');
+const iconBox = document.querySelector('.icon_box')
+
+const minScroll = 150;
+const maxScroll = 1000;
+
+// Video scaling
+const minScale = window.innerWidth < 1024 ? 0.9 : 0.6;
+const maxScale = 1;
+
+// Text transform
+const startY = 0;      // starting translateY in %
+const endY = 400;      // ending translateY in %
+const startScale = window.innerWidth < 1024 ? 1.2 : 1.5;
+const endScale = 1;
+
+document.addEventListener('scroll', () => {
+    let scroll = window.scrollY;
+
+    if (scroll < minScroll) scroll = minScroll;
+    if (scroll > maxScroll) scroll = maxScroll;
+
+    // progress between 0 and 1
+    const progress = (scroll - minScroll) / (maxScroll - minScroll);
+
+    // scale video progressively
+    const videoScale = minScale + (maxScale - minScale) * progress;
+    videos.style.transform = `scale3d(${videoScale}, ${videoScale}, 1)`;
+
+    // translate & scale text progressively
+    const textY = startY + (endY - startY) * progress;
+    const textScale = startScale + (endScale - startScale) * progress;
+    videoText.style.transform = `translate3d(0%, ${textY}%, 0) scale3d(${textScale}, ${textScale}, 1)`;
+    iconBox.style.transform = `scale3d(${textScale}, ${textScale}, 1)`;
+});
+
+///
+
+const marginBtn = document.querySelector('.switch');
+const marginBox = document.querySelector('.cm_in');
+
+marginBtn.addEventListener('click', () => {
+    marginBtn.classList.toggle('active');
+    marginBox.classList.toggle('active');
+});
+
+
+//
+const popupBtn = document.querySelector('.menu_icon ')
+const menuPopup = document.querySelector('.setion_popup')
+
+popupBtn.addEventListener('click', () => {
+    popupBtn.classList.toggle('active')
+    menuPopup.classList.toggle('active');
+    if (popupBtn.classList.classes('active') && popupBtn.classList.classes('active')) {
+        window.body.style.overflow = 'hiden';
+    } else{
+        window.body.style.overflow = 'auto';
+    }
+})
