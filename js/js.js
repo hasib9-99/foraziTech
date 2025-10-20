@@ -14353,3 +14353,24 @@ imgBtn.forEach((btn, i) => {
         imgBackground.style.backgroundImage = `url(${imgUrl})`
     });
 })
+
+
+// image bg change
+const imgBackground = document.querySelector('.image_container')
+const imgBtn = document.querySelectorAll('.img_btn')
+const imageTitle = document.querySelector('.image_title h2')
+
+imgBtn.forEach((btn, i) => {
+    const imgUrl = btn.getAttribute('img-url')
+    const imgTitle = btn.getAttribute('title')
+    btn.addEventListener('mouseenter', () => {
+        imgBackground.style.backgroundImage = `url(${imgUrl})`
+        imageTitle.textContent = imgTitle
+    });
+    btn.addEventListener('mouseleave', () => {
+        imgBackground.style.backgroundImage = `url(${imgBtn[0].getAttribute('img-url')})`
+        imageTitle.textContent = imgBtn[0].getAttribute('title')
+    });
+})
+
+
