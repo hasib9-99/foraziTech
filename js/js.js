@@ -14190,154 +14190,154 @@ popupBtn.addEventListener('click', () => {
 
 
 
-(() => {
-    const showOriginalFieldForDemo = true;
-    const isAndroid = true;
-    const fieldDateOfBirth = document.querySelector('.dob input');
-    const fieldStyle = window.getComputedStyle(fieldDateOfBirth);
-    let month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    (() => {
+        const showOriginalFieldForDemo = true;
+        const isAndroid = true;
+        const fieldDateOfBirth = document.querySelector('.dob input');
+        const fieldStyle = window.getComputedStyle(fieldDateOfBirth);
+        let month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-    // use localized month names
-    if (window.Intl && window.Intl.DateTimeFormat) {
-        try {
-            var formatter = new window.Intl.DateTimeFormat([], { month: 'long', timeZone: 'UTC' });
-            var months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => {
-                var mm = month < 10 ? '0' + month : month;
-                return new Date('0000-' + mm + '-01T00:00:00+00:00');
-            });
-            month_names = months.map(date => formatter.format(date));
-        } catch (e) { }
-    }
-
-    if (isAndroid) {
-        const dateWrapper = document.createElement('div');
-        dateWrapper.id = 'date-select-wrapper';
-        fieldDateOfBirth.parentNode.appendChild(dateWrapper);
-
-        const dateFieldDay = document.createElement('select');
-        const dateFieldMonth = document.createElement('select');
-        const dateFieldYear = document.createElement('select');
-
-        const dateFields = [dateFieldYear, dateFieldMonth, dateFieldDay];
-
-        // copy over styles from text input
-        if (fieldStyle) {
-            var styleOptions = ['boxSizing', 'backgroundColor', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'height', 'font', 'verticalAlign'];
-            styleOptions.forEach(function (s) {
-                if (fieldStyle[s]) {
-                    dateFields.forEach(function (f) {
-                        f.style[s] = fieldStyle[s];
-                    });
-                }
-            });
+        // use localized month names
+        if (window.Intl && window.Intl.DateTimeFormat) {
+            try {
+                var formatter = new window.Intl.DateTimeFormat([], { month: 'long', timeZone: 'UTC' });
+                var months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(month => {
+                    var mm = month < 10 ? '0' + month : month;
+                    return new Date('0000-' + mm + '-01T00:00:00+00:00');
+                });
+                month_names = months.map(date => formatter.format(date));
+            } catch (e) { }
         }
 
-        const emptyDayOption = document.createElement('option');
-        emptyDayOption.value = '';
-        emptyDayOption.textContent = 'Day';
-        dateFieldDay.add(emptyDayOption);
-        const emptyMonthOption = document.createElement('option');
-        emptyMonthOption.value = '';
-        emptyMonthOption.textContent = 'Month';
-        dateFieldMonth.add(emptyMonthOption);
-        const emptyYearOption = document.createElement('option');
-        emptyYearOption.value = '';
-        emptyYearOption.textContent = 'Year';
-        dateFieldYear.add(emptyYearOption);
+        if (isAndroid) {
+            const dateWrapper = document.createElement('div');
+            dateWrapper.id = 'date-select-wrapper';
+            fieldDateOfBirth.parentNode.appendChild(dateWrapper);
 
-        const dayOptions = [emptyDayOption];
-        for (var i = 1; i <= 31; i++) {
-            var newOption = document.createElement('option');
-            newOption.value = (i < 10 ? '0' : '') + i;
-            newOption.textContent = i;
-            dayOptions.push(newOption);
-            dateFieldDay.add(newOption);
-        }
+            const dateFieldDay = document.createElement('select');
+            const dateFieldMonth = document.createElement('select');
+            const dateFieldYear = document.createElement('select');
 
-        const monthOptions = [emptyMonthOption];
-        for (var i = 0; i < month_names.length; i++) {
-            var newOption = document.createElement('option');
-            newOption.value = (i < 9 ? '0' : '') + (i + 1);
-            newOption.textContent = month_names[i];
-            monthOptions.push(newOption);
-            dateFieldMonth.add(newOption);
-        }
+            const dateFields = [dateFieldYear, dateFieldMonth, dateFieldDay];
 
-        const yearEnd = new Date().getFullYear();
-        const yearStart = yearEnd - 120;
-        const yearOptions = [emptyYearOption];
-        for (var i = yearEnd; i >= yearStart; i--) {
-            var newOption = document.createElement('option');
-            newOption.value = i;
-            newOption.textContent = i;
-            yearOptions.push(newOption);
-            dateFieldYear.add(newOption);
-        }
-
-        dateWrapper.appendChild(dateFieldDay);
-        dateWrapper.appendChild(dateFieldMonth);
-        dateWrapper.appendChild(dateFieldYear);
-
-        const dateChangeHandler = function () {
-            // var day = parseInt( dateFieldDay.value, 10 );
-            const month = parseInt(dateFieldMonth.value, 10);
-            const year = parseInt(dateFieldYear.value, 10);
-            let maxDays = 31;
-
-            if (month === 2) {
-                const isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)
-                maxDays = isLeapYear ? 29 : 28;
-            } else if ([2, 4, 6, 9, 11].indexOf(month) >= 0) {
-                maxDays = 30;
+            // copy over styles from text input
+            if (fieldStyle) {
+                var styleOptions = ['boxSizing', 'backgroundColor', 'paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft', 'height', 'font', 'verticalAlign'];
+                styleOptions.forEach(function (s) {
+                    if (fieldStyle[s]) {
+                        dateFields.forEach(function (f) {
+                            f.style[s] = fieldStyle[s];
+                        });
+                    }
+                });
             }
 
-            dayOptions.filter(function (o, i) {
-                o.hidden = i > maxDays;
-                if (o.hidden && o.selected) {
-                    emptyDayOption.selected = true;
-                }
-            });
+            const emptyDayOption = document.createElement('option');
+            emptyDayOption.value = '';
+            emptyDayOption.textContent = 'Day';
+            dateFieldDay.add(emptyDayOption);
+            const emptyMonthOption = document.createElement('option');
+            emptyMonthOption.value = '';
+            emptyMonthOption.textContent = 'Month';
+            dateFieldMonth.add(emptyMonthOption);
+            const emptyYearOption = document.createElement('option');
+            emptyYearOption.value = '';
+            emptyYearOption.textContent = 'Year';
+            dateFieldYear.add(emptyYearOption);
 
-            let allSet = true;
-            dateFields.forEach(field => {
-                const isEmpty = !field.value;
-                if (isEmpty) {
-                    allSet = false;
-                }
-                field.classList[isEmpty ? 'add' : 'remove']('show-placeholder');
-            });
-
-            if (allSet) {
-                fieldDateOfBirth.value = dateFields.map(function (field) {
-                    return field.value;
-                }).join('-');
-            } else {
-                fieldDateOfBirth.value = '';
+            const dayOptions = [emptyDayOption];
+            for (var i = 1; i <= 31; i++) {
+                var newOption = document.createElement('option');
+                newOption.value = (i < 10 ? '0' : '') + i;
+                newOption.textContent = i;
+                dayOptions.push(newOption);
+                dateFieldDay.add(newOption);
             }
-        };
 
-        // if the original input already has a value, set the selected options accordingly
-        if (fieldDateOfBirth.value) {
-            const ymd = fieldDateOfBirth.value.split('-');
-            yearOptions.filter(function (o) {
-                if (o.value === ymd[0]) {
-                    o.selected = true;
+            const monthOptions = [emptyMonthOption];
+            for (var i = 0; i < month_names.length; i++) {
+                var newOption = document.createElement('option');
+                newOption.value = (i < 9 ? '0' : '') + (i + 1);
+                newOption.textContent = month_names[i];
+                monthOptions.push(newOption);
+                dateFieldMonth.add(newOption);
+            }
+
+            const yearEnd = new Date().getFullYear();
+            const yearStart = yearEnd - 120;
+            const yearOptions = [emptyYearOption];
+            for (var i = yearEnd; i >= yearStart; i--) {
+                var newOption = document.createElement('option');
+                newOption.value = i;
+                newOption.textContent = i;
+                yearOptions.push(newOption);
+                dateFieldYear.add(newOption);
+            }
+
+            dateWrapper.appendChild(dateFieldDay);
+            dateWrapper.appendChild(dateFieldMonth);
+            dateWrapper.appendChild(dateFieldYear);
+
+            const dateChangeHandler = function () {
+                // var day = parseInt( dateFieldDay.value, 10 );
+                const month = parseInt(dateFieldMonth.value, 10);
+                const year = parseInt(dateFieldYear.value, 10);
+                let maxDays = 31;
+
+                if (month === 2) {
+                    const isLeapYear = ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)
+                    maxDays = isLeapYear ? 29 : 28;
+                } else if ([2, 4, 6, 9, 11].indexOf(month) >= 0) {
+                    maxDays = 30;
                 }
-            });
-            monthOptions[parseInt(ymd[1], 10)].selected = true;
-            dayOptions[parseInt(ymd[2], 10)].selected = true;
-        }
 
-        dateFieldDay.addEventListener('change', dateChangeHandler);
-        dateFieldMonth.addEventListener('change', dateChangeHandler);
-        dateFieldYear.addEventListener('change', dateChangeHandler);
-        dateChangeHandler();
+                dayOptions.filter(function (o, i) {
+                    o.hidden = i > maxDays;
+                    if (o.hidden && o.selected) {
+                        emptyDayOption.selected = true;
+                    }
+                });
 
-        if (!showOriginalFieldForDemo) {
-            fieldDateOfBirth.type = 'hidden';
+                let allSet = true;
+                dateFields.forEach(field => {
+                    const isEmpty = !field.value;
+                    if (isEmpty) {
+                        allSet = false;
+                    }
+                    field.classList[isEmpty ? 'add' : 'remove']('show-placeholder');
+                });
+
+                if (allSet) {
+                    fieldDateOfBirth.value = dateFields.map(function (field) {
+                        return field.value;
+                    }).join('-');
+                } else {
+                    fieldDateOfBirth.value = '';
+                }
+            };
+
+            // if the original input already has a value, set the selected options accordingly
+            if (fieldDateOfBirth.value) {
+                const ymd = fieldDateOfBirth.value.split('-');
+                yearOptions.filter(function (o) {
+                    if (o.value === ymd[0]) {
+                        o.selected = true;
+                    }
+                });
+                monthOptions[parseInt(ymd[1], 10)].selected = true;
+                dayOptions[parseInt(ymd[2], 10)].selected = true;
+            }
+
+            dateFieldDay.addEventListener('change', dateChangeHandler);
+            dateFieldMonth.addEventListener('change', dateChangeHandler);
+            dateFieldYear.addEventListener('change', dateChangeHandler);
+            dateChangeHandler();
+
+            if (!showOriginalFieldForDemo) {
+                fieldDateOfBirth.type = 'hidden';
+            }
         }
-    }
-})()
+    })()
 
 // image bg change
 const imgBackground = document.querySelector('.image_container')
@@ -14373,4 +14373,179 @@ imgBtn.forEach((btn, i) => {
     });
 })
 
+
+
+const sliders = document.querySelectorAll('.custom_slider');
+
+sliders.forEach((customSlider) => {
+    const sliderWrap = customSlider.querySelector('.slider_wrap');
+    const slides = sliderWrap.querySelectorAll('.slide');
+    const slideNext = customSlider.querySelector('.slide_next');
+    const slidePrev = customSlider.querySelector('.slide_prev');
+
+    let currentSlide = 0;
+
+    function update() {
+        slides.forEach((item) => item.classList.remove('active'));
+        slides[currentSlide].classList.add('active');
+
+        const bgUrl = slides[currentSlide].getAttribute('ima-data');
+        customSlider.style.backgroundImage = `url(${bgUrl})`;
+
+        const slideWidth = slides[0].offsetWidth;
+        // const gap = gapvale * parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const gap = window.innerWidth > 1024 ? 50 : 25
+        const middleWidth = window.innerWidth / 2;
+        const totalSlideWidth = slideWidth + gap;
+        const activeCenter = (currentSlide * totalSlideWidth) + (slideWidth / 2);
+        const translateX = middleWidth - activeCenter;
+
+        sliderWrap.style.transform = `translateX(${translateX}px)`;
+    }
+
+    // Initialize
+    update();
+
+    // Next/Prev buttons
+    slideNext.addEventListener('click', () => {
+        if (currentSlide < slides.length - 1) {
+            currentSlide++;
+        } else {
+            currentSlide = 0; // wrap-around
+        }
+        update();
+    });
+
+    slidePrev.addEventListener('click', () => {
+        if (currentSlide > 0) {
+            currentSlide--;
+        } else {
+            currentSlide = slides.length - 1; // wrap-around
+        }
+        update();
+    });
+
+    // Resize
+    window.addEventListener('resize', update);
+});
+
+
+// flid popup
+
+const popupData = [
+    {
+        title: 'lorem10',
+        disciption: 'lorem 10 lorem 10 lorem 10 '
+    }
+]
+const fildPopup = document.querySelectorAll('.fild_popup')
+fildPopup.forEach((item, i) => {
+    const popupHTML = `
+    <div class="popup_btn">!</div>
+    <div class="custom_fild-popup">
+        <div class="popup_arrow"></div>
+        <div class="popup_content">
+            <h2>${popupData[i].title}</h2>
+            <hr>
+            <p>${popupData[i].disciption}</p>
+            <button>Close button</button>
+        </div>
+    </div>
+    `
+    item.insertAdjacentHTML('beforeend', popupHTML)
+})
+
+if (window.innerWidth >= 1024) return;
+
+fildPopup.forEach((item, i) => {
+    item.querySelector('.popup_btn').addEventListener('click', () => {
+        item.querySelector('.custom_fild-popup').classList.add('active')
+    })
+    item.querySelector('button').addEventListener('click', () => {
+        item.querySelector('.custom_fild-popup').classList.remove('active')
+    })
+})
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const BG = document.querySelector('._cus_BG');
+        if (BG) {
+            BG.classList.add('active');
+        }
+    }, 500);
+});
+
+const customBarsCon = document.querySelector('.bars');
+const bars = customBarsCon.querySelectorAll('div');
+window.addEventListener('scroll', () => {
+    bars[0].style.transform = `translateY(${(scrollY / 100) * -9}px)`
+    bars[1].style.transform = `translateY(${(scrollY / 100) * -13}px)`
+    bars[2].style.transform = `translateY(${(scrollY / 100) * -21}px)`
+    bars[3].style.transform = `translateY(${(scrollY / 100) * -13}px)`
+    bars[4].style.transform = `translateY(${(scrollY / 100) * -9}px)`
+});
+
+
+const gap =
+    window.innerWidth >= 1024 // Desktop
+        ? 50
+        : window.innerWidth >= 768 // Tablet
+            ? 25
+            : 20; // Phone
+
+
+const btns = document.querySelectorAll('.custom_btn');
+btns.forEach((item) => {
+    const button = item.querySelector('a')
+    const theText = item.querySelector('.elementor-button-text').textcontent;
+    button.innerHTML = ''
+    const theStacture = `
+            <div class="btn_inre"></div>
+            <div class="logo_wrap">
+                <div class="custm_logo">
+                    <div class="logo-1"><svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 30" id="svg10004993011" width="31"  height="30" ><path d="M 14.031 19.808 L 14.031 4.746 L 16.969 4.746 L 16.969 19.808 L 24.033 12.972 L 26.096 15 L 15.5 25.254 L 4.904 15 L 6.967 12.972 Z" fill="#F9F9F9"></path></svg></div>
+                    <div class="logo-2"><svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 31 30" id="svg10004993011" width="31"  height="30" ><path d="M 14.031 19.808 L 14.031 4.746 L 16.969 4.746 L 16.969 19.808 L 24.033 12.972 L 26.096 15 L 15.5 25.254 L 4.904 15 L 6.967 12.972 Z" fill="#F9F9F9"></path></svg></div>
+                </div>
+            </div>
+            <div class="btn_text">
+                <div class="text_1">${theText}</div>
+                <div class="text_2">${theText}</div>
+            </div>
+    `
+    button.insertAdjacentHTML('beforeend', theStacture)
+})
+
+
+
+
+let observTarget = document.querySelector('body');
+
+const observer = new MutationObserver((mutationsList) => {
+    for (const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+            mutation.addedNodes.forEach((node) => {
+                updateContent();
+            });
+        }
+    }
+});
+
+observer.observe(observTarget, {
+    childList: true,
+    subtree: true
+});
+
+
+function updateContent() {
+    const lightBox = document.querySelector('.dialog-lightbox-widget');
+    const LightBoxTitleEl = lightBox.querySelector('.elementor-slideshow__title');
+    const LightBoxTitleParts = LightBoxTitleEl.textContent.split('|');
+
+    const Url = LightBoxTitleParts[0].trim();
+    const TitleText = LightBoxTitleParts[1].trim() ? LightBoxTitleParts[1].trim() : '';
+
+    LightBoxTitleEl.innerHTML = `<a href="${Url}" target="_blank">${TitleText}</a>`;
+
+}
 
