@@ -14549,3 +14549,37 @@ function updateContent() {
 
 }
 
+
+
+
+const selectInputs = document.querySelectorAll(
+    '#form-field-field_select_1, #form-field-field_select_2, #form-field-field_select_3, #form-field-field_select_4'
+);
+const discribes = document.querySelectorAll(
+    '.elementor-field-group-field_value_1, .elementor-field-group-field_value_2, .elementor-field-group-field_value_3, .elementor-field-group-field_value_4'
+);
+
+function updateForm(select, discribe) {
+    const value = select.value.trim().toLowerCase();
+    const inputField = discribe.querySelector('input, textarea, select');
+
+    if (value === 'yes') {
+        discribe.style.display = 'flex';
+        if (inputField) inputField.setAttribute('required', 'required');
+    } else {
+        discribe.style.display = 'none';
+        if (inputField) {
+            inputField.removeAttribute('required');
+            inputField.value = ''; // clear old value
+        }
+    }
+}
+
+// Loop through all pairs
+selectInputs.forEach((select, i) => {
+    const discribe = discribes[i];
+    if (!select || !discribe) return;
+
+    select.addEventListener('change', () => updateForm(select, discribe));
+    updateForm(select, discribe); // run once on load
+});
