@@ -1,132 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body style="background-color: gray;">
-    
-
-
-
-<p>
-    Before we get your quote, we've summarised the key details that you have told us, please check the details below are correct to ensure they meet your needs.
-</p>
-<br>
-<br>
-<br>
-<div class="result_fild">
-
-</div>
-<h4>Keeping you informed</h4>
-<p>
-    Briefly and affiliated companies in our group would like to occasionally contact you to tell you about new products, special offers and promotions, so you don't miss out
-    <br>
-    Further information can be found in our Privacy Notice. 
-    <br>
-    <br>
-    If you'd prefer not to hear from us, please click <b><a href="#">here</a></b> and tick the relevant boxes below. 
-    <br>
-    <br>
-    By continuing with your quote you confirm you have read and accept the disclaimer. Please note that we will use your email address and phone number to confirm your quote.
-</p>
-
-
-
-
-
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scroll Product Animation</title>
 <style>
-    .hambar{
-    height: 20px;
-    margin: auto;
+  body {
+    height: 300vh;
+    margin: 0;
+    background: #f7f7f7;
+    font-family: Arial, sans-serif;
+  }
+
+  .section {
     position: relative;
-    width: 22px;
-    }
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .line {
-    background-color: #ffffff;
-    border-radius: 2px;
-    height: 2px;
-    left: 0;
-    position: absolute;
-    transition: all .25s ease-in-out;
-    width: 100%;
-}
-._2,
-._3{
-    bottom: 0;
-}
-._2 {
-    margin: auto;
+  .product-wrapper {
+    position: sticky;
     top: 0;
-}
-.hambar.active ._1{
-    transform: translateY(10px) translateY(-50%) rotate(-45deg);
-}
-.hambar.active ._2{
-    opacity: 0;
-}
-.hambar.active ._3 {
-    transform: translateY(-10px) translateY(50%) rotate(45deg);
-}
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .product {
+    width: 400px;
+    height: 400px;
+    background-image: url('https://i.pinimg.com/736x/11/2c/93/112c933e00502825649a504ca3ab3947.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform-style: preserve-3d;
+    transition: transform 0.1s linear;
+    position: fixed;
+  }
+
+  h1 {
+    position: absolute;
+    top: 10%;
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+  }
 </style>
-<div class="hambar">
-    <span class="line _1"></span>
-    <span class="line _2"></span>
-    <span class="line _3"></span>
-</div>
-
-<div class="popup_btn">!</div>
-<div class="custom_fild-popup">
-    <div class="popup_arrow"></div>
-    <div class="popup_content">
-        <h2>${popupData[i].title}</h2>
-        <hr>
-        <p>${popupData[i].disciption}</p>
-        <button>Close button</button>
-    </div>
-</div>
-
-
-<button class="custom_btn">
-    lorem
-</button>
-
-<div class="btn_inre"></div>
-<div class="logo_wrap">
-    <div class="custm_logo">
-        <div class="logo-1"></div>
-        <div class="logo-2"></div>
-    </div>
-</div>
-<div class="btn_text">
-    <div class="text_1"></div>
-    <div class="text_2"></div>
-</div>
-
+</head>
+<body>
+<!-- 
+<section class="section">
+  <h1>Scroll to Rotate the Product</h1>
+  <div class="product-wrapper">
+    <div class="product"></div>
+  </div>
+</section> -->
 
 <script>
-    const btns = document.querySelector('.custom_btn');
-    btns.forEach(btn => {
-        const theText = btn.textcontent
-    });
+  const product = document.querySelector('.product');
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const rotation = scrollTop / 5; // smaller = slower rotation
+    const scale = 1 + scrollTop / 3000; // smooth zoom-in effect
+    product.style.transform = `rotateY(${rotation}deg) scale(${scale})`;
+  });
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.10.88/build/spline-viewer.js"></script>
+<spline-viewer url="https://prod.spline.design/w-92D9B-y1xQ02wh/scene.splinecode"></spline-viewer>
 </body>
 </html>

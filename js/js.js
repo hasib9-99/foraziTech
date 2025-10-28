@@ -3999,20 +3999,22 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 })
 
-function parallax() {
-    var parallax = document.querySelectorAll(".parallax");
-    var speed = 0.1; // The speed of the parallax effect
-    for (var i = 0; i < parallax.length; i++) {
-        var windowHalfY = window.innerHeight / 7;
-        var parallaxY = parallax[i].getBoundingClientRect().top + windowHalfY;
-        var pos = parallaxY * -speed;
-        parallax[i].style.backgroundPosition = "50% " + pos + "px";
+if (window.innerWidth > 1024) {
+    function parallax() {
+        var parallax = document.querySelectorAll(".parallax");
+        var speed = 0.1; // The speed of the parallax effect
+        for (var i = 0; i < parallax.length; i++) {
+            var windowHalfY = window.innerHeight / 7;
+            var parallaxY = parallax[i].getBoundingClientRect().top + windowHalfY;
+            var pos = parallaxY * -speed;
+            parallax[i].style.backgroundPosition = "50% " + pos + "px";
 
 
+        }
     }
-}
-window.addEventListener("scroll", parallax);
+    window.addEventListener("scroll", parallax);
 
+}
 
 //
 
@@ -14476,14 +14478,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 });
 
-const customBarsCon = document.querySelector('.bars');
-const bars = customBarsCon.querySelectorAll('div');
+const allBarsSections = document.querySelectorAll('.bars');
+
 window.addEventListener('scroll', () => {
-    bars[0].style.transform = `translateY(${(scrollY / 100) * -9}px)`
-    bars[1].style.transform = `translateY(${(scrollY / 100) * -13}px)`
-    bars[2].style.transform = `translateY(${(scrollY / 100) * -21}px)`
-    bars[3].style.transform = `translateY(${(scrollY / 100) * -13}px)`
-    bars[4].style.transform = `translateY(${(scrollY / 100) * -9}px)`
+    allBarsSections.forEach(section => {
+        const bars = section.querySelectorAll('.bar');
+        const rect = section.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Check if the section is visible in viewport
+        if (rect.top < windowHeight && rect.bottom > 0) {
+            // Calculate scroll progress relative to viewport
+            const visibleRatio = 1 - rect.top / windowHeight;
+
+            bars[0].style.transform = `translateY(${visibleRatio * -90}px)`;  // -9 * 10
+            bars[1].style.transform = `translateY(${visibleRatio * -130}px)`; // -13 * 10
+            bars[2].style.transform = `translateY(${visibleRatio * -210}px)`; // -21 * 10
+            bars[3].style.transform = `translateY(${visibleRatio * -130}px)`;
+            bars[4].style.transform = `translateY(${visibleRatio * -90}px)`;
+        }
+    });
 });
 
 
@@ -14583,3 +14597,94 @@ selectInputs.forEach((select, i) => {
     select.addEventListener('change', () => updateForm(select, discribe));
     updateForm(select, discribe); // run once on load
 });
+
+const DragImage = document.querySelector('.drag_image');
+const box = document.querySelector('.drag-box');
+
+let isDragging = false;
+let startX = 0;
+let offsetX = 0;
+
+function getClientX(e) {
+    return e.touches ? e.touches[0].clientX : e.clientX;
+}
+
+// Start drag (mouse + touch)
+function startDrag(e) {
+    isDragging = true;
+    startX = getClientX(e) - offsetX;
+    box.style.cursor = 'grabbing';
+}
+
+// Move drag (mouse + touch)
+function moveDrag(e) {
+    if (!isDragging) return;
+    const clientX = getClientX(e);
+    offsetX = clientX - startX;
+    const perspective = window.offsetWidth > 767 ? 700 : 400
+    box.style.transform = `perspective(${perspective}px) rotateY(${offsetX}deg)`;
+    console.log('Dragged:', offsetX.toFixed(2), 'px');
+}
+
+// End drag (mouse + touch)
+function endDrag() {
+    isDragging = false;
+    box.style.cursor = 'grab';
+}
+
+// Mouse events
+DragImage.addEventListener('mousedown', startDrag);
+window.addEventListener('mousemove', moveDrag);
+window.addEventListener('mouseup', endDrag);
+
+// Touch events
+DragImage.addEventListener('touchstart', startDrag);
+window.addEventListener('touchmove', moveDrag);
+window.addEventListener('touchend', endDrag);
+
+
+
+const fadeSections = document.querySelectorAll('.background_section');
+
+window.addEventListener('scroll', () => {
+    fadeSections.forEach(section => {
+        const bgImage = section.querySelector('.background_image');
+        if (!bgImage) return;
+
+        const rect = section.getBoundingClientRect();
+        const fadeDistance = 800; 
+
+        let opacity = 1 - (0 - rect.top) / fadeDistance;
+        opacity = Math.max(Math.min(opacity, 1), 0);
+
+        bgImage.style.opacity = opacity;
+    });
+
+});
+
+
+//
+
+const customPopup = document.querySelector('.custom_popup ');
+const openPopup = document.querySelector('.open_menu')
+const closePopup = document.querySelector('.close_menu')
+
+openPopup.addEventListener('click', () => {
+    customPopup.classList.add('active');
+    if (customPopup.classList.contains('active')){
+        window.body.overflow = 'headen'
+    }
+})
+closePopup.addEventListener('click', () => {
+    customPopup.classList.remove('active');
+    if (customPopup.classList.contains('active')){
+        window.body.overflow = 'visible'
+    }
+})
+
+document.addEventListener('click', (e) => {
+    if (!e.target.customPopup){
+        customPopup.classList.remove('active');
+        window.body.overflow = 'visible'
+    }
+})
