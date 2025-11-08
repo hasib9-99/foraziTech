@@ -14554,15 +14554,21 @@ observer.observe(observTarget, {
 function updateContent() {
     const lightBox = document.querySelector('.dialog-lightbox-widget');
     const LightBoxTitleEl = lightBox.querySelector('.elementor-slideshow__title');
-    const LightBoxTitleParts = LightBoxTitleEl.textContent.split('|');
+    const LightBoxTitleParts = LightBoxTitleEl.textContent.split('<br>');
 
     const Url = LightBoxTitleParts[0].trim();
     const TitleText = LightBoxTitleParts[1].trim() ? LightBoxTitleParts[1].trim() : '';
 
-    LightBoxTitleEl.innerHTML = `<a href="${Url}" target="_blank">${TitleText}</a>`;
+    LightBoxTitleEl.innerHTML = `${Url} <i>${TitleText}</i>`;
 
 }
 
+const imageBoxs = document.querySelectorAll('.custom_gallery .elementor-gallery-item');
+imageBoxs.forEach((box) => {
+    const title = box.querySelector('.elementor-gallery-item__title');
+    const titleText = title.textContent.split('<br>');
+    title.innerHTML = `${titleText[0].trim()} <br> <i>${titleText[1].trim() }</i>`;
+})
 
 
 
@@ -14797,3 +14803,29 @@ if (sliderCon) {
 
 update();
 startAutoplay();
+
+
+
+///----------------------//
+
+const menuLits = document.querySelectorAll('.attribute_menu a')
+
+menuList.forEach((item ) => {
+    const title = item.getAttribute('title').split('|');
+    const dataClick = item.setAttribute('data-click-id', title[1].trim())
+    
+})
+
+
+const menuIcon = document.querySelector();
+const menuPoup = document.querySelector()
+
+menuIcon.addEventListener('click', () => {
+    menuIcon.classList.toggle('acive')
+    menuPoup.classList.toggle('acive')
+    if (menuIcon.classList.contains('active') && menuIcon.classList.contains('active')) {
+        window.body.style.overflow = 'hiden'
+    } else{
+        window.body.style.overflow = 'auto'
+    }
+} )

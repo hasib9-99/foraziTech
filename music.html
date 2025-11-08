@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Circular Audio Visualizer</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+  }
+
+  .upload {
+    position: absolute;
+    bottom: 30px;
+    color: #fff;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid #444;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: sans-serif;
+  }
+</style>
+</head>
+<body>
+  <canvas id="visualizer"></canvas>
+  <input type="file" id="audioFile" class="upload" accept="audio/*">
+
+<script>
+const canvas = document.getElementById("visualizer");
+const ctx = canvas.getContext("2d");
+let audioCtx, analyser, source, bufferLength, dataArray, audio;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const centerX = canvas.width / 2;
+const centerY = canvas.height / 2;
+const radius = 200;
+
+function drawVisualizer() {
+  requestAnimationFrame(drawVisualizer);
+
+  if (!analyser) return;
+
+  analyser.getByteFrequencyData(dataArray);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+  gradient.addColorStop(0, "rgba(0, 162, 255, 0.9)");
+  gradient.addColorStop(0.5, "rgba(255, 0, 255, 0.9)");
+  gradient.addColorStop(1, "rgba(255, 94, 0, 0.9)");
+
+  ctx.beginPath();
+  for (let i = 0; i < bufferLength; i++) {
+    const angle = (i / bufferLength) * Math.PI * 2;
+    const barHeight = dataArray[i] * 0.8;
+    const x = centerX + Math.cos(angle) * (radius + barHeight);
+    const y = centerY + Math.sin(angle) * (radius + barHeight);
+    ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.strokeStyle = gradient;
+  ctx.lineWidth = 3;
+  ctx.shadowBlur = 25;
+  ctx.shadowColor = "rgba(255, 0, 255, 0.8)";
+  ctx.stroke();
+}
+
+document.getElementById("audioFile").addEventListener("change", function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (audio) audio.pause();
+
+  audio = new Audio(URL.createObjectURL(file));
+  audio.crossOrigin = "anonymous";
+  audio.loop = true;
+  audio.play();
+
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  source = audioCtx.createMediaElementSource(audio);
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+
+  analyser.fftSize = 256;
+  bufferLength = analyser.frequencyBinCount;
+  dataArray = new Uint8Array(bufferLength);
+
+  drawVisualizer();
+});
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>YouTube XML to JSON API</title>
+</head>
+<body>
+  <h1>YouTube Channel Videos</h1>
+  <div id="videos"></div>
+
+  <script>
+    const channelId = "UC7NeKokKrEhuyvGc-3hoZTg";
+    const proxyUrl = "https://api.allorigins.win/get?url=";
+    const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+    // Declare global variable
+    let videosArray = [];
+
+    async function fetchYouTubeJSON() {
+      try {
+        const res = await fetch(proxyUrl + encodeURIComponent(feedUrl));
+        const data = await res.json(); // AllOrigins returns { contents: "XML here..." }
+
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data.contents, "application/xml");
+
+        const entries = Array.from(xmlDoc.getElementsByTagName("entry"));
+
+        // Populate global variable
+        videosArray = entries.map(entry => ({
+          videoId: entry.getElementsByTagName("yt:videoId")[0]?.textContent,
+          title: entry.getElementsByTagName("title")[0]?.textContent,
+          link: entry.getElementsByTagName("link")[0]?.getAttribute("href"),
+          published: entry.getElementsByTagName("published")[0]?.textContent,
+          thumbnail: entry.getElementsByTagName("media:thumbnail")[0]?.getAttribute("url")
+        }));
+
+        console.log("Videos Array:", videosArray);
+        return videosArray;
+
+      } catch (err) {
+        console.error("Failed to fetch YouTube feed:", err);
+      }
+    }
+
+    async function renderVideos() {
+      await fetchYouTubeJSON(); // Ensure videosArray is populated
+      const container = document.getElementById("videos");
+
+      videosArray.forEach(v => {
+        const div = document.createElement("div");
+        div.innerHTML = `
+          <h3>${v.title}</h3>
+          <a href="${v.link}" target="_blank">
+            <img src="${v.thumbnail}" alt="${v.title}" style="width:200px">
+          </a>
+          <p>Published: ${v.published}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    renderVideos();
+  </script>
+</body>
+</html>
+

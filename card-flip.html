@@ -35,6 +35,39 @@
 <body>
 
 
+    <div class="menu">
+        <ul>
+            <li>Lorem, ipsum.</li>
+            <li>Lorem, ipsum.</li>
+            <li>Lorem, ipsum.</li>
+            <li>Lorem, ipsum.</li>
+            <li class="under_item">Lorem, ipsum.</li>
+        </ul>
+    </div>
+    <div class="sub-items">
+        <ul>
+            <li>Lorem, ipsum.</li>
+            <li>Lorem, ipsum.</li>
+            <li>Lorem, ipsum.</li>
+            <li>Lorem, ipsum.</li>
+        </ul>
+    </div>
+    <style>
+        .sub-items{
+            opacity: 0;
+        }
+        .under_item:hover .sub-items{
+            opacity: 1;
+        }
+    </style>
+
+<script>
+const underItem = document.querySelector('.mega_sub ul li:nthchild(4)');
+const subItems = document.querySelector('.mega_sub_menu');
+
+underItem.addEventListener('mouseenter', () => subItems.style.display = 'block');
+underItem.addEventListener('mouseleave', () => subItems.style.display = 'none');
+</script>
 
 <div class="years" style="position: absolute; left: 25%; width: 16px; height: 16px;">
         <div class="year_dot"></div>
