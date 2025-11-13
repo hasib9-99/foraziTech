@@ -14567,7 +14567,7 @@ const imageBoxs = document.querySelectorAll('.custom_gallery .elementor-gallery-
 imageBoxs.forEach((box) => {
     const title = box.querySelector('.elementor-gallery-item__title');
     const titleText = title.textContent.split('<br>');
-    title.innerHTML = `${titleText[0].trim()} <br> <i>${titleText[1].trim() }</i>`;
+    title.innerHTML = `${titleText[0].trim()} <br> <i>${titleText[1].trim()}</i>`;
 })
 
 
@@ -14658,7 +14658,7 @@ window.addEventListener('scroll', () => {
         if (!bgImage) return;
 
         const rect = section.getBoundingClientRect();
-        const fadeDistance = 800; 
+        const fadeDistance = 800;
 
         let opacity = 1 - (0 - rect.top) / fadeDistance;
         opacity = Math.max(Math.min(opacity, 1), 0);
@@ -14677,19 +14677,19 @@ const closePopup = document.querySelector('.close_menu')
 
 openPopup.addEventListener('click', () => {
     customPopup.classList.add('active');
-    if (customPopup.classList.contains('active')){
+    if (customPopup.classList.contains('active')) {
         window.body.overflow = 'headen'
     }
 })
 closePopup.addEventListener('click', () => {
     customPopup.classList.remove('active');
-    if (customPopup.classList.contains('active')){
+    if (customPopup.classList.contains('active')) {
         window.body.overflow = 'visible'
     }
 })
 
 document.addEventListener('click', (e) => {
-    if (!e.target.customPopup){
+    if (!e.target.customPopup) {
         customPopup.classList.remove('active');
         window.body.overflow = 'visible'
     }
@@ -14810,10 +14810,10 @@ startAutoplay();
 
 const menuLits = document.querySelectorAll('.attribute_menu a')
 
-menuList.forEach((item ) => {
+menuList.forEach((item) => {
     const title = item.getAttribute('title').split('|');
     const dataClick = item.setAttribute('data-click-id', title[1].trim())
-    
+
 })
 
 
@@ -14825,7 +14825,158 @@ menuIcon.addEventListener('click', () => {
     menuPoup.classList.toggle('acive')
     if (menuIcon.classList.contains('active') && menuIcon.classList.contains('active')) {
         window.body.style.overflow = 'hiden'
-    } else{
+    } else {
         window.body.style.overflow = 'auto'
     }
-} )
+})
+
+const theBox = document.querySelector('.cards');
+
+youtubeData.forEach((item) => {
+    const theStacture = `
+        <div class="card" video-data="${item.url}">
+            <img src="${item.thumbnail}" alt="">
+            <div class="card-overly">
+                <h4>${item.title}</h4>
+                <div class="icon"></div>
+                <div class="video-duration"></div>
+            </div>
+        </div>
+    `;
+    theBox.insertAdjacentHTML('beforeend', theStacture);
+});
+
+
+
+const video = document.getElementById("myVideo");
+const button = document.getElementById("capture");
+const img = document.getElementById("thumbnail");
+
+button.addEventListener("click", () => {
+    if (video.readyState < 2) {
+        alert("Please wait until the video is loaded.");
+        return;
+    }
+
+    // Create a canvas the same size as the video
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+
+    // Draw the current frame of the video onto the canvas
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to a data URL (image)
+    const thumbnailData = canvas.toDataURL("image/jpeg");
+
+    // Display it in the <img>
+    img.src = thumbnailData;
+})
+
+setTimeout(() => {
+    youtubeData.forEach((item, i) => {
+        const theStacture = `
+            <div class="card" video-data="${item.url}">
+                <img src="${item.thumbnail}" alt="">
+                <div class="card-overly">
+                    <h4>${item.title}</h4>
+                    <img src="/wp-content/uploads/2025/11/svgexport-15.svg" alt="">
+                </div>
+            </div>
+        `;+
+        theBox.insertAdjacentHTML("beforeend", theStacture);
+    });
+
+    document.addEventListener("click", (e) => {
+        const card = e.target.closest(".card");
+        if (card) {
+            const videoUrl = card.getAttribute("video-data");
+            const videoId = new URL(videoUrl).searchParams.get("v");
+
+            const iframe = document.querySelector(".cutom-video iframe.elementor-video");
+            if (iframe && videoId) {
+                const newSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&playsinline=1`;
+                iframe.src = newSrc;
+            }
+        }
+    });
+}, 500);
+
+//=================================================================================================
+document.addEventListener('DOMContentLoaded', () => {
+    const theBox = document.querySelector('.cards');
+    const customVideoSection = document.querySelector('.cutom-video');
+
+    // Clone the section and remove the original from DOM
+    const videosIframeSection = customVideoSection.cloneNode(true);
+    customVideoSection.remove();
+
+    Object.entries(youtubeTest).forEach(([cat, videos]) => {
+        const catName = cat;
+
+        // Create video cards
+        const videosItems = videos.map(video => {
+            console.log(video.title, video.url);
+            return `
+            <div class="card" video-data="${video.url}">
+                <img src="${video.thumbnail}" alt="">
+                <div class="card-overly">
+                    <h4>${video.title}</h4>
+                    <img src="/wp-content/uploads/2025/11/svgexport-15.svg" alt="">
+                    <div class="video-duration"></div>
+                </div>
+            </div>
+        `;
+        }).join('');
+
+        // Build the category section with cloned iframe
+        const theStacture = `
+        <div class="video-category">
+            <h2 class="catagory-name">${catName}</h2>
+            <div class="video-wraper">
+                ${videosIframeSection.outerHTML}
+                <div class="videos-container">
+                    ${videosItems}
+                </div>
+            </div>
+        </div>
+    `;
+
+        // Replace iframe src in cloned section
+        const iframe = videosIframeSection.querySelector('iframe');
+        if (iframe) {
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        theBox.insertAdjacentHTML('beforeend', theStacture);
+    });
+
+
+    setTimeout(() => {
+        const categoryBox = document.querySelectorAll('.video-category');
+
+        categoryBox.forEach((category, i) => {
+            const iframe = category.querySelector('.cutom-video iframe');
+            const url = Object.entries(youtubeTest)[i][1][0].url
+            const videoId = new URL(url).searchParams.get('v');
+            iframe.src = `https://www.youtube.com/embed/${videoId}`;
+        });
+
+        categoryBox.forEach((category) => {
+            const cards = category.querySelectorAll('.card');
+            const iframe = category.querySelector('.cutom-video iframe');
+            cards.forEach((card) => {
+                card.addEventListener('click', () => {
+                    const videoUrl = card.getAttribute('video-data');
+                    const videoId = new URL(videoUrl).searchParams.get('v');
+                    if (iframe && videoId) {
+                        const newSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&playsinline=1`;
+                        iframe.src = newSrc;
+                    }
+                });
+            });
+        });
+    }, 500);
+});
+
