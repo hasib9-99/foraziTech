@@ -14884,8 +14884,8 @@ setTimeout(() => {
                     <img src="/wp-content/uploads/2025/11/svgexport-15.svg" alt="">
                 </div>
             </div>
-        `;+
-        theBox.insertAdjacentHTML("beforeend", theStacture);
+        `; +
+            theBox.insertAdjacentHTML("beforeend", theStacture);
     });
 
     document.addEventListener("click", (e) => {
@@ -14980,3 +14980,144 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 });
 
+//=========cusm from================cusm from============cusm from================cusm from=====================cusm from=======================
+
+const getFrom = document.querySelector(".custom_from");
+const allSelects = getFrom.querySelectorAll("select");
+const getConsole = getFrom.querySelector(".elementor-field-group-Console");
+const consolField = getFrom.querySelectorAll(".elementor-field-group-Xbox, .elementor-field-group-PlayStation, .elementor-field-group-Nintendo, .elementor-field-group-Other");
+const fileUploadSection = getFrom.querySelector('.elementor-field-group-file_upload');
+const theLabel = fileUploadSection.querySelector('.elementor-field-label');
+const fileInput = fileUploadSection.querySelector('input');
+
+
+const previewContainer = document.createElement('div');
+previewContainer.classList.add('file-preview-container');
+
+fileUploadSection.appendChild(previewContainer);
+
+fileInput.addEventListener('change', () => {
+    const files = Array.from(fileInput.files);
+    previewContainer.innerHTML = '';
+
+    files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const fileSize =
+                file.size < 1024 * 1024
+                    ? (file.size / 1024).toFixed(2) + ' <b>KB</b>'
+                    : (file.size / (1024 * 1024)).toFixed(2) + ' <b>MB</b>';
+
+            const imageWraper = `
+            <div class="upload_image">
+                <img src="${e.target.result}" alt="">
+                <div class="image_diteals">
+                    <p>${file.size}</p>
+                    <p>${file.name}</p>
+                </div>
+            </div>`
+            previewContainer.insertAdjacentHTML('beforeend', imageWraper);
+        }
+        reader.readAsDataURL(file);
+    });
+});
+
+allSelects.forEach(select => {
+    // Check if the first option is not already a placeholder
+    const firstOption = select.querySelector("option:first-child");
+    firstOption.value = "";
+    firstOption.disabled = true;
+    firstOption.selected = true;
+    firstOption.hidden = true;
+});
+
+getConsole.querySelector('select').addEventListener("change", () => {
+    const selectedValue = getConsole.querySelector('select').value;
+    consolField.forEach(field => {
+
+        const isTarget = field.classList.contains(`elementor-field-group-${selectedValue}`);
+        console.log(isTarget);
+        if (isTarget) {
+            field.style.display = "flex";
+            field.querySelector('input, textarea, select').setAttribute('required', 'required');
+        } else {
+            field.style.display = "none";
+            field.querySelector('input, textarea, select').removeAttribute('required');
+        }
+    });
+});
+consolField.forEach(field => {
+    field.style.display = "none";
+    field.querySelector('input, textarea, select').removeAttribute('required');
+});
+
+
+
+const theStacture = `
+    <div class="fild_aria">
+        <img src="/wp-content/uploads/2025/11/svgexport-1-1.svg" alt="">
+        <h4>Click or drag files to this area to upload.</h4>
+        <p>You can upload up to 10 files.</p>
+    </div>
+    `
+theLabel.insertAdjacentHTML('beforeend', theStacture);
+
+
+
+/// map
+
+const svg = document.querySelector('.lend-map svg');
+const paths = svg.querySelectorAll('path, g');
+const allStates = document.querySelector('.states h2')
+const stats = []
+
+paths.forEach((item) => {
+    const stat = item.getAttribute('data-url') && item.getAttribute('data-url') !== 'false' ? item.id : ''
+    if (stat) stats.push({
+        id: item.id,
+        url: item.getAttribute('data-url')
+    });
+})
+stats.sort((a, b) => a.id.localeCompare(b.id, undefined, { sensitivity: 'base' }));
+
+allStates.textContent = '';
+stats.forEach((item, index) => {
+    const span = document.createElement('span');
+    span.classList.add('local-stats')
+    span.textContent = item.id;
+    span.setAttribute('data-url', item.url);
+    allStates.appendChild(span);
+
+    if (index < stats.length - 1) {
+        allStates.append(', ');
+    }
+});
+
+paths.forEach((item) => {
+    item.addEventListener('mouseenter', () => {
+        const statSpan = Array.from(document.querySelectorAll('.local-stats'))
+            .find(span => span.textContent === item.id);
+        if (statSpan) statSpan.classList.add('active');
+    });
+
+    item.addEventListener('mouseleave', () => {
+        const statSpan = Array.from(document.querySelectorAll('.local-stats'))
+            .find(span => span.textContent === item.id);
+        if (statSpan) statSpan.classList.remove('active');
+    });
+    item.addEventListener('click', () => {
+        const url = item.getAttribute('data-url');
+        if (url && url !== 'false') {
+            window.location.href = url;
+        }
+    });
+});
+
+allStates.querySelectorAll('span').forEach((span) => {
+    span.addEventListener('click', () => {
+        const url = span.getAttribute('data-url');
+        if (url && url !== 'false') {
+            window.location.href = url;
+        }
+    });
+});
