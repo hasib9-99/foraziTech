@@ -15121,3 +15121,214 @@ allStates.querySelectorAll('span').forEach((span) => {
         }
     });
 });
+
+
+
+// Grouped output
+const groupedData = [];
+
+// Helper object for quick lookups
+const locationMap = {};
+
+globalDateData.forEach(event => {
+
+    event.locations.forEach(location => {
+
+        // If this location does not exist yet, create it
+        if (!locationMap[location]) {
+            locationMap[location] = {
+                location: location,
+                posts: []
+            };
+        }
+
+        // Push event into this location group
+        locationMap[location].posts.push({
+            title: event.title,
+            content: event.content,
+            start_date: event.start_date,
+            end_date: event.end_date
+        });
+
+    });
+
+});
+
+// Convert map → array
+const finalStructure = Object.values(locationMap);
+
+// Log the result
+console.log("Grouped Location Data:", finalStructure);
+
+
+finalStructure.forEach(locationGroup => {
+    console.log(`Location: ${locationGroup.location}`);
+    locationGroup.posts.forEach(post => {
+        console.log(`  - Title: ${post.title}, Start: ${post.start_date}, End: ${post.end_date}`);
+    });
+});
+
+const inpformationBox = document.querySelector('.information_box');
+const locationCard = inpformationBox.querySelector('.location_card');
+const locations = inpformationBox.querySelector('.locations');
+
+
+finalStructure.forEach(locationGroup => {
+    const locationCardClone = locationCard.cloneNode(true);
+    locationCardClone.querySelector('.location_title .elementor-icon-list-text').textContent = locationGroup.location;
+    locationCardClone.querySelector('.location_wrap').innerHTML = '';
+
+    locationGroup.posts.forEach(post => {
+        const locationClone = locations.cloneNode(true);
+        locationClone.querySelector('.elementor-icon-box-title span').textContent = post.start_date;
+        locationClone.querySelector('.elementor-icon-box-description').textContent = post.end_date;
+        locationCardClone.querySelector('.location_wrap').appendChild(locationClone);
+    });
+    inpformationBox.appendChild(locationCardClone);
+})
+
+locationCard.remove();
+locations.remove();
+
+
+//========================
+const innersOne = document.querySelectorAll('.menu-bg__inner div');
+const innersTwo = document.querySelectorAll('.menu-bg__inner2 div');
+const menuIcon = document.querySelector('#menu-btn');
+const mainManu = document.querySelector('.main_menu');
+const menuContent = document.querySelector('.menu_content');
+
+let isMenu = false;
+
+// OPEN MENU animation
+function animateMenuOpen() {
+    // innersOne go LEFT to RIGHT
+    innersOne.forEach((item, i) => {
+        setTimeout(() => {
+            item.style.transform = 'translate(0, 0)'; // RESET
+        }, i * 100);
+    });
+
+    // innersTwo go RIGHT to LEFT
+    [...innersTwo].reverse().forEach((item, i) => {
+        setTimeout(() => {
+            item.style.transform = 'translate(0, 0)'; // RESET
+        }, i * 100);
+    });
+}
+
+// CLOSE MENU animation
+function animateMenuClose() {
+    // innersOne go RIGHT
+    innersOne.forEach((item, i) => {
+        setTimeout(() => {
+            item.style.transform = 'translate(100%, 0)';
+        }, i * 100);
+    });
+
+    // innersTwo go LEFT (reverse order)
+    [...innersTwo].reverse().forEach((item, i) => {
+        setTimeout(() => {
+            item.style.transform = 'translate(-100%, 0)';
+        }, i * 100);
+    });
+}
+
+menuIcon.addEventListener('click', () => {
+    if (isMenu) {
+        menuContent.style.opacity = 0;
+        animateMenuClose();
+        setTimeout(() => {
+            mainManu.style.display = 'none';
+        }, 1600);
+        document.body.style.overflow = 'auto';
+        isMenu = false;
+
+    } else {
+        mainManu.style.display = 'flex';
+        animateMenuOpen();
+        setTimeout(() => {
+            menuContent.style.opacity = 1;
+        }, 1600);
+        document.body.style.overflow = 'hidden';
+        isMenu = true;
+    }
+});
+
+// INIT STATE (start hidden)
+animateMenuClose();
+
+
+//==========================================
+const menuBtn = document.querySelector('.custom_btn')
+const customMenu = document.querySelector('.custom_menu')
+
+menuBtn.addEventListener('click', () => {
+    customMenu.classList.toggle('active')
+    menuBtn.classList.toggle('active')
+})
+
+
+
+//============================================
+
+const contactBox = document.querySelector('.contact_box');
+const contactText = document.querySelector('.contact_text')
+contactBox.addEventListener('.mousemove', (e) => {
+    contactText.style.top = `${e.clientY}px`
+    contactText.style.left = `${e.clientX}px`
+})
+
+//============================================
+function activateFadeUp() {
+    const items = document.querySelectorAll('.custom_fade');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    items.forEach(item => observer.observe(item));
+}
+
+// just call once
+activateFadeUp();
+
+
+//============================================
+const listsBox = document.querySelector('.custom_lists')
+const lists = listsBox.querySelectorAll('._list') 
+
+lists.forEach((item) => {
+    const img = item.querySelector('._image');
+
+    item.addEventListener('mouseenter', () => {
+        img.style.transform = 'scale3d(1, 1, 1)';
+        img.style.opacity = 1;
+    })
+
+    item.addEventListener('mouseleave', () => {
+        img.style.transform = 'scale3d(0, 0, 1)';
+        img.style.opacity = 0;
+    })
+})
+
+//============================================
+
+const imageBarBox = document.querySelector('.image_bar_box');
+const imgBars = document.querySelectorAll('.img_bar');
+
+document.addEventListener('scroll', () => {
+    const rect = imageBarBox.getBoundingClientRect()
+    imgBars.forEach((item, i) => {
+        if( i / 2 === 0){
+            item.style.transform = `translateX(${rect.top}px)`
+        }else{
+            item.style.transform = `translateX(${-rect.top}px)`
+        }
+    })
+})
+

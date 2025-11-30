@@ -38,6 +38,44 @@
     border-radius: 8px;
     margin-right: 10px;
   }
+
+
+
+
+
+
+
+.burger-menu-line-1{transform: translate3d(0px, 0px, 0px) rotateZ(0deg);}
+.burger-menu-line-2{opacity: 1;}
+.burger-menu-line-3{transform: translate3d(0%, 0px, 0px) rotateZ(0deg);}
+
+.custom_btn.active .burger-menu .burger-menu-line-1{transform: translate3d(0px, 8px, 0px) rotateZ(45deg);}
+.custom_btn.active .burger-menu .burger-menu-line-2{opacity: 0;}
+.custom_btn.active .burger-menu .burger-menu-line-3{transform: translate3d(0px, -8px, 0px) rotateZ(-45deg);}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </style>
 </head>
 <body>
@@ -127,6 +165,120 @@ window.addEventListener('resize', () => {
   fillImages();
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+.burger-menu{
+    height: 1.2em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.burger-menu-line-1,
+.burger-menu-line-2,
+.burger-menu-line-3{
+    height: 1px;
+    width: 100%;
+    background: #f0f0f0;
+
+    --tx: 0px;
+    --ty: 0px;
+    --rotate: 0deg;
+
+    transform: translate3d(var(--tx), var(--ty), 0) rotateZ(var(--rotate));
+    transition:
+        transform 0.2s linear, 
+        opacity 0.2s linear;  
+}
+
+.burger-menu-line-2 { opacity: 1; }
+
+.custom_btn.active .burger-menu .burger-menu-line-1{ --tx: 0px; --ty: 8px; }
+.custom_btn.active .burger-menu .burger-menu-line-2{ opacity: 0; }
+.custom_btn.active .burger-menu .burger-menu-line-3{ --tx: 0px; --ty: -8px; }
+
+.custom_btn.active.delay .burger-menu .burger-menu-line-1{
+    transition-delay: 0.2s;
+    --rotate: 45deg;
+}
+.custom_btn.active.delay .burger-menu .burger-menu-line-3{
+    transition-delay: 0.2s;
+    --rotate: -45deg;
+}
+
+.custom_btn:not(.active) .burger-menu div{
+    transition-delay: 0s !important;
+}
+</style>
+
+<div class="custom_btn">
+    <div class="burger-menu">
+        <div class="burger-menu-line-1"></div>
+        <div class="burger-menu-line-2"></div>
+        <div class="burger-menu-line-3"></div>
+    </div>
+</div>
+
+<script>
+const menuBtn = document.querySelector('.custom_btn');
+
+menuBtn.addEventListener('click', () => {
+    menuBtn.classList.toggle('active');
+
+    if(menuBtn.classList.contains('active')){
+        setTimeout(() => menuBtn.classList.add('delay'), 200);
+    } else {
+        menuBtn.classList.remove('delay');
+    }
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
