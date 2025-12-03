@@ -15300,7 +15300,7 @@ activateFadeUp();
 
 //============================================
 const listsBox = document.querySelector('.custom_lists')
-const lists = listsBox.querySelectorAll('._list') 
+const lists = listsBox.querySelectorAll('._list')
 
 lists.forEach((item) => {
     const img = item.querySelector('._image');
@@ -15324,11 +15324,130 @@ const imgBars = document.querySelectorAll('.img_bar');
 document.addEventListener('scroll', () => {
     const rect = imageBarBox.getBoundingClientRect()
     imgBars.forEach((item, i) => {
-        if( i / 2 === 0){
+        if (i / 2 === 0) {
             item.style.transform = `translateX(${rect.top}px)`
-        }else{
+        } else {
             item.style.transform = `translateX(${-rect.top}px)`
         }
     })
 })
 
+//============================================
+const hero = document.querySelector('.hero_section');
+const img = hero.querySelector('._img');
+const overlay = hero.querySelector('.section_overly');
+const heroTitles = hero.querySelectorAll('.hero_title');
+const bottomIcon = hero.querySelector('._bottom');
+
+document.addEventListener('DOMContentLoaded', () => {
+    img.style.transform = 'translateX(0) rotate(4deg) scale3d(0.6, 0.6, 1)';
+    setTimeout(() => {
+        img.querySelector('img').style.opacity = 1;
+        img.style.transform = 'translateX(0) rotate(4deg) scale3d(1, 1, 1)';
+        setTimeout(() => {
+            overlay.style.height = '150vh';
+            bottomIcon.classList.add('active');
+            [...heroTitles].reverse().forEach((item, i) => {
+                setTimeout(() => {
+                    item.classList.add('active');
+                }, i * 200);
+            });
+        }, 500);
+    }, 1000);
+});
+
+
+//============================================ cutom step menu
+
+const menuIcon = document.querySelector('.menu_btn')
+const menuPopup = document.querySelector('.menu_popup');
+const menu = menuPopup.querySelector('.the_menu .elementor-nav-menu__container > .elementor-nav-menu');
+const newMenu = menuPopup.querySelector('.new_menu');
+
+function buildMenu(currentMenu, parentAnchor = null) {
+    const ul = document.createElement('ul');
+
+    const menuItems = currentMenu.querySelectorAll(':scope > li.menu-item');
+
+    if (parentAnchor) {
+        // BACK BUTTON
+        const backLi = document.createElement('li');
+        backLi.className = 'back_item';
+        backLi.innerHTML = `<a href="javascript:void(0)">Back</a>`;
+        ul.appendChild(backLi);
+
+        // PARENT LABEL
+        const parentLi = document.createElement('li');
+        parentLi.className = 'parent_item';
+        const parentText = document.createElement('span');
+        parentText.textContent = parentAnchor.textContent;
+        parentLi.appendChild(parentText);
+        ul.appendChild(parentLi);
+    }
+
+    menuItems.forEach((item) => {
+        const li = document.createElement('li');
+        const anchor = item.querySelector(':scope > a');
+        anchor.classList = ''
+        const subMenu = item.querySelector(':scope > .sub-menu');
+
+        // Add class 'sub-icon' if submenu exists
+        if (subMenu) {
+            li.classList.add('sub_icon');
+        }
+
+        if (anchor) {
+            const clonedAnchor = anchor.cloneNode(true);
+            if (subMenu) {
+                clonedAnchor.removeAttribute('href');
+                clonedAnchor.style.cursor = 'default';
+            }
+            li.appendChild(clonedAnchor);
+        }
+
+        if (subMenu) {
+            const childUl = buildMenu(subMenu, anchor);
+            childUl.classList.add('sub_menu');
+            childUl.style.right = '-100%'; // hide by default
+            li.appendChild(childUl);
+        }
+
+        ul.appendChild(li);
+    });
+
+    return ul;
+}
+
+const cloned = buildMenu(menu);
+newMenu.appendChild(cloned);
+
+// Handle submenu opening
+newMenu.addEventListener('click', (e) => {
+    const li = e.target.closest('li');
+    if (!li) return;
+
+    const sub = li.querySelector(':scope > .sub_menu');
+    if (sub) {
+        sub.style.right = '0';
+        e.stopPropagation();
+    }
+
+    // Handle BACK button
+    if (li.classList.contains('back_item')) {
+        const parentUl = li.parentElement;
+        parentUl.style.right = '-100%';
+        e.stopPropagation();
+    }
+});
+
+
+menuIcon.addEventListener('click', () => {
+    menuPopup.classList.add('active')
+})
+
+document.addEventListener('click', (e) => {
+    // Check if the click target is NOT inside menuPopup
+    if (!menuPopup.contains(e.target) && !menuIcon.contains(e.target)) {
+        menuPopup.classList.remove('active');
+    }
+});
