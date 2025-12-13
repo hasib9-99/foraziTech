@@ -15451,3 +15451,334 @@ document.addEventListener('click', (e) => {
         menuPopup.classList.remove('active');
     }
 });
+
+
+//============================================ button progress
+const stories = document.querySelectorAll('.story_card .storis_card');
+const storiesBtns = document.querySelectorAll('.stoty_btn .e-loop-item');
+const buttonWrap = document.querySelector('.button_wrap');
+const height = window.innerHeight;
+
+document.addEventListener('scroll', () => {
+
+    stories.forEach((story, i) => {
+        const rect = story.getBoundingClientRect();
+
+        // top to card height progress
+        let progress = (-rect.top) / rect.height;
+        progress = Math.min(Math.max(progress, 0), 1);
+
+        const prog = storiesBtns[i].querySelector('.progress_innar');
+        prog.style.transform = `scale3d(${progress}, 1, 1)`;
+        prog.style.transformOrigin = 'left center';
+    });
+
+    if (window.scrollY >= height) {
+        buttonWrap.classList.add('active');   // add class
+    } else {
+        buttonWrap.classList.remove('active'); // remove class
+    }
+});
+
+
+// CLICK: go to story top
+storiesBtns.forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+        stories[i].scrollIntoView({
+            behavior: 'smooth',
+            block: 'start' // makes top = 0
+        });
+    });
+});
+
+
+
+//============================================ fully custom menu
+
+const theHeader = document.querySelector('.custom_header')
+const menuItems = theHeader.querySelectorAll('.custom_menu .elementor-nav-menu--main .elementor-item-anchor');
+const overly = theHeader.querySelector('.dropdown_overlay')
+const dorpDowns = overly.querySelectorAll('.dropdown_menu');
+let headerHight = 0
+
+document.addEventListener('scroll', () => {
+    console.log(window.scrollY);
+    if (window.scrollY > 100) {
+        theHeader.classList.add('active')
+    } else {
+        theHeader.classList.remove('active')
+    }
+})
+function resetDropDowns(item) {
+    const cardsItems = item.querySelector('_item');
+    const linksList = item.querySelector('._link-list li');
+    item.style.top = '-100%';
+    item.style.zIndex = 0;
+    overly.style.display = 'none';
+    document.body.style.overflowY = 'auto';
+    if (!cardsItems) return
+    if (!linksList) return
+
+    cardsItems.forEach((card, i) => {
+        card.style.transition = '';
+        card.classList.add('active');
+    })
+    linksList.forEach((link, i) => {
+        link.style.transition = '';
+        link.classList.add('active');
+    })
+}
+
+
+menuItems.forEach((item, index) => {
+    item.addEventListener('mouseenter', () => {
+        headerHight = document.querySelector('.main_desktop_menu').offsetHeight;
+
+        const cardsItems = item.querySelector('_item');
+        const linksList = item.querySelector('._link-list li');
+        dorpDowns.forEach(dropdown => {
+            resetDropDowns(dropdown);
+        })
+        overly.style.display = 'block';
+        dorpDowns[index].style.zIndex = 10;
+        document.body.style.overflowY = 'hidden';
+        setTimeout(() => {
+            dorpDowns[index].style.top = `${headerHight}px`;
+            cardsItems.forEach((card, i) => {
+                setTimeout(() => {
+                    card.style = 'transition: all 0.2s linear';
+                    card.classList.add('active');
+                }, i * 100);
+            })
+            linksList.forEach((link, i) => {
+                setTimeout(() => {
+                    link.style = 'transition: all 0.2s linear';
+                    link.classList.add('active');
+                }, i * 100);
+            })
+
+
+        }, 200);
+    });
+});
+
+dorpDowns.forEach((dropdown) => {
+    dropdown.addEventListener('mouseleave', () => {
+        resetDropDowns(dropdown)
+    });
+});
+
+
+
+//============================================ fully custom menu
+const theHeader = document.querySelector('.custom_header');
+const menuItems = theHeader.querySelectorAll('.custom_menu .elementor-nav-menu--main .elementor-item-anchor');
+const overly = theHeader.querySelector('.dropdown_overlay');
+const dorpDowns = overly.querySelectorAll('.dropdown_menu');
+
+const dorpTime = 200
+let headerHight = 0
+
+function handleResize() {
+    if (window.matchMedia('(min-width: 1379px)').matches) {
+
+        document.addEventListener('scroll', () => {
+            console.log(window.scrollY);
+            if (window.scrollY > 100) {
+                theHeader.classList.add('active')
+            } else {
+                theHeader.classList.remove('active')
+            }
+        })
+
+        function resetDropDowns(dropdown) {
+            const cardsItems = dropdown.querySelectorAll('._item');
+            const linksList = dropdown.querySelectorAll('._link-list li');
+
+            dropdown.style.top = '-100%';
+            dropdown.style.zIndex = 0;
+            overly.style.display = 'none';
+            document.body.style.overflowY = 'auto';
+
+            cardsItems.forEach((card, i) => {
+                card.style.transition = '';
+                card.classList.remove('active');
+            });
+
+            linksList.forEach((link, i) => {
+                link.style.transition = '';
+                link.classList.remove('active');
+            });
+        }
+
+
+        menuItems.forEach((item, index) => {
+            item.addEventListener('mouseenter', () => {
+                const dropdown = dorpDowns[index];
+                const cardsItems = dropdown.querySelectorAll('._item');
+                const linksList = dropdown.querySelectorAll('._link-list li');
+
+                headerHight = document.querySelector('.main_desktop_menu').offsetHeight;
+
+                dorpDowns.forEach(d => resetDropDowns(d));
+
+                overly.style.display = 'block';
+                dropdown.style.zIndex = 10;
+                document.body.style.overflowY = 'hidden';
+
+                setTimeout(() => {
+                    dropdown.style.top = `${headerHight}px`;
+
+                    cardsItems.forEach((card, i) => {
+                        setTimeout(() => {
+                            card.style = 'transition: all 0.2s linear';
+                            card.classList.add('active');
+                        }, dorpTime + (i * 100));
+                    })
+                    linksList.forEach((link, i) => {
+                        setTimeout(() => {
+                            link.style = 'transition: all 0.2s linear';
+                            link.classList.add('active');
+                        }, dorpTime + (i * 100));
+                    })
+                }, 200);
+            });
+        });
+
+        dorpDowns.forEach((dropdown) => {
+            dropdown.addEventListener('mouseleave', () => {
+                resetDropDowns(dropdown)
+            });
+        });
+
+    }
+}
+
+
+const menuBtn = document.querySelector('.mobile_menu-btn .toggle-button');
+const mobileDropdown = document.querySelector('.mobile_dtopdown')
+const subMenuBtns = document.querySelectorAll('.sub_menu-btn');
+const subMenuOption = document.querySelectorAll('.sub_option')
+const mainMenuOption = document.querySelector('.main_option')
+let MenuClose = document.querySelector('.close_back');
+let isSubMenu = false;
+
+
+menuBtn.addEventListener('click', () => {
+    mobileDropdown.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)'
+    mobileDropdown.style.pointerEvents = 'all'
+    document.body.style.overflowY = 'hidden';
+    menuBtn.style.opacity = '0'
+})
+
+MenuClose.addEventListener('click', () => {
+    if (!isSubMenu) {
+        mobileDropdown.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'
+        mobileDropdown.style.pointerEvents = 'none'
+        menuBtn.style.opacity = 1
+        document.body.style.overflowY = 'auto';
+    }else{
+        subMenuOption.forEach(item => {
+            item.style.left = '100%'
+        })
+        mainMenuOption.style.left = '0%'
+        MenuClose.classList.remove('sub');
+        isSubMenu = false;
+        document.body.style.overflowY = 'hidden';
+    }
+})
+subMenuBtns.forEach((menuBtn, i) => {
+    menuBtn.addEventListener('click', () => {
+        subMenuOption[i].style.left = 0
+        mainMenuOption.style.left = '-100%'
+        MenuClose.classList.add('sub')
+        isSubMenu = true;
+    })
+})
+
+
+
+const topToggle = document.querySelector('.top_bar_toggle');
+const toggleBtn = topToggle.querySelector('.toggle_btn');
+const togglecontent = topToggle.querySelector('.toggle_content');
+
+toggleBtn.addEventListener('click', () => {
+    toggleBtn.classList.toggle('active')
+    togglecontent.classList.toggle('active')
+})
+
+
+handleResize();
+window.addEventListener('resize', handleResize);
+
+
+const sortMenu = document.querySelector('.sort_menu');
+const sortBtn = sortMenu.querySelector('.sortBtn');
+const infoBox = sortMenu.querySelector('._info');
+
+sortBtn.addEventListener('click', () => {
+    sortMenu.classList.toggle('active');
+});
+
+document.addEventListener('click', (e) => {
+    if (!infoBox.contains(e.target) && !sortBtn.contains(e.target)) {
+        sortMenu.classList.remove('active');
+    }
+});
+
+
+const sectionContainer = document.querySelector('.section_container')
+const sectionOpenBtn = document.querySelector('.section_open')
+const sectionCloseBtn = document.querySelector('.section_close')
+
+const listBtns = document.querySelectorAll('.section_list li');
+const rightScroll = document.querySelector('.section_wraper');
+const sections = rightScroll.querySelectorAll('._section');
+
+listBtns.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+
+        // 1️⃣ reset all listBtns
+        listBtns.forEach(b => b.classList.remove('active'));
+
+        // 2️⃣ activate clicked button
+        btn.classList.add('active');
+
+        // 3️⃣ scroll to section
+        rightScroll.scrollTo({
+            top: sections[index].offsetTop,
+            behavior: 'smooth'
+        });
+
+        // 4️⃣ reset section scroll
+        sections[index].scrollTop = 0;
+    });
+});
+
+rightScroll.addEventListener('scroll', () => {
+    let currentIndex = 0;
+
+    sections.forEach((section, index) => {
+        if (rightScroll.scrollTop >= section.offsetTop - 10) {
+            currentIndex = index;
+        }
+    });
+
+    listBtns.forEach(b => b.classList.remove('active'));
+    listBtns[currentIndex].classList.add('active');
+});
+
+listBtns[0].classList.add('active');
+
+
+sectionOpenBtn.addEventListener('click', () => {
+    sectionContainer.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)';
+    sectionContainer.style.pointerEvents = 'all'
+    document.body.style.overflowY = 'hidden';
+});
+
+sectionCloseBtn.addEventListener('click', () => {
+    sectionContainer.style.clipPath = 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)'
+    sectionContainer.style.pointerEvents = 'none'
+    document.body.style.overflowY = 'auto';
+});
