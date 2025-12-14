@@ -15677,7 +15677,7 @@ MenuClose.addEventListener('click', () => {
         mobileDropdown.style.pointerEvents = 'none'
         menuBtn.style.opacity = 1
         document.body.style.overflowY = 'auto';
-    }else{
+    } else {
         subMenuOption.forEach(item => {
             item.style.left = '100%'
         })
@@ -15782,3 +15782,195 @@ sectionCloseBtn.addEventListener('click', () => {
     sectionContainer.style.pointerEvents = 'none'
     document.body.style.overflowY = 'auto';
 });
+
+
+// ==================================================
+// Ferrari Custom Slider (Autoplay + Bullets + Drag)
+// ==================================================
+
+// ---------- DOM
+const ferariSlider = document.querySelector('.ferari_slider');
+const fSliderWraper = ferariSlider.querySelector('.slider_wraper');
+const fSlide = fSliderWraper.querySelectorAll('._slide');
+const fBullets = ferariSlider.querySelectorAll('.f_slider_bullets span');
+const fTitles = ferariSlider.querySelectorAll('._title h2');
+
+// ---------- CONFIG
+const fSlideCount = fSlide.length;
+const fSlideDuration = 5000;
+const dragThreshold = 60; // px
+
+// ---------- STATE
+let fCurrent = 0;
+let autoPlay = null;
+
+// ---------- DRAG STATE
+let isDragging = false;
+let startX = 0;
+let currentTranslate = 0;
+let prevTranslate = 0;
+
+// ==================================================
+// CORE
+// ==================================================
+
+fTitles.forEach(title => {
+    const words = title.textContent.trim().split(' ');
+    title.innerHTML = words
+        .map(word => `<span class='wraper'><span class="word">${word}</span></span>`)
+        .join(' ');
+})
+
+function goTo(index) {
+    // move slider
+    fSliderWraper.style.transform = `translateX(-${index * 100}%)`;
+
+    // reset ALL words (important)
+    fTitles.forEach(title => {
+        title.querySelectorAll('.word').forEach(word => {
+            word.style.transform = 'translate3d(0, 50px, 0) rotate(4deg)';
+            word.style.transition = 'none';
+        });
+    });
+
+    // animate active slide words
+    const words = fSlide[index].querySelectorAll('.word');
+    words.forEach((w, i) => {
+        setTimeout(() => {
+            w.style.transition = 'all 0.5s linear';
+            w.style.transform = 'translate3d(0px, 0px, 0px) rotate(0deg)';
+        }, i * 50);
+    });
+}
+
+function sliderVisible(index) {
+    fSlide.forEach(slide => {
+        slide.style.transition = 'opacity 0.2s linear';
+        slide.style.opacity = 0;
+    });
+    fSlide[index].style.opacity = 1;
+}
+
+function updateBullets(index) {
+    fBullets.forEach((bullet, i) => {
+        const circle = bullet.querySelector('.bullet-progress-circle');
+        if (!circle) return;
+
+        bullet.classList.remove('active_bullet');
+
+        circle.style.transition = 'none';
+        circle.style.strokeDashoffset = 70;
+        circle.getBoundingClientRect();
+
+        if (i === index) {
+            bullet.classList.add('active_bullet');
+            circle.style.transition = `stroke-dashoffset ${fSlideDuration}ms linear`;
+            circle.style.strokeDashoffset = 0;
+        }
+    });
+}
+
+// ==================================================
+// SLIDE CONTROL
+// ==================================================
+
+function applySlide() {
+    goTo(fCurrent);
+    sliderVisible(fCurrent);
+    updateBullets(fCurrent);
+    restartAutoplay();
+}
+
+function next() {
+    if (fCurrent >= fSlideCount - 1) return;
+    fCurrent++;
+    applySlide();
+}
+
+function prev() {
+    if (fCurrent <= 0) return;
+    fCurrent--;
+    applySlide();
+}
+
+function restartAutoplay() {
+    clearInterval(autoPlay);
+    autoPlay = setInterval(() => {
+        if (fCurrent === fSlideCount - 1) {
+            fCurrent = 0;
+        } else {
+            fCurrent++;
+        }
+        applySlide();
+    }, fSlideDuration);
+}
+
+// ==================================================
+// BULLET EVENTS
+// ==================================================
+
+fBullets.forEach((bullet, index) => {
+    bullet.addEventListener('click', () => {
+        fCurrent = index;
+        applySlide();
+    });
+});
+
+// ==================================================
+// DRAG / SWIPE
+// ==================================================
+function getX(e) {
+    return e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+}
+
+function dragStart(e) {
+    isDragging = true;
+    startX = getX(e);
+    prevTranslate = -fCurrent * ferariSlider.offsetWidth;
+
+    fSliderWraper.style.transition = 'none';
+    clearInterval(autoPlay);
+}
+
+function dragMove(e) {
+    if (!isDragging) return;
+
+    const currentX = getX(e);
+    const diff = currentX - startX;
+
+    currentTranslate = prevTranslate + diff;
+    fSliderWraper.style.transform = `translateX(${currentTranslate}px)`;
+}
+
+function dragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+
+    const movedBy = currentTranslate - prevTranslate;
+    const dragThreshold = ferariSlider.offsetWidth * 0.25; // 25% of slide width
+    fSliderWraper.style.transition = 'transform 0.4s ease';
+
+    if (movedBy < -dragThreshold) {
+        next();
+    } else if (movedBy > dragThreshold) {
+        prev();
+    } else {
+        applySlide(); // snap back
+    }
+}
+
+// Mouse
+fSliderWraper.addEventListener('mousedown', dragStart);
+window.addEventListener('mousemove', dragMove);
+window.addEventListener('mouseup', dragEnd);
+
+// Touch
+fSliderWraper.addEventListener('touchstart', dragStart, { passive: true });
+fSliderWraper.addEventListener('touchmove', dragMove, { passive: true });
+fSliderWraper.addEventListener('touchend', dragEnd);
+
+// ==================================================
+// INIT
+// ==================================================
+
+applySlide();
