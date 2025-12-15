@@ -15974,3 +15974,76 @@ fSliderWraper.addEventListener('touchend', dragEnd);
 // ==================================================
 
 applySlide();
+
+
+
+setTimeout(() => {
+    // ==================================================
+    // Maserati Custom Slider (Autoplay + Bullets + Drag)
+    // ==================================================
+    const maseratiSlider = document.querySelector('.maserati_slider');
+    const mBullets = maseratiSlider.querySelectorAll('.swiper-pagination-bullets .swiper-pagination-bullet');
+    const bulletWraper = document.querySelector('.maserati_bullets');
+    const mSliderNumber = document.querySelector('.slider_number h2');
+    const MsliderCount = mBullets.length
+
+    // build custom bullets
+    mBullets.forEach(() => {
+        bulletWraper.insertAdjacentHTML(
+            'beforeend',
+            `<div class="slider_dot"><div class="dot_inner"></div></div>`
+        );
+    });
+
+    const customDots = bulletWraper.querySelectorAll('.slider_dot');
+
+    // observe swiper bullet class changes
+    mBullets.forEach((bullet, index) => {
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(mutation => {
+                if (
+                    mutation.type === 'attributes' &&
+                    mutation.attributeName === 'class'
+                ) {
+                    if (bullet.classList.contains('swiper-pagination-bullet-active')) {
+                        // sync active class
+                        customDots.forEach(dot => {
+                            const inner = dot.querySelector('.dot_inner')
+                            inner.style.transition = 'none'
+                            dot.classList.remove('active')
+                        });
+                        mSliderNumber.textContent = `${index + 1} / ${MsliderCount}`
+                        customDots[index].querySelector('.dot_inner').style.transition = 'all 5s linear';
+                        customDots[index].classList.add('active');
+                    }
+                }
+            });
+        });
+
+        observer.observe(bullet, {
+            attributes: true,
+            attributeFilter: ['class'],
+        });
+    });
+
+
+    // ===============================
+    // INIT FIRST BULLET (WITH TRANSITION)
+    // ===============================
+    if (mBullets[0].classList.contains('swiper-pagination-bullet-active')) {
+        customDots.forEach(dot => {
+            const inner = dot.querySelector('.dot_inner');
+            inner.style.transition = 'none';
+            dot.classList.remove('active');
+        });
+
+        mSliderNumber.textContent = `1 / ${MsliderCount}`;
+
+        // force browser repaint
+        requestAnimationFrame(() => {
+            customDots[0].querySelector('.dot_inner').style.transition = 'all 5s linear';
+            customDots[0].classList.add('active');
+        });
+    }
+
+}, 500);
