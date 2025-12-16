@@ -16047,3 +16047,99 @@ setTimeout(() => {
     }
 
 }, 500);
+
+
+
+// ===============================
+// TSG SLIDER DATA
+// ===============================
+const sliderContent = [
+    {
+        title: 'London olympic games',
+        link: '#',
+        imgData: '/wp-content/uploads/2025/12/tsg-hero-image-expanded_compressed.jpg'
+    },
+    {
+        title: 'Hampden Park – CWG',
+        link: '#',
+        imgData: '/wp-content/uploads/2025/12/HERO_Image_Content-4.jpg'
+    },
+    {
+        title: 'Lotus – GFOS',
+        link: '#',
+        imgData: '/wp-content/uploads/2025/12/HERO_Image_Content.jpg'
+    }
+];
+
+// ===============================
+// ELEMENTS
+// ===============================
+const tsgSlider = document.querySelector('.tsg_slider');
+const tsgWraper = document.querySelector('.tsg_wrapper');
+const tsgContentWraper = tsgSlider.querySelector('.slider_contet');
+
+const tsgNextBtn = tsgContentWraper.querySelector('.next');
+const tsgPrevBtn = tsgContentWraper.querySelector('.prev');
+
+const tsgOne = tsgContentWraper.querySelector('.title_one h2');
+const tsgTwo = tsgContentWraper.querySelector('.title_two h2');
+const tsgLink = tsgContentWraper.querySelector('.tsg_link a');
+
+// ===============================
+// CREATE SLIDES
+// ===============================
+sliderContent.forEach((data, index) => {
+    tsgWraper.insertAdjacentHTML(
+        'beforeend',
+        `<div class="slide"
+            style="
+                background-image:url(${data.imgData});
+                position:absolute;
+                inset:0;
+                opacity:${index === 0 ? 1 : 0};
+                transition: opacity 0.6s ease;
+            ">
+        </div>`
+    );
+});
+
+const tsgSlides = tsgWraper.querySelectorAll('.slide');
+const tsgSlideCount = tsgSlides.length;
+
+let tsgCurrent = 0;
+
+// ===============================
+// UPDATE SLIDER
+// ===============================
+function tsgSliderUpdate() {
+    tsgSlides.forEach(slide => slide.style.opacity = 0);
+    tsgSlides[tsgCurrent].style.opacity = 1;
+
+    tsgOne.textContent = sliderContent[tsgCurrent].title;
+    tsgTwo.textContent = sliderContent[tsgCurrent].title;
+    tsgLink.href = sliderContent[tsgCurrent].link;
+}
+
+// ===============================
+// INFINITE CONTROLS
+// ===============================
+function tsgNext() {
+    tsgCurrent = (tsgCurrent + 1) % tsgSlideCount;
+    tsgSliderUpdate();
+}
+
+function tsgPrev() {
+    tsgCurrent = (tsgCurrent - 1 + tsgSlideCount) % tsgSlideCount;
+    tsgSliderUpdate();
+}
+
+// ===============================
+// EVENTS
+// ===============================
+tsgNextBtn.addEventListener('click', tsgNext);
+tsgPrevBtn.addEventListener('click', tsgPrev);
+
+// ===============================
+// INIT
+// ===============================
+tsgSliderUpdate();

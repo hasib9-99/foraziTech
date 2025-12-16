@@ -1,202 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        body{
-            background-color: black;
-
-        }
-        .lines{
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            justify-content: flex-end;
-            align-items: flex-end;
-        }
-        .line{
-            background-color: #fff;
-            height: 1px;
-            width: 100%;
-        }
-        .lines .line:nth-child(1){
-            width: 90%;
-            transition: width 0.8s linear;
-        }
-        .lines:hover .line:nth-child(1){
-            width: 100%;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talk Word Counter</title>
+<style>
+body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+h1 { text-align: center; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ccc; padding: 10px; text-align: center; }
+th { background: #eee; }
+button { padding: 5px 10px; margin: 2px; }
+#status { margin-top: 20px; font-weight: bold; }
+</style>
 </head>
 <body>
 
-    
+<h1>Office Word Counter</h1>
 
-    <div class="menu">
-        <ul>
-            <li>Lorem, ipsum.</li>
-            <li>Lorem, ipsum.</li>
-            <li>Lorem, ipsum.</li>
-            <li>Lorem, ipsum.</li>
-            <li class="under_item">Lorem, ipsum.</li>
-        </ul>
-    </div>
-    <div class="sub-items">
-        <ul>
-            <li>Lorem, ipsum.</li>
-            <li>Lorem, ipsum.</li>
-            <li>Lorem, ipsum.</li>
-            <li>Lorem, ipsum.</li>
-        </ul>
-    </div>
-    <style>
-        .sub-items{
-            opacity: 0;
-        }
-        .under_item:hover .sub-items{
-            opacity: 1;
-        }
-    </style>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Words Spoken</th>
+</tr>
+</thead>
+<tbody id="table-body">
+<!-- Rows created by JS -->
+</tbody>
+</table>
+
+<div id="status">Status: OFF</div>
+<button id="startBtn">Start Listening</button>
+<button id="stopBtn">Stop Listening</button>
 
 <script>
-const underItem = document.querySelector('.mega_sub ul li:nthchild(4)');
-const subItems = document.querySelector('.mega_sub_menu');
+if(!('webkitSpeechRecognition' in window)) {
+    alert("Speech Recognition not supported in this browser. Use Chrome.");
+}
 
-underItem.addEventListener('mouseenter', () => subItems.style.display = 'block');
-underItem.addEventListener('mouseleave', () => subItems.style.display = 'none');
-</script>
+const people = ["A","B","C","D","E","F"];
+let wordCounts = {};
+people.forEach(p => wordCounts[p] = 0);
 
-<div class="years" style="position: absolute; left: 25%; width: 16px; height: 16px;">
-        <div class="year_dot"></div>
-        <h2 class="year_text">2019</h2>
-        <div class="project_content">
-            <div class="dot_wraper">
-                <div class="monthly_post"></div>
-                <div class="monthly_post"></div>
-                <div class="monthly_post"></div>
-            </div>
-            <div class="year_content">
-                <p>Restoration of 19 old documentaries (Project manager)</p>
-            </div>
-        </div>
-    </div>
-<script>
-
-yearsData.forEach((year, i) => {
-    const percent = (monthDiffs[i] / maxMonths) * 100;
-
-    // description (cleaning HTML)
-    const cleanDescription = year.projectDescription 
-        ? year.projectDescription.replace(/<[^>]*>/g, '').trim() 
-        : '';
-
-    const descriptionBlock = cleanDescription
-        ? `<li>
-                <p>description</p>
-                <span>${cleanDescription}</span>
-           </li>`
-        : '';
-
-    // project list
-    const projectItems = (year.subPosts && year.subPosts.length > 0)
-        ? year.subPosts.map((item) => `<li><p>${item.title}</p></li>`).join('')
-        : '';
-
-    const projectBlock = projectItems
-        ? `<li>
-                <p>project</p>
-                <ul>${projectItems}</ul>
-           </li>`
-        : '';
-
-    // final HTML
-    const dotHTML = `
-    <div class="years" style="position: absolute; left:${percent}%; width: 16px; height: 16px;">
-        <div class="year_dot"></div>
-        <h2 class="year_text">${year.projectName || ''}</h2>
-        <div class="post-content">
-            <ul>
-                ${descriptionBlock}
-                ${projectBlock}
-            </ul>
-        </div>
-    </div>
-    `;
-
-    barWraper.insertAdjacentHTML('beforeend', dotHTML);
+// Generate table rows
+const tbody = document.getElementById("table-body");
+people.forEach(p => {
+    const tr = document.createElement("tr");
+    const tdName = document.createElement("td");
+    tdName.textContent = p;
+    const tdCount = document.createElement("td");
+    tdCount.id = "count-"+p;
+    tdCount.textContent = 0;
+    tr.appendChild(tdName);
+    tr.appendChild(tdCount);
+    tbody.appendChild(tr);
 });
 
-</script>
+// Speech Recognition
+let recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.lang = 'en-US';
+let status = document.getElementById("status");
 
+// Assign speaker manually for demo
+let currentPersonIndex = 0; // In real office, assign mic per person
+function getCurrentPerson() { return people[currentPersonIndex]; }
 
-
-
-
-
-
-
-
-<script>
-    const menuIcon = document.querySelector('.menu_icon');
-    const menuPopup = document.querySelector('.menu_popup');
-    const popupInner = menuPopup.querySelector('.popup_inner');
-    menuIcon.addEventListener('click', () => {
-        menuIcon.classList.toggle('active');
-        menuPopup.classList.toggle('active');
-        if (menuPopup.classList.contains('active')) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'auto';
+recognition.onresult = function(event) {
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+        if(event.results[i].isFinal) {
+            const transcript = event.results[i][0].transcript.trim();
+            const wordCount = transcript.split(/\s+/).length;
+            const person = getCurrentPerson();
+            wordCounts[person] += wordCount;
+            document.getElementById("count-"+person).textContent = wordCounts[person];
+            console.log(`${person} spoke ${wordCount} words: "${transcript}"`);
         }
-    });
+    }
+};
 
-    document.addEventListener('click', (e) => {
-        if (!popupInner.contains(e.target) && !menuIcon.contains(e.target)) {
-            menuIcon.classList.remove('active');
-            menuPopup.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
+document.getElementById("startBtn").addEventListener("click", () => {
+    recognition.start();
+    status.textContent = "Status: LISTENING";
+});
+
+document.getElementById("stopBtn").addEventListener("click", () => {
+    recognition.stop();
+    status.textContent = "Status: OFF";
+});
+
+// Demo: switch speaker every 10s
+setInterval(()=>{ currentPersonIndex = (currentPersonIndex+1)%people.length; }, 10000);
 </script>
-
-
-<style>
-    .menu_icon{
-        height: 40px;
-        cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-    }
-    .line{
-        display: block;
-        width: 100%;
-        height: 2px;
-        background-color: white;
-        transition: all 0.3s ease;
-    }
-    .menu_icon.active .line._1{
-        transform: rotate(45deg) translate(5px, 5px);
-        width: 100%;
-    }
-    .menu_icon.active .line._2{
-        transform: rotate(-45deg) translate(5px, -5px);
-        width: 100%;
-    }
-</style>
-
-<div class="menu_icon ">
-    <span class="line _1"></span>
-    <span class="line _2"></span>
-</div>
-
-
 
 </body>
 </html>
