@@ -16143,3 +16143,157 @@ tsgPrevBtn.addEventListener('click', tsgPrev);
 // INIT
 // ===============================
 tsgSliderUpdate();
+
+
+// ==================================================
+// lexus Custom Slider
+// ==================================================
+const lexusSlider = document.querySelector('.lexus_slider');
+const lSlides = lexusSlider.querySelectorAll('.slide');
+const lBulletsWrap = lexusSlider.querySelector('.lexus_bullets');
+const lNextBtn = lexusSlider.querySelector('.lexus_content .next');
+const lPrevBtn = lexusSlider.querySelector('.lexus_content .prev');
+
+const lTitle = lexusSlider.querySelector('.lexus_title h2');
+const lContent = lexusSlider.querySelector('.lexus_contnt h2');
+const lBtn = lexusSlider.querySelector('.lexus_btn');
+const lBtnText = lBtn.querySelector('.elementor-button-text');
+
+const lSlideCount = lSlides.length;
+let lCurrent = 0;
+const lSlideDuration = 5000;
+
+let lAutoPlay = null;
+
+// -------------------------------
+// Create bullets
+// -------------------------------
+lSlides.forEach(item => {
+    const title = item.getAttribute('title')?.trim() || '';
+    const bullet = `
+        <div class="lexus_bullet">
+            <span>${title}</span>
+            <div class="bullet_bar">
+                <div class="bar_inner"></div>
+            </div>
+        </div>
+    `;
+    lBulletsWrap.insertAdjacentHTML('beforeend', bullet);
+});
+
+const lBars = lBulletsWrap.querySelectorAll('.bar_inner');
+
+// -------------------------------
+// Update Slider
+// -------------------------------
+
+function textFadeLeft(el, text) {
+    el.classList.remove('lexus_text_active');
+    el.classList.add('lexus_text_animate');
+
+    // force reflow
+    el.offsetWidth;
+
+    el.textContent = text;
+
+    el.classList.add('lexus_text_active');
+}
+
+
+function buttonFadeLeft(btn, textEl, text) {
+    // remove active class to reset
+    btn.classList.remove('lexus_text_active');
+    btn.classList.add('lexus_text_animate');
+
+    // force reflow
+    void btn.offsetWidth;
+
+    // set text first
+    textEl.textContent = text;
+
+    // trigger animation
+    btn.classList.add('lexus_text_active');
+}
+
+
+function lSliderUpdate() {
+
+    // slides
+    lSlides.forEach((item, i) => {
+        item.style.opacity = i === lCurrent ? '1' : '0';
+    });
+
+    // text content
+    const slide = lSlides[lCurrent];
+    const title = slide.getAttribute('title')?.trim() || '';
+    const content = slide.getAttribute('content')?.trim() || '';
+
+    textFadeLeft(lTitle, title);
+    textFadeLeft(lContent, content);
+    buttonFadeLeft(lBtn, lBtnText, `DISCOVER ${title}`);
+
+
+    // reset bars
+    lBars.forEach(bar => {
+        bar.style.transition = 'none';
+        bar.style.width = '0';
+    });
+
+    const bar = lBars[lCurrent];
+
+    // force reflow
+    bar.offsetWidth;
+
+    // animate bar
+    bar.style.transition = `width ${lSlideDuration}ms linear`;
+    bar.style.width = '100%';
+}
+
+// -------------------------------
+// Navigation
+// -------------------------------
+function lNext() {
+    lCurrent = (lCurrent + 1) % lSlideCount;
+    lSliderUpdate();
+    lSliderReset();
+}
+
+function lPrev() {
+    lCurrent = (lCurrent - 1 + lSlideCount) % lSlideCount;
+    lSliderUpdate();
+    lSliderReset();
+}
+
+// -------------------------------
+// Autoplay
+// -------------------------------
+function lSliderStart() {
+    lSliderStop();
+    lAutoPlay = setInterval(lNext, lSlideDuration);
+}
+
+function lSliderStop() {
+    if (lAutoPlay) {
+        clearInterval(lAutoPlay);
+        lAutoPlay = null;
+    }
+}
+
+function lSliderReset() {
+    lSliderStart();
+}
+
+// -------------------------------
+// Events
+// -------------------------------
+lNextBtn.addEventListener('click', lNext);
+lPrevBtn.addEventListener('click', lPrev);
+
+lexusSlider.addEventListener('mouseenter', lSliderStop);
+lexusSlider.addEventListener('mouseleave', lSliderStart);
+
+// -------------------------------
+// Init
+// -------------------------------
+lSliderUpdate();
+lSliderStart();
