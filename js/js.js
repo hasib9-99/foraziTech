@@ -16297,3 +16297,88 @@ lexusSlider.addEventListener('mouseleave', lSliderStart);
 // -------------------------------
 lSliderUpdate();
 lSliderStart();
+
+// -------------------------------
+// Hero section
+// -------------------------------
+const heroData = [
+    {
+        title: 'Kenya & Tanzania Wildlife Safari',
+        year: "2025",
+        offer: false
+    },
+    {
+        title: 'Kenya and Tanzania Safari Adventure',
+        year: "2026",
+        offer: true
+    },
+    {
+        title: 'Kenya and Tanzania Safari Adventure',
+        year: "2027",
+        offer: false
+    }
+];
+
+// Elements
+const titleWrap = document.querySelector('.custom_title h2');
+const titleBtn = titleWrap.querySelector('.litle_btn');
+const offer = document.querySelector('.offer_title');
+
+// Create dropdown
+const ul = document.createElement('ul');
+ul.className = 'year_dropdown';
+ul.style.display = 'none';
+
+// Create list items
+heroData.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.textContent = item.year;
+    li.dataset.index = index;
+    ul.appendChild(li);
+});
+
+titleBtn.appendChild(ul);
+
+// Toggle dropdown
+titleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    ul.style.display = ul.style.display === 'block' ? 'none' : 'block';
+});
+
+// Click outside → close
+window.addEventListener('click', () => {
+    ul.style.display = 'none';
+});
+
+// Click on year
+ul.querySelectorAll('li').forEach(li => {
+    li.addEventListener('click', (e) => {
+        e.stopPropagation(); // 🔥 THIS IS THE FIX
+
+        const index = e.currentTarget.dataset.index;
+        const data = heroData[index];
+
+        // Update title text only
+        titleWrap.childNodes[0].nodeValue = data.title + ' ';
+
+        // Toggle offer
+        offer.style.display = data.offer ? 'flex' : 'none';
+
+        // Close dropdown
+        ul.style.display = 'none';
+    });
+});
+
+
+const section = document.querySelector('.the_section');
+const circle = section.querySelector('.circle')
+
+
+document.addEventListener('mousemove', (e) => {
+    if (!e.target.section) return;
+
+    circle.style.top = `${e.clientY}px`
+    circle.style.left = `${e.clientX}px`
+})
+
+
