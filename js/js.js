@@ -16382,3 +16382,60 @@ document.addEventListener('mousemove', (e) => {
 })
 
 
+//============================================
+// mouse move
+//================================================
+
+const section = document.querySelector('.the_section');
+const circle = section.querySelector('.circle');
+
+let targetX = 0;
+let targetY = 0;
+let currentX = 0;
+let currentY = 0;
+
+const speed = 0.5; // fast + smooth
+let isInside = false;
+
+// Mouse move
+section.addEventListener('mousemove', (e) => {
+    const rect = section.getBoundingClientRect();
+    targetX = e.clientX - rect.left;
+    targetY = e.clientY - rect.top;
+    isInside = true;
+});
+
+// Enter section
+section.addEventListener('mouseenter', () => {
+    isInside = true;
+    circle.style.transform += ' scale(1)';
+});
+
+// Leave section
+section.addEventListener('mouseleave', () => {
+    isInside = false;
+    circle.style.transform += ' scale(0)';
+});
+
+function animate() {
+    const dx = targetX - currentX;
+    const dy = targetY - currentY;
+
+    currentX += dx * speed;
+    currentY += dy * speed;
+
+    circle.style.transform = `
+        translate(${currentX}px, ${currentY}px)
+        translate(-50%, -50%)
+        scale(${isInside ? 1 : 0})
+    `;
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+
+undefined
+
+
