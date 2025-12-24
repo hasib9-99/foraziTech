@@ -16439,3 +16439,101 @@ animate();
 undefined
 
 
+
+
+
+const customSlider = document.querySelector('.custom_slider');
+const slides = customSlider.querySelectorAll('._slide');
+
+let currentIndex = 0;
+let isDragging = false;
+let startX = 0;
+let diffX = 0;
+let autoPlayInterval;
+
+// ----------------------------
+// Init
+// ----------------------------
+slides.forEach((slide, i) => {
+    slide.style.opacity = i === 0 ? 1 : 0;
+    slide.style.transition = 'opacity 0.6s ease';
+});
+
+// ----------------------------
+// Slide functions
+// ----------------------------
+function showSlide(index) {
+    slides[currentIndex].style.opacity = 0;
+    currentIndex = index;
+    slides[currentIndex].style.opacity = 1;
+
+    // outher video puse and reset
+    slides.forEach((slide, i) => {
+        const video = slide.querySelector('video');
+        if (video && i !== currentIndex) {
+            video.pause();
+            video.currentTime = 0;
+        }
+    });
+    const video = slides[currentIndex].querySelector('video');
+    if (video) {
+        video.currentTime = 0;
+        video.play();
+    }
+}
+
+function next() {
+    showSlide((currentIndex + 1) % slides.length);
+}
+
+function prev() {
+    showSlide((currentIndex - 1 + slides.length) % slides.length);
+}
+
+// ----------------------------
+// Autoplay
+// ----------------------------
+function startAutoplay() {
+    autoPlayInterval = setInterval(next, 4000);
+}
+
+function stopAutoplay() {
+    clearInterval(autoPlayInterval);
+}
+
+startAutoplay();
+
+// ----------------------------
+// Drag Events
+// ----------------------------
+customSlider.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    diffX = 0;
+    stopAutoplay();
+    customSlider.style.cursor = 'grabbing';
+});
+
+customSlider.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    diffX = e.clientX - startX;
+});
+
+customSlider.addEventListener('mouseup', handleDragEnd);
+customSlider.addEventListener('mouseleave', handleDragEnd);
+
+function handleDragEnd() {
+    if (!isDragging) return;
+    isDragging = false;
+    customSlider.style.cursor = 'grab';
+
+    const threshold = 80; // drag distance
+
+    if (diffX < -threshold) {
+        next();
+    } else if (diffX > threshold) {
+        prev();
+    }
+
+    startAutoplay();
+}
