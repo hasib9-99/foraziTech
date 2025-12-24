@@ -16537,3 +16537,35 @@ function handleDragEnd() {
 
     startAutoplay();
 }
+
+
+// mod acrodian
+const accordianItems = document.querySelectorAll('.mod_acrodiant details');
+const accordianImgs = document.querySelectorAll('._acro-Image');
+
+// observ accordianItems
+accordianItems.forEach((item, index) => {
+    item.addEventListener('toggle', () => {
+        if (item.open) {
+            // close other items
+            accordianItems.forEach((otherItem, otherIndex) => {
+                if (otherIndex !== index) {
+                    otherItem.open = false;
+                }
+            });
+            // show image
+            accordianImgs.forEach((img, imgIndex) => {
+                img.style.opacity = imgIndex === index ? 1 : 0;
+                img.style.transition = 'opacity 0.6s ease';
+            });
+        } else {
+            // hide all images
+            accordianImgs.forEach((img) => {
+                img.style.opacity = 0;
+                img.style.transition = 'opacity 0.6s ease';
+            });
+        }
+    });
+});
+
+
