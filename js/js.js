@@ -16569,3 +16569,92 @@ accordianItems.forEach((item, index) => {
 });
 
 
+// ===============================
+// SUITE TOGGLE
+// ===============================
+const suites = document.querySelectorAll('.suite');
+
+suites.forEach((suite) => {
+    const btn = suite.querySelector('.suite_btn');
+    const content = suite.querySelector('.suite_content');
+
+    btn.addEventListener('click', () => {
+        content.classList.toggle('active');
+        btn.querySelector('.elementor-button-text').textContent =
+            content.classList.contains('active') ? 'Hide Details' : 'Show Details';
+        btn.classList.toggle('active');
+    });
+});
+
+
+// ===============================
+// SUITE SLIDER BUTTON ⇄ BULLET SYNC
+// ===============================
+const suiteSlideContents = document.querySelectorAll('.suite_slide-content');
+
+suiteSlideContents.forEach((content) => {
+    const bulletWraper = content.querySelector('.suite_slider .swiper-pagination');
+    const btns = content.querySelectorAll('.suite_slide-btns .btn');
+
+    if (!bulletWraper || !btns.length) return;
+
+    let bullets = [];
+
+    // -----------------------------
+    // BUTTON → BULLET
+    // -----------------------------
+    btns.forEach((btn, index) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (!bullets[index]) return;
+            bullets[index].click();
+        });
+    });
+
+    // -----------------------------
+    // BULLET → BUTTON (ACTIVE SYNC)
+    // -----------------------------
+    function syncActiveButton() {
+        bullets.forEach((bullet, index) => {
+            if (bullet.classList.contains('swiper-pagination-bullet-active')) {
+                btns.forEach(b => b.classList.remove('active'));
+                btns[index]?.classList.add('active');
+            }
+        });
+    }
+
+    // -----------------------------
+    // OBSERVE BULLET CLASS CHANGES
+    // -----------------------------
+    function observeBullets() {
+        bullets = bulletWraper.querySelectorAll('.swiper-pagination-bullet');
+
+        bullets.forEach((bullet) => {
+            const bulletObserver = new MutationObserver(() => {
+                syncActiveButton();
+            });
+
+            bulletObserver.observe(bullet, {
+                attributes: true,
+                attributeFilter: ['class']
+            });
+        });
+
+        syncActiveButton();
+    }
+
+    // -----------------------------
+    // OBSERVE BULLET CREATION
+    // -----------------------------
+    const wrapperObserver = new MutationObserver(() => {
+        observeBullets();
+    });
+
+    wrapperObserver.observe(bulletWraper, {
+        childList: true,
+        subtree: false
+    });
+
+    // initial
+    observeBullets();
+});
