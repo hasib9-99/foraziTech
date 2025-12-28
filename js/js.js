@@ -16658,3 +16658,250 @@ suiteSlideContents.forEach((content) => {
     // initial
     observeBullets();
 });
+
+
+// =============================== 
+// discovery feature
+// ===============================
+const discoveryData = [
+    {
+        section: "Exterior",
+        items: [
+            {
+                title: "MAKE YOUR MARK",
+                content: "Choose from a selection of striking colours and design flourishes including new 21-inch alloy wheels, finished in Gloss Black.",
+                img: "/wp-content/uploads/2025/12/L55026GL_303104697_015.avif",
+                poinPosition: { top: '84%', left: '23.05%' }
+            },
+            {
+                title: "ROOM FOR ADVENTURE",
+                content: "Space for roof boxes, bikes, and all your other gear. A dynamic roof load of up to 75kg.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_132-1.avif",
+                poinPosition: { top: '44%', left: '52%' }
+            },
+            {
+                title: "DISCOVERY DNA",
+                content: "The unmistakable and purposeful stance of a Discovery, with its rising waistline, and distinctive rear roof pillar.",
+                img: "/wp-content/uploads/2025/12/L55026GL_303104697_003_CROP.avif",
+                poinPosition: { top: '50%', left: '68%' }
+            },
+            {
+                title: "LOAD UP WITH EASE",
+                content: "The powered tailgate opens and closes at the touch of a button, with a generous loadspace of 1,794 litres.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_059.avif",
+                poinPosition: { top: '72%', left: '84%' }
+            }
+        ]
+    },
+    {
+        section: "Interior",
+        items: [
+            {
+                title: "SPACE FOR ALL",
+                content: "Flexibility and comfort for up to seven people across three rows.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_017.avif",
+                poinPosition: { top: '93%', left: '4%' }
+            },
+            {
+                title: "BRIGHT AND AIRY",
+                content: "A better view from every seat with the panoramic glass roof.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_026.avif",
+                poinPosition: { top: '20%', left: '9%' }
+            },
+            {
+                title: "KNOW THE ROAD AHEAD",
+                content: "12.3-inch Interactive Driver Display and optional Head-up Display.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_028.avif",
+                poinPosition: { top: '18%', left: '57%' }
+            },
+            {
+                title: "STAY IN TOUCH",
+                content: "Advanced connectivity keeps you informed and entertained.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_001.avif",
+                poinPosition: { top: '45%', left: '69%' }
+            },
+            {
+                title: "INGENIOUS STOWAGE",
+                content: "Ample stowage with wireless charging and smart spaces.",
+                img: "/wp-content/uploads/2025/12/L55024GL_303101775_027_ALT.avif",
+                poinPosition: { top: '85%', left: '70%' }
+            }
+        ]
+    }
+];
+
+const tabContents = document.querySelector('.tab_content');
+const contents = tabContents.querySelectorAll('._content');
+const tabBtns = document.querySelectorAll('.tab_btns ._btn');
+
+contents.forEach((cont, index) => {
+    const slide = cont.querySelector('._slider');
+    const carWraper = cont.querySelector('._car');
+    const sliderWraper = slide.querySelector('.slider_wraper');
+    const bullets = slide.querySelector('.bullets');
+    const posterImage = cont.querySelector('._pop img');
+    const title = slide.querySelector('._title h2');
+    const desc = slide.querySelector('._desc p');
+
+    const items = discoveryData[index].items;
+
+    items.forEach((item, itemIndex) => {
+        // Image
+        const img = document.createElement('img');
+        img.src = item.img;
+        img.alt = item.title;
+        img.className = '_slide';
+        img.style.display = itemIndex === 0 ? 'block' : 'none';
+        sliderWraper.appendChild(img);
+
+        // Bullet
+        const bullet = document.createElement('div');
+        bullet.className = itemIndex === 0 ? 'bullet active' : 'bullet';
+        bullet.dataset.index = itemIndex;
+        bullets.appendChild(bullet);
+
+        //hotspot point
+        const point = document.createElement('div');
+        const pointInner = document.createElement('div');
+        pointInner.className = 'point_inner';
+        point.className = `point`;
+        point.style.top = item.poinPosition.top;
+        point.style.left = item.poinPosition.left;
+        point.appendChild(pointInner);
+        carWraper.appendChild(point);
+
+        // Set first content
+        if (itemIndex === 0) {
+            title.textContent = item.title;
+            desc.textContent = item.content;
+            posterImage.src = item.img;
+        }
+    });
+});
+
+// Get slide data
+function dataSlide(contentIndex, slideIndex) {
+    const item = discoveryData[contentIndex].items[slideIndex];
+    return item;
+}
+
+// Update function
+function updateData(contentIndex, slideIndex) {
+
+    const cont = tabContents.querySelectorAll('._content')[contentIndex]; // get content
+    const slide = cont.querySelector('._slider');
+    const points = cont.querySelectorAll('.point');
+    const posterImage = cont.querySelector('._pop img');
+    const sliderWraper = slide.querySelector('.slider_wraper');
+    const bullets = slide.querySelectorAll('.bullet');
+    const slides = sliderWraper.querySelectorAll('._slide');
+    const title = slide.querySelector('._title h2');
+    const desc = slide.querySelector('._desc p');
+
+    // Update slides
+    slides.forEach((s, i) => {
+        s.style.display = i === slideIndex ? 'block' : 'none';
+    });
+
+    // Update title and desc
+    const data = dataSlide(contentIndex, slideIndex);
+    title.textContent = data.title;
+    desc.textContent = data.content;
+    posterImage.src = data.img;
+
+    // Update active bullet
+    bullets.forEach((b, i) => {
+        b.classList = i === slideIndex ? 'bullet active' : 'bullet';
+    });
+
+    // Update active point
+    points.forEach((p, i) => {
+        p.classList = i === slideIndex ? 'point active' : 'point';
+    });
+
+    // for any tablet and phones, open tab content
+    if (window.innerWidth <= 1024) {
+        slide.classList.add('active');
+        document.body.style.overflowY = 'hidden';
+    }
+}
+
+// Event listeners
+const newContents = tabContents.querySelectorAll('._content');
+newContents.forEach((cont, contIndex) => {
+
+    // Elements
+    const slide = cont.querySelector('._slider');
+    const bullets = cont.querySelectorAll('.bullet');
+    const nextBtn = cont.querySelector('._next');
+    const prevBtn = cont.querySelector('._prev');
+    const points = cont.querySelectorAll('.point');
+    const expand = cont.querySelector('._expand');
+    const popUp = cont.querySelector('._pop');
+    const close = cont.querySelector('._close');
+    const closeSlide = cont.querySelector('._close_slide');
+    let currentSlideIndex = 0; // Track current slide index
+
+    // Bullet click
+    bullets.forEach((bullet, bulletIndex) => {
+        bullet.addEventListener('click', () => {
+            updateData(contIndex, bulletIndex);
+        });
+    });
+
+    // Point click
+    points.forEach((point, pointIndex) => {
+        point.addEventListener('click', () => {
+            updateData(contIndex, pointIndex);
+            tabContents.classList.add('active');
+        });
+    });
+
+    // Next / Prev click
+    nextBtn.addEventListener('click', () => {
+        currentSlideIndex = (currentSlideIndex + 1) % discoveryData[contIndex].items.length;
+        updateData(contIndex, currentSlideIndex);
+    });
+    prevBtn.addEventListener('click', () => {
+        currentSlideIndex = (currentSlideIndex - 1 + discoveryData[contIndex].items.length) % discoveryData[contIndex].items.length;
+        updateData(contIndex, currentSlideIndex);
+    });
+
+    expand.addEventListener('click', () => {
+        popUp.classList.add('active');
+    });
+
+    close.addEventListener('click', () => {
+        popUp.classList.remove('active');
+    });
+
+    popUp.addEventListener('click', (e) => {
+        const img = popUp.querySelector('.img');
+        const closeBtn = popUp.querySelector('._close');
+
+        if ((img && img.contains(e.target)) || (closeBtn && closeBtn.contains(e.target))) {
+            // Clicked on image or close button → do nothing
+            return;
+        }
+
+        // Clicked outside → close popup
+        popUp.classList.remove('active');
+    });
+    closeSlide.addEventListener('click', () => {
+        slide.classList.remove('active');
+        document.body.style.overflowY = 'auto';
+        points.forEach(p => p.classList.remove('active'));
+    });
+});
+
+tabBtns.forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+        tabBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        newContents.forEach(c => c.classList.remove('active'));
+        newContents[index].classList.add('active');
+    });
+});
+
+tabBtns[0].click();
+

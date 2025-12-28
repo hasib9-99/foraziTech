@@ -22,3 +22,34 @@
     padding: 8px 12px
     
 }
+
+
+
+
+
+
+@keyframes scroll {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-2221px);
+    }
+}
+
+
+@media (max-width: 767px){
+    .marquee__inner {
+        width: 3512px;
+        animation: scroll 40s linear infinite;
+    }
+
+    @keyframes scroll {
+        from {
+            transform: translateX(0);
+        }
+        to {
+            transform: translateX(-1756px);
+        }
+    }
+}

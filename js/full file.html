@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Land Rover Canvas Renderer</title>
+<style>
+    body {
+        background: #111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+    canvas {
+        background: transparent;
+    }
+</style>
+</head>
+<body>
+
+<canvas id="carCanvas" width="2000" height="1000"></canvas>
+
+<script>
+const canvas = document.getElementById('carCanvas');
+const ctx = canvas.getContext('2d');
+
+/* ------------------------------
+   LAYER CONFIG
+------------------------------ */
+const layers = [
+    { id: 10 },
+    { id: 100 },
+    { id: 200 },
+    { id: 400 },
+    { id: 500 },
+    { id: 600 },
+    { id: 701 }
+];
+
+/* ------------------------------
+   DATA SOURCES
+------------------------------ */
+const data = {
+    10: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/shadow/exshad_l550_k26_a-swb_1.png?v=4cjrf"
+    },
+    100: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/colour/exbse_l550_k26_a-swb_a-rdyn-se_n-1af_gl_1.jpg?v=4cjrf",
+        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/colour/exbsemask_l550_k26_a-swb_a-rdyn-se_gl_1.png?v=4cjrf",
+        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/colour/exbse_l550_k26_a-swb_a-rdyn-se_gl.json?v=4cjrf"
+    },
+    200: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/engine/exeng_l550_k26_a-swb_a-d204_gl_1.jpg?v=4cjrf",
+        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/engine/exengmask_l550_k26_a-swb_a-d204_gl_1.png?v=4cjrf",
+        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/engine/exeng_l550_k26_a-swb_a-d204_gl.json?v=4cjrf"
+    },
+    400: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/wheel/exwhl_l550_k26_a-swb_n-039kz_gl_1.jpg?v=4cjrf",
+        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/wheel/exwhlmask_l550_k26_a-swb_n-039kz_gl_1.png?v=4cjrf",
+        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/wheel/exwhl_l550_k26_a-swb_n-039kz_gl.json?v=4cjrf"
+    },
+    500: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/roof/exroof_l550_k26_a-swb_n-080an_a-rdyn-se_gl_1.jpg?v=4cjrf",
+        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/roof/exroofmask_l550_k26_a-swb_n-080an_a-rdyn-se_gl_1.png?v=4cjrf",
+        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/roof/exroof_l550_k26_a-swb_n-080an_a-rdyn-se_gl.json?v=4cjrf"
+    },
+    600: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exopt_l550_k26_n-047db_a-swb_gl_1.jpg?v=4cjrf",
+        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exoptmask_l550_k26_n-047db_a-swb_gl_1.png?v=4cjrf",
+        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exopt_l550_k26_n-047db_a-swb_gl.json?v=4cjrf"
+    },
+    701: {
+        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exbcopt_l550_k26_n-041cx_a-swb_n-1af_n-080an_a-rdyn-se_gl_1.jpg?v=4cjrf",
+        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exbcoptmask_l550_k26_n-041cx_a-swb_n-080an_a-rdyn-se_gl_1.png?v=4cjrf",
+        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exbcopt_l550_k26_n-041cx_a-swb_n-080an_a-rdyn-se_gl.json?v=4cjrf"
+    }
+};
+
+/* ------------------------------
+   HELPERS
+------------------------------ */
+function loadImage(src) {
+    return new Promise(res => {
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        img.onload = () => res(img);
+        img.src = src;
+    });
+}
+
+function loadJSON(url) {
+    return url;
+}
+
+/* ------------------------------
+   DRAW WITH MASK
+------------------------------ */
+async function drawLayer(layerId) {
+    const layer = data[layerId];
+
+    const img = await loadImage(layer.image);
+
+    if (!layer.alpha || !layer.coord) {
+        ctx.drawImage(img, 0, 0);
+        return;
+    }
+
+    const [mask, coord] = await Promise.all([
+        loadImage(layer.alpha),
+        loadJSON(layer.coord)
+    ]);
+
+    const off = document.createElement('canvas');
+    off.width = coord.width;
+    off.height = coord.height;
+    const octx = off.getContext('2d');
+
+    // draw image
+    octx.drawImage(img, 0, 0, coord.width, coord.height);
+
+    // apply mask
+    octx.globalCompositeOperation = 'destination-in';
+    octx.drawImage(mask, 0, 0, coord.width, coord.height);
+
+    ctx.drawImage(off, coord.x, coord.y);
+}
+
+/* ------------------------------
+   RENDER ALL
+------------------------------ */
+async function render() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (const l of layers) {
+        await drawLayer(l.id);
+    }
+}
+
+render();
+</script>
+
+</body>
+</html>
