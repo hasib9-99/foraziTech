@@ -1,0 +1,200 @@
+import React, { useState } from 'react';
+import { CheckCircle, AlertCircle, Info, Copy, Check } from 'lucide-react';
+
+const CodeReviewAssistant = () => {
+  const [activeTab, setActiveTab] = useState('javascript');
+  const [copied, setCopied] = useState(null);
+
+  const copyToClipboard = (text, id) => {
+    navigator.clipboard.writeText(text);
+    setCopied(id);
+    setTimeout(() => setCopied(null), 2000);
+  };
+
+  const jsChecklist = [
+    {
+      category: "Performance",
+      severity: "high",
+      items: [
+        { text: "Avoid unnecessary re-renders (React)", comment: "Consider using useMemo/useCallback or moving this outside the component" },
+        { text: "No memory leaks (event listeners, intervals)", comment: "Missing cleanup - add return statement in useEffect or removeEventListener" },
+        { text: "Efficient loops (avoid nested loops where possible)", comment: "This nested loop has O(n²) complexity - consider using a Map/Set" },
+        { text: "Debounce/throttle expensive operations", comment: "This handler fires on every keystroke - consider debouncing" }
+      ]
+    },
+    {
+      category: "Security",
+      severity: "critical",
+      items: [
+        { text: "No XSS vulnerabilities (sanitize user input)", comment: "Unsanitized user input detected - use DOMPurify or proper escaping" },
+        { text: "No eval() or Function() constructor", comment: "Avoid eval() - this is a security risk" },
+        { text: "Validate data before using", comment: "Add input validation here to prevent injection attacks" },
+        { text: "No sensitive data in client-side code", comment: "API key should be in environment variable, not hardcoded" }
+      ]
+    },
+    {
+      category: "Code Quality",
+      severity: "medium",
+      items: [
+        { text: "Meaningful variable/function names", comment: "Consider renaming 'x' to something descriptive like 'userData'" },
+        { text: "Functions do one thing (single responsibility)", comment: "This function does multiple things - consider splitting it" },
+        { text: "Avoid magic numbers (use named constants)", comment: "Replace magic number with named constant like MAX_RETRIES" },
+        { text: "Remove console.logs and debugger statements", comment: "Remove debug code before merging" },
+        { text: "Handle errors properly (try-catch, error boundaries)", comment: "Add error handling for this async operation" }
+      ]
+    },
+    {
+      category: "Modern JS Practices",
+      severity: "low",
+      items: [
+        { text: "Use const/let instead of var", comment: "Replace var with const/let for block scoping" },
+        { text: "Use arrow functions appropriately", comment: "Arrow function would be cleaner here" },
+        { text: "Use destructuring where helpful", comment: "Consider destructuring: const { name, email } = user" },
+        { text: "Use optional chaining (?.) for nested properties", comment: "Use user?.address?.city to avoid null errors" },
+        { text: "Use template literals instead of concatenation", comment: "Use template literal: `Hello ${name}` instead of 'Hello ' + name" }
+      ]
+    }
+  ];
+
+  const cssChecklist = [
+    {
+      category: "Performance",
+      severity: "high",
+      items: [
+        { text: "Minimize specificity (avoid deep nesting)", comment: "Reduce specificity - this selector is too specific and hard to override" },
+        { text: "Avoid !important (unless absolutely necessary)", comment: "Remove !important and fix specificity issue instead" },
+        { text: "Use shorthand properties", comment: "Combine into shorthand: margin: 10px 20px;" },
+        { text: "Optimize animations (use transform/opacity)", comment: "Use transform instead of top/left for better performance" }
+      ]
+    },
+    {
+      category: "Responsiveness",
+      severity: "high",
+      items: [
+        { text: "Mobile-first approach used", comment: "Consider mobile-first: start with mobile styles, add tablet/desktop in media queries" },
+        { text: "Flexible units (rem, em, %, vw/vh) not fixed px", comment: "Use rem instead of px for better scalability" },
+        { text: "Appropriate breakpoints defined", comment: "Add media query for tablet/mobile viewports" },
+        { text: "Images are responsive", comment: "Add max-width: 100% and height: auto to images" }
+      ]
+    },
+    {
+      category: "Maintainability",
+      severity: "medium",
+      items: [
+        { text: "CSS variables for repeated values", comment: "Define color as CSS variable: --primary-color" },
+        { text: "Consistent naming convention (BEM, etc.)", comment: "Follow BEM naming: .block__element--modifier" },
+        { text: "Logical organization/grouping", comment: "Group related styles together" },
+        { text: "Remove unused styles", comment: "This class appears unused - verify and remove" },
+        { text: "Vendor prefixes when needed", comment: "Add -webkit- prefix for Safari support" }
+      ]
+    },
+    {
+      category: "Modern CSS",
+      severity: "low",
+      items: [
+        { text: "Use Flexbox/Grid for layouts", comment: "Use CSS Grid/Flexbox instead of floats" },
+        { text: "Logical properties (inline/block)", comment: "Consider margin-inline-start instead of margin-left for RTL support" },
+        { text: "CSS nesting (if supported)", comment: "Can use native nesting here if browser support allows" },
+        { text: "Container queries where appropriate", comment: "Container query would work better here than media query" }
+      ]
+    }
+  ];
+
+  const getSeverityColor = (severity) => {
+    switch(severity) {
+      case 'critical': return 'text-red-600 bg-red-50';
+      case 'high': return 'text-orange-600 bg-orange-50';
+      case 'medium': return 'text-yellow-600 bg-yellow-50';
+      case 'low': return 'text-blue-600 bg-blue-50';
+      default: return 'text-gray-600 bg-gray-50';
+    }
+  };
+
+  const getSeverityIcon = (severity) => {
+    if (severity === 'critical' || severity === 'high') {
+      return <AlertCircle className="w-4 h-4" />;
+    }
+    return <Info className="w-4 h-4" />;
+  };
+
+  const checklist = activeTab === 'javascript' ? jsChecklist : cssChecklist;
+
+  return (
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Code Review Assistant</h1>
+        <p className="text-gray-600">Quick checklist and comment templates to speed up your reviews</p>
+      </div>
+
+      <div className="bg-white rounded-lg shadow-sm mb-6">
+        <div className="flex border-b">
+          <button
+            onClick={() => setActiveTab('javascript')}
+            className={`flex-1 px-6 py-3 font-medium transition-colors ${
+              activeTab === 'javascript'
+                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            JavaScript
+          </button>
+          <button
+            onClick={() => setActiveTab('css')}
+            className={`flex-1 px-6 py-3 font-medium transition-colors ${
+              activeTab === 'css'
+                ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50'
+                : 'text-gray-600 hover:bg-gray-50'
+            }`}
+          >
+            CSS
+          </button>
+        </div>
+
+        <div className="p-6">
+          {checklist.map((section, idx) => (
+            <div key={idx} className="mb-6 last:mb-0">
+              <div className={`flex items-center gap-2 mb-3 px-3 py-2 rounded-md ${getSeverityColor(section.severity)}`}>
+                {getSeverityIcon(section.severity)}
+                <h2 className="font-semibold">{section.category}</h2>
+                <span className="text-xs uppercase ml-auto">{section.severity}</span>
+              </div>
+              
+              <div className="space-y-2">
+                {section.items.map((item, itemIdx) => (
+                  <div key={itemIdx} className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-md group">
+                    <CheckCircle className="w-5 h-5 text-gray-300 flex-shrink-0 mt-0.5" />
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-gray-700 mb-1">{item.text}</div>
+                      <div className="flex items-start gap-2">
+                        <code className="text-sm text-gray-600 bg-gray-100 px-2 py-1 rounded flex-1 break-words">
+                          {item.comment}
+                        </code>
+                        <button
+                          onClick={() => copyToClipboard(item.comment, `${idx}-${itemIdx}`)}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-200 rounded"
+                          title="Copy comment"
+                        >
+                          {copied === `${idx}-${itemIdx}` ? (
+                            <Check className="w-4 h-4 text-green-600" />
+                          ) : (
+                            <Copy className="w-4 h-4 text-gray-600" />
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
+        <strong>Tip:</strong> Hover over any item and click the copy icon to quickly paste review comments into your PR!
+      </div>
+    </div>
+  );
+};
+
+export default CodeReviewAssistant;

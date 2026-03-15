@@ -1,143 +1,234 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Land Rover Canvas Renderer</title>
+add_action( 'wp_head', function () {
+?>
 <style>
-    body {
-        background: #111;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
+/* ===== Followers Toggle (site #2) ===== */
+
+.custom-followers-wrapper{
+    position: relative;
+}
+
+/* Desktop / Tablet → hide after 10 */
+.custom-followers-wrapper .custom-followers-grid .follower-card:nth-child(n+11){
+    display:none;
+}
+.custom-followers-wrapper.followers-show-extra .custom-followers-grid .follower-card:nth-child(n+11){
+    display:block;
+}
+
+/* Mobile → hide after 9 */
+@media (max-width:767px){
+    .custom-followers-wrapper .custom-followers-grid .follower-card:nth-child(n+10){
+        display:none;
     }
-    canvas {
-        background: transparent;
+    .custom-followers-wrapper.followers-show-extra .custom-followers-grid .follower-card:nth-child(n+10){
+        display:block;
     }
+}
+
+/* Grid clipping */
+.custom-followers-wrapper .custom-followers-grid{
+    overflow:hidden;
+    transition:max-height .25s ease;
+}
+
+/* Blur overlay */
+.custom-followers-wrapper.has-follower-toggle{
+    overflow:hidden;
+}
+.custom-followers-wrapper .custom-followers-grid{
+    padding:2px;
+}
+.custom-followers-wrapper.has-follower-toggle .followers-blur{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:50px;
+    pointer-events:none;
+    background:linear-gradient(to bottom, rgba(255,255,255,.4), #fff);
+    backdrop-filter: blur(3px);
+    transition:.25s;
+}
+
+.custom-followers-wrapper.followers-expanded .followers-blur{
+    opacity:0;
+    visibility:hidden;
+}
+
+/* Toggle container */
+.followers-toggle{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin-top:-50px;
+}
+.custom-followers-wrapper.followers-expanded .followers-toggle{
+    margin-top:10px;
+}
+
+/* Button */
+.followers-toggle-btn{
+	border: none;
+    background: transparent;
+    padding: 0px;
+    font-family: "Regularfigtree", system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    color: #333F6F;
+    cursor: pointer;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    gap: 2px;
+    z-index: 2;
+    height: 50px;
+    padding-top: 6px;
+}
+							   
+.followers-toggle-btn:hover,
+        .followers-toggle-btn:focus {
+            background: transparent;
+            outline: none;
+            box-shadow: none;
+        }
+
+.followers-toggle-btn .toggle-action{
+    display: inline-flex;
+    align-items: center;
+    gap: 0px;
+    color: #0077FF;
+    text-underline-offset: 4px;
+}
+
+.followers-toggle-btn u{
+    text-decoration:underline;
+}
+							   
+.followers-toggle-btn .toggle-prefix {
+            margin-right: 0px;
+            color: #333F6F;
+            font-weight: 500;
+        }
+
+.followers-expanded .toggle-prefix{
+    display:none;
+}
+.toggle-action svg {
+            width: 26px;
+            height: 26px;
+            margin-top: -4px;
+            margin-bottom: -4px;
+        }
+
+        .toggle-action svg path {
+            stroke: #0077FF;
+        }
+.custom-followers-wrapper.followers-expanded .toggle-action svg {
+            margin-bottom: -10px;
+        }
+.custom-followers-wrapper.followers-expanded .followers-toggle-btn {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            height: auto;
+            padding-top: 0px;
+        }
 </style>
-</head>
-<body>
+<?php
+});
 
-<canvas id="carCanvas" width="2000" height="1000"></canvas>
-
+add_action( 'wp_footer', function () {
+?>
 <script>
-const canvas = document.getElementById('carCanvas');
-const ctx = canvas.getContext('2d');
+    
+document.addEventListener('DOMContentLoaded', () => {
 
-/* ------------------------------
-   LAYER CONFIG
------------------------------- */
-const layers = [
-    { id: 10 },
-    { id: 100 },
-    { id: 200 },
-    { id: 400 },
-    { id: 500 },
-    { id: 600 },
-    { id: 701 }
-];
+    const DESKTOP_MAX_HEIGHT = 215;
+    const MOBILE_MAX_HEIGHT  = 302;
+    const BREAKPOINT         = 767;
 
-/* ------------------------------
-   DATA SOURCES
------------------------------- */
-const data = {
-    10: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/shadow/exshad_l550_k26_a-swb_1.png?v=4cjrf"
-    },
-    100: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/colour/exbse_l550_k26_a-swb_a-rdyn-se_n-1af_gl_1.jpg?v=4cjrf",
-        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/colour/exbsemask_l550_k26_a-swb_a-rdyn-se_gl_1.png?v=4cjrf",
-        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/colour/exbse_l550_k26_a-swb_a-rdyn-se_gl.json?v=4cjrf"
-    },
-    200: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/engine/exeng_l550_k26_a-swb_a-d204_gl_1.jpg?v=4cjrf",
-        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/engine/exengmask_l550_k26_a-swb_a-d204_gl_1.png?v=4cjrf",
-        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/engine/exeng_l550_k26_a-swb_a-d204_gl.json?v=4cjrf"
-    },
-    400: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/wheel/exwhl_l550_k26_a-swb_n-039kz_gl_1.jpg?v=4cjrf",
-        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/wheel/exwhlmask_l550_k26_a-swb_n-039kz_gl_1.png?v=4cjrf",
-        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/wheel/exwhl_l550_k26_a-swb_n-039kz_gl.json?v=4cjrf"
-    },
-    500: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/roof/exroof_l550_k26_a-swb_n-080an_a-rdyn-se_gl_1.jpg?v=4cjrf",
-        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/roof/exroofmask_l550_k26_a-swb_n-080an_a-rdyn-se_gl_1.png?v=4cjrf",
-        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/roof/exroof_l550_k26_a-swb_n-080an_a-rdyn-se_gl.json?v=4cjrf"
-    },
-    600: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exopt_l550_k26_n-047db_a-swb_gl_1.jpg?v=4cjrf",
-        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exoptmask_l550_k26_n-047db_a-swb_gl_1.png?v=4cjrf",
-        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exopt_l550_k26_n-047db_a-swb_gl.json?v=4cjrf"
-    },
-    701: {
-        image: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exbcopt_l550_k26_n-041cx_a-swb_n-1af_n-080an_a-rdyn-se_gl_1.jpg?v=4cjrf",
-        alpha: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exbcoptmask_l550_k26_n-041cx_a-swb_n-080an_a-rdyn-se_gl_1.png?v=4cjrf",
-        coord: "https://assets.config.landrover.com/lr/l550/k26/exkf/option/exbcopt_l550_k26_n-041cx_a-swb_n-080an_a-rdyn-se_gl.json?v=4cjrf"
-    }
-};
+    const productTitle = "<?php echo esc_js( get_the_title() ); ?>";
 
-/* ------------------------------
-   HELPERS
------------------------------- */
-function loadImage(src) {
-    return new Promise(res => {
-        const img = new Image();
-        img.crossOrigin = "anonymous";
-        img.onload = () => res(img);
-        img.src = src;
+    const SVG_UP = `
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+<path d="M15.9992 13.002L11.9996 9.00115L8 13.002" stroke="#595959" stroke-width="1.8" stroke-linecap="square"></path>
+</svg>`;
+
+    const SVG_DOWN = `
+<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" transform="matrix(-1,0,0,-1,0,0)">
+<path d="M15.9992 13.002L11.9996 9.00115L8 13.002" stroke="#595959" stroke-width="1.8" stroke-linecap="square"></path>
+</svg>`;
+
+    const collapsedHeight = () =>
+        window.innerWidth <= BREAKPOINT ? MOBILE_MAX_HEIGHT : DESKTOP_MAX_HEIGHT;
+
+    const setupWrapper = (wrapper) => {
+
+        const grid  = wrapper.querySelector('.custom-followers-grid');
+        const cards = wrapper.querySelectorAll('.follower-card');
+        if (!grid || cards.length <= (window.innerWidth <= BREAKPOINT ? 9 : 10)) return;
+
+        wrapper.classList.add('has-follower-toggle','followers-show-extra');
+
+        grid.dataset.collapsed = collapsedHeight();
+        grid.dataset.full = grid.scrollHeight;
+
+        grid.style.maxHeight = grid.dataset.collapsed + 'px';
+
+        /* Blur */
+        const blur = document.createElement('div');
+        blur.className = 'followers-blur';
+        wrapper.appendChild(blur);
+
+        /* Toggle */
+        const toggleWrap = document.createElement('div');
+        toggleWrap.className = 'followers-toggle';
+
+        const btn = document.createElement('button');
+        btn.className = 'followers-toggle-btn';
+        btn.innerHTML = `
+            <span class="toggle-prefix">Heb je meer ${productTitle} nodig?</span>
+            <span class="toggle-action"><u>Toon meer opties</u>${SVG_DOWN}</span>
+        `;
+
+        toggleWrap.appendChild(btn);
+        wrapper.appendChild(toggleWrap);
+
+        btn.addEventListener('click', () => {
+            const expanded = wrapper.classList.toggle('followers-expanded');
+
+            grid.style.maxHeight = expanded
+                ? grid.dataset.full + 'px'
+                : grid.dataset.collapsed + 'px';
+
+            btn.innerHTML = expanded
+                ? `<span class="toggle-prefix">Heb je meer ${productTitle} nodig?</span>
+                   <span class="toggle-action"><u>Opties verbergen</u>${SVG_UP}</span>`
+                : `<span class="toggle-prefix">Heb je meer ${productTitle} nodig?</span>
+                   <span class="toggle-action"><u>Toon meer opties</u>${SVG_DOWN}</span>`;
+        });
+    };
+
+    const run = () => {
+        document.querySelectorAll('.custom-followers-wrapper').forEach(wrapper => {
+            if (!wrapper.dataset.toggleApplied && wrapper.querySelectorAll('.follower-card').length) {
+                wrapper.dataset.toggleApplied = '1';
+                setupWrapper(wrapper);
+            }
+        });
+    };
+
+    run();
+
+    new MutationObserver(run).observe(document.body,{
+        childList:true,
+        subtree:true
     });
-}
 
-function loadJSON(url) {
-    return url;
-}
-
-/* ------------------------------
-   DRAW WITH MASK
------------------------------- */
-async function drawLayer(layerId) {
-    const layer = data[layerId];
-
-    const img = await loadImage(layer.image);
-
-    if (!layer.alpha || !layer.coord) {
-        ctx.drawImage(img, 0, 0);
-        return;
-    }
-
-    const [mask, coord] = await Promise.all([
-        loadImage(layer.alpha),
-        loadJSON(layer.coord)
-    ]);
-
-    const off = document.createElement('canvas');
-    off.width = coord.width;
-    off.height = coord.height;
-    const octx = off.getContext('2d');
-
-    // draw image
-    octx.drawImage(img, 0, 0, coord.width, coord.height);
-
-    // apply mask
-    octx.globalCompositeOperation = 'destination-in';
-    octx.drawImage(mask, 0, 0, coord.width, coord.height);
-
-    ctx.drawImage(off, coord.x, coord.y);
-}
-
-/* ------------------------------
-   RENDER ALL
------------------------------- */
-async function render() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    for (const l of layers) {
-        await drawLayer(l.id);
-    }
-}
-
-render();
+    window.addEventListener('resize', () => location.reload());
+});
 </script>
-
-</body>
-</html>
+<?php
+});

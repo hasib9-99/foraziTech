@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
+
+<title>Lottie JSON Control</title>
+
+<style>
+button{
+  padding:10px 15px;
+  margin:5px;
+  cursor:pointer;
+}
+
+#lottie{
+  width:300px;
+}
+</style>
+
+</head>
+<body>
+
+<div id="lottie"></div>
+
+<br>
+
+<button id="play">Play</button> <button id="pause">Pause</button> <button id="stop">Stop</button> <button id="speedUp">Speed +</button> <button id="speedDown">Speed -</button> <button id="start">Go Start</button> <button id="segment">Play Segment</button>
+
+<script>
+
+const element = document.getElementById("lottie");
+
+const animation = lottie.loadAnimation({
+  container: element,
+  renderer: "svg",
+  loop: false,
+  autoplay: false,
+  path: "./lottis/art.json"
+});
+
+let speed = 1;
+
+document.getElementById("play").onclick = () => animation.play();
+document.getElementById("pause").onclick = () => animation.pause();
+document.getElementById("stop").onclick = () => animation.stop();
+
+document.getElementById("speedUp").onclick = () => {
+  speed += 0.5;
+  animation.setSpeed(speed);
+};
+
+document.getElementById("speedDown").onclick = () => {
+  speed -= 0.5;
+  if(speed < 0.5) speed = 0.5;
+  animation.setSpeed(speed);
+};
+
+document.getElementById("start").onclick = () => {
+  animation.goToAndStop(0, true);
+};
+
+document.getElementById("segment").onclick = () => {
+  animation.playSegments([20,100], true);
+};
+
+element.addEventListener("mouseenter", () => {
+  animation.setDirection(1);
+  animation.play();
+});
+
+element.addEventListener("mouseleave", () => {
+  animation.setDirection(-1);
+  animation.play();
+});
+
+</script>
+
+</body>
+</html>
