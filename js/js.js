@@ -17357,28 +17357,42 @@ const animation = lottie.loadAnimation({
 let speed = 1;
 
 
+
+
 const lottiePath = [
-    '/wp-content/uploads/2026/03/urba.json',
-    '/wp-content/uploads/2026/03/prod.json',
-    '/wp-content/uploads/2026/03/int.json',
-    '/wp-content/uploads/2026/03/Dig.json',
-    '/wp-content/uploads/2026/03/data.json',
-    '/wp-content/uploads/2026/03/Booth.json',
-    '/wp-content/uploads/2026/03/art.json'
+    { json: '/wp-content/uploads/2026/03/Dig.json' },
+    { json: '/wp-content/uploads/2026/03/urba.json', img: '/wp-content/uploads/2026/03/640cde8f299a537ecec651d0_T-urba-01.svg' },
+    { json: '/wp-content/uploads/2026/03/prod.json', img: '/wp-content/uploads/2026/03/640ce05f85f0c00d1fa83bab_T-Prod-01.svg' },
+    { json: '/wp-content/uploads/2026/03/Booth.json', img: '/wp-content/uploads/2026/03/640ce05f6953394f97679c20_T-Booth-01.svg' },
+    { json: '/wp-content/uploads/2026/03/int.json', img: '/wp-content/uploads/2026/03/640cdd119747f44dfbbfffcb_T-Int.svg' },
+    { json: '/wp-content/uploads/2026/03/data.json', img: '/wp-content/uploads/2026/03/640ce05f90971b4d8404339c_art-01.svg' },
+    { json: '/wp-content/uploads/2026/03/Dig.json', img: '/wp-content/uploads/2026/03/640ce1ee317316663a89623e_Digital-01.svg' },
+    { json: '/wp-content/uploads/2026/03/urba.json' }
 ];
 
+const lottieWrap = document.querySelector('._lottie_wrap');
 const getLotties = document.querySelectorAll('._lottie');
+const lottiePoint = document.querySelector('.lottie_point');
+const nextBtn = document.querySelector('.next_btn');
+const prevBtn = document.querySelector('.prev_btn');
+
+const visibleItems = 3;
+const centerIndex = Math.floor(visibleItems / 2);
+
+let lottieImgs = [];
+let currentIndex = 0;
 
 getLotties.forEach((lottieCon, index) => {
 
-    const amimation = lottie.loadAnimation({
+    const animation = lottie.loadAnimation({
         container: lottieCon,
         renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: lottiePath[index]
+        loop: false,
+        autoplay: false,
+        path: lottiePath[index].json
     });
 
+    // Hover animation
     lottieCon.addEventListener("mouseenter", () => {
         animation.setDirection(1);
         animation.play();
@@ -17388,4 +17402,465 @@ getLotties.forEach((lottieCon, index) => {
         animation.setDirection(-1);
         animation.play();
     });
+
+
+
+    // Create bottom image points
+    if (lottiePath[index].img) {
+        const img = document.createElement('img');
+        img.src = lottiePath[index].img;
+        img.className = 'lottie_img';
+        lottiePoint.appendChild(img);
+        lottieImgs.push(img);
+        img.addEventListener('mouseenter', () => {
+            let moveIndex = index - centerIndex;
+            if (moveIndex < 0) moveIndex = 0;
+            lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+            getLotties.forEach(i => {
+                i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)';
+            });
+            lottieCon.style.transform = window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+            animation.setDirection(1);
+            animation.play();
+            img.style.filter = 'invert(0%)';
+
+            updateContent(index)
+        });
+        img.addEventListener('mouseleave', () => {
+            animation.setDirection(-1);
+            animation.play();
+            img.style.filter = 'invert(40%)';
+        });
+    }
+
+    // Click on lottie
+    lottieCon.addEventListener('click', () => {
+        let moveIndex = index - centerIndex;
+        if (moveIndex < 0) moveIndex = 0;
+        lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+        getLotties.forEach(i => {
+            i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)';
+        });
+        lottieCon.style.transform = window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+
+        updateContent(index)
+
+    });
 });
+
+
+function updateSlider(index) {
+
+    let moveIndex = index - centerIndex;
+    if (moveIndex < 0) moveIndex = 0;
+
+    lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+
+    getLotties.forEach(i => i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)');
+    getLotties[index].style.transform = window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+
+    updateContent(index)
+    if (animations[index]) {
+        animations.forEach(a => a.stop());
+        animations[index].setDirection(1);
+        animations[index].play();
+    }
+
+}
+
+nextBtn.addEventListener('click', () => {
+    currentIndex++;
+    if (currentIndex >= getLotties.length) {
+        currentIndex = getLotties.length - 1;
+    }
+    updateSlider(currentIndex);
+});
+
+prevBtn.addEventListener('click', () => {
+    currentIndex--;
+    if (currentIndex < 0) {
+        currentIndex = 0;
+    }
+    updateSlider(currentIndex);
+});
+
+
+
+
+
+/* ---------------- CHECK COOKIE ---------------- */
+
+const loader = document.querySelector(".loader");
+
+if (localStorage?.isFisrttime == 'false') {
+
+    loader.style.display = "none";
+
+} else {
+
+    const text = document.querySelector(".loader_text");
+    const img = document.querySelector(".loader_img");
+    const video = loader.querySelector('.elementor-background-video-hosted');
+
+
+    /* TEXT FADE IN */
+    setTimeout(() => {
+        text.style.opacity = "1";
+    }, 200);
+
+
+    /* TEXT FADE OUT */
+    setTimeout(() => {
+        text.style.opacity = "0";
+    }, 1200);
+
+
+    /* IMAGE FADE IN */
+    setTimeout(() => {
+        img.style.opacity = "1";
+    }, 1500);
+
+
+    /* VIDEO FINISHED */
+    video.addEventListener("ended", () => {
+
+        loader.style.opacity = "0";
+        loader.style.transition = "1s";
+        loader.style.pointerEvents = "none";
+
+
+        setTimeout(() => {
+            loader.style.display = "none";
+        }, 1000);
+
+        setCookie("loaderShown", "true", 7);
+
+    });
+
+    localStorage.isFisrttime == 'true';
+}
+
+
+setTimeout(() => {
+    const videoCards = document.querySelectorAll('.click-video');
+    const videoPopup = document.querySelector('._video-popup');
+    const popupClose = videoPopup.querySelector('._close');
+    const popupIframe = videoPopup.querySelector('iframe');
+
+    popupClose.addEventListener('click', () => {
+        videoPopup.style.display = 'none';
+
+        // stop video
+        popupIframe.src = '';
+    });
+
+    videoCards.forEach(card => {
+        card.addEventListener('click', () => {
+            videoPopup.style.display = 'block';
+
+            let videoSrc = card.querySelector('iframe').src;
+
+            // autoplay enable
+            if (!videoSrc.includes('autoplay=1')) {
+                videoSrc += (videoSrc.includes('?') ? '&' : '?') + 'autoplay=1';
+            }
+
+            popupIframe.src = videoSrc;
+        });
+    });
+}, 1000);
+
+
+
+
+
+// Create a class that extends HTMLDivElement
+class MyCard extends HTMLDivElement {
+    constructor() {
+        super(); // Always call super() when extending
+
+        // Add some extra behavior
+        this.addEventListener('click', () => {
+            const videoPopup = document.querySelector('._video-popup');
+            const popupClose = videoPopup.querySelector('._close');
+            const popupIframe = videoPopup.querySelector('iframe');
+
+            videoPopup.style.display = 'block';
+
+            let videoSrc = card.querySelector('iframe').src;
+
+            // autoplay enable
+            if (!videoSrc.includes('autoplay=1')) {
+                videoSrc += (videoSrc.includes('?') ? '&' : '?') + 'autoplay=1';
+            }
+
+            popupIframe.src = videoSrc;
+        });
+    }
+}
+
+// Register as a customized built-in element
+customElements.define('click-video', MyCard, { extends: 'div' });
+
+
+
+
+
+const lottiePath = [
+    { json: '/wp-content/uploads/2026/03/Dig.json', name: 'Digital', title: 'graphic', link: '/project-category/digital-graphic/' },
+    { json: '/wp-content/uploads/2026/03/urba.json', img: '/wp-content/uploads/2026/03/640cde8f299a537ecec651d0_T-urba-01.svg', name: 'architecture', title: 'urbanism', link: '/project-category/architecture-urbanism/' },
+    { json: '/wp-content/uploads/2026/03/int.json', img: '/wp-content/uploads/2026/03/640cdd119747f44dfbbfffcb_T-Int.svg', name: 'interior', title: 'space', link: '/project-category/interior-space/' },
+    { json: '/wp-content/uploads/2026/03/Booth.json', img: '/wp-content/uploads/2026/03/640ce05f6953394f97679c20_T-Booth-01.svg', name: 'booth', title: 'display', link: '/project-category/booth-display/' },
+    { json: '/wp-content/uploads/2026/03/prod.json', img: '/wp-content/uploads/2026/03/640ce05f85f0c00d1fa83bab_T-Prod-01.svg', name: 'product', title: 'packaging', link: '/project-category/product-packaging/' },
+    { json: '/wp-content/uploads/2026/03/art.json', img: '/wp-content/uploads/2026/03/640ce05f90971b4d8404339c_art-01.svg', name: 'artwork', title: 'installation', link: '/project-category/artwork-installation/' },
+    { json: '/wp-content/uploads/2026/03/Dig.json', img: '/wp-content/uploads/2026/03/640ce1ee317316663a89623e_Digital-01.svg', name: 'digital', title: 'graphic', link: '/project-category/digital-graphic/' },
+    { json: '/wp-content/uploads/2026/03/urba.json', name: 'architecture', title: 'urbanism', link: '/project-category/architecture-urbanism/' }
+];
+
+const lottieWrap = document.querySelector('._lottie_wrap');
+const getLotties = document.querySelectorAll('._lottie');
+const lottiePoint = document.querySelector('.lottie_point');
+const nextBtn = document.querySelector('.next_btn');
+const prevBtn = document.querySelector('.prev_btn');
+const lottieName = document.querySelector('._name h2');
+const lottieTitle = document.querySelector('._title h2');
+
+const visibleItems = 3;
+const centerIndex = Math.floor(visibleItems / 2);
+
+let animations = [];
+let lottieImgs = [];
+let currentIndex = 0;
+
+getLotties.forEach((lottieCon, index) => {
+
+    const animation = lottie.loadAnimation({
+        container: lottieCon,
+        renderer: "svg",
+        loop: false,
+        autoplay: false,
+        path: lottiePath[index].json
+    });
+
+    animations.push(animation); // store animation
+
+    // Hover animation
+    lottieCon.addEventListener("mouseenter", () => {
+        animation.setDirection(1);
+        animation.play();
+    });
+
+    lottieCon.addEventListener("mouseleave", () => {
+        animation.setDirection(-1);
+        animation.play();
+    });
+
+
+
+    // Create bottom image points
+    if (lottiePath[index].img) {
+        const img = document.createElement('img');
+        img.src = lottiePath[index].img;
+        img.className = 'lottie_img';
+        lottiePoint.appendChild(img);
+        lottieImgs.push(img);
+        img.addEventListener('mouseenter', () => {
+            let moveIndex = index - centerIndex;
+            if (moveIndex < 0) moveIndex = 0;
+            const maxMove = getLotties.length - centerIndex - 1;
+            if (moveIndex > maxMove) moveIndex = maxMove;
+            lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+            getLotties.forEach(i => {
+                i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)';
+            });
+            lottieCon.style.transform = window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+            animation.setDirection(1);
+            animation.play();
+            img.style.filter = 'invert(0%)';
+
+            updateContent(index);
+        });
+
+        img.addEventListener('mouseleave', () => {
+            animation.setDirection(-1);
+            animation.play();
+            img.style.filter = 'invert(40%)';
+        });
+
+        img.addEventListener('click', () => {
+            let moveIndex = index - centerIndex;
+            if (moveIndex < 0) moveIndex = 0;
+            const maxMove = getLotties.length - centerIndex - 1;
+            if (moveIndex > maxMove) moveIndex = maxMove;
+            lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+            getLotties.forEach(i => {
+                i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)';
+            });
+            lottieCon.style.transform = window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+
+            // play animation
+            animations.forEach(a => a.stop());
+            animations[index].setDirection(1);
+            animations[index].play();
+        });
+
+    }
+
+    // Click on lottie
+    lottieCon.addEventListener('click', () => {
+        let moveIndex = index - centerIndex;
+        if (moveIndex < 0) moveIndex = 0;
+        const maxMove = getLotties.length - centerIndex - 1;
+        if (moveIndex > maxMove) moveIndex = maxMove;
+        lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+        getLotties.forEach(i => {
+            i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)';
+        });
+        lottieCon.style.transform = window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+
+        updateContent(index)
+
+    });
+});
+
+
+function updateSlider(index) {
+
+    const moveIndex = Math.max(
+        0,
+        Math.min(index - centerIndex, getLotties.length - centerIndex - 1)
+    );
+
+    lottieWrap.style.transform = `translateX(-${moveIndex * 33.33}%)`;
+
+    getLotties.forEach(i =>
+        i.style.transform = window.innerWidth <= 768 ? 'scale(1)' : 'scale(0.6)')
+        ;
+
+    getLotties[index].style.transform =
+        window.innerWidth <= 768 ? 'scale(1.5)' : 'scale(1)';
+
+    updateContent(index);
+
+    if (animations[index]) {
+        animations.forEach(a => a.stop());
+        animations[index].setDirection(1);
+        animations[index].play();
+    }
+}
+
+nextBtn.addEventListener('click', () => {
+    currentIndex++;
+    if (currentIndex >= getLotties.length) {
+        currentIndex = getLotties.length - 1;
+    }
+    updateSlider(currentIndex);
+});
+
+prevBtn.addEventListener('click', () => {
+    currentIndex--;
+    if (currentIndex < 0) {
+        currentIndex = 0;
+    }
+    updateSlider(currentIndex);
+});
+
+
+function updateContent(index) {
+    lottieName.textContent = lottiePath[index].name;
+    lottieTitle.textContent = lottiePath[index].title;
+}
+
+const newLottieImgs = document.querySelectorAll('.lottie_img');
+const newLotties = document.querySelectorAll('._lottie');
+
+
+newLottieImgs.forEach((img, index) => {
+    img.setAttribute('Link', false);
+});
+newLotties.forEach((lottie, index) => {
+    lottie.setAttribute('Link', false);
+});
+
+function handleLottieClick(elements) {
+    elements.forEach((el, index) => {
+        el.addEventListener('click', () => {
+
+            if (el.getAttribute('link') === 'true') {
+                window.open(lottiePath[index].link, "_self");
+                return;
+            }
+
+            if (el.getAttribute('link') === 'false') {
+                elements.forEach(i => i.setAttribute('link', 'false'));
+                el.setAttribute('link', 'true');
+            }
+
+        });
+    });
+}
+
+handleLottieClick(newLottieImgs);
+handleLottieClick(newLotties);
+
+
+
+// rendom color for details
+const colors = ['#E7C950', '#FF69B4', '#4CC9F0', '#70E000', '#FB8500'];
+const getDetails = document.querySelectorAll('._acro details');
+let lastColor = '';
+getDetails.forEach(detail => {
+    let randomColor;
+    do {
+        randomColor = colors[Math.floor(Math.random() * colors.length)];
+    } while (randomColor === lastColor);
+    lastColor = randomColor;
+    detail.style.setProperty('--color', randomColor);
+});
+
+
+// rendom color for details without repeat
+const colors = ['#E7C950', '#FF69B4', '#4CC9F0', '#70E000', '#FB8500'];
+
+const getDetails = document.querySelectorAll('._acro details');
+
+getDetails.forEach((detail, index) => {
+    const color = colors[index % colors.length];
+    detail.style.setProperty('--color', color);
+});
+
+
+// horizontal scroll with mouse wheel
+const scrollContainer = document.querySelector('[data-elementor-type="wp-page"]');
+const section = scrollContainer.querySelectorAll('.e-con.e-parent');
+const perSectionWidth = scrollContainer.offsetWidth;
+// horizontal scroll with vertical scroll
+
+const scrollContainer = document.querySelector('[data-elementor-type="wp-page"]');
+const sections = scrollContainer.querySelectorAll('.e-con.e-parent');
+
+let totalWidth = 0;
+
+sections.forEach(section => {
+    totalWidth += section.offsetWidth;
+});
+
+// make page height equal to horizontal scroll distance
+document.body.style.height = totalWidth + "px";
+
+window.addEventListener('scroll', () => {
+
+    let scrollTop = window.scrollY;
+    if (scrollTop >= totalWidth) {
+        scrollTop = totalWidth;
+    }
+    scrollContainer.style.transform = `translateX(-${scrollTop}px)`;
+});
+
+
+
+setTimeout(() => {
+    document.querySelector('.Bubble__BubbleComponent-sc-75c3757e-0').click()
+}, 10000);
+
+
