@@ -18304,3 +18304,34 @@ dropdownInner.addEventListener('mouseleave', () => {
     }, { once: true });
 
 });
+
+
+
+// --------------------------------------------------------------yachts dropdown animation 
+const allDropdown = document.querySelector('._all-dropdown');
+const allDropdownBtn = document.querySelector('.all-drop-open');
+const allDropdownClose = allDropdown.querySelector('.all-drop-close');
+
+
+allDropdownBtn.addEventListener('click', () => {
+    allDropdown.classList.add('active');
+});
+
+allDropdownClose.addEventListener('click', () => {
+    allDropdown.classList.remove('active');
+});
+
+const options = document.querySelectorAll('._option ul li');
+const cards = document.querySelectorAll('._ship_section ._card');
+
+options.forEach((option, index) => {
+    option.addEventListener('click', () => {
+        const targetCard = cards[index];
+        targetCard.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    });
+});
+
+
