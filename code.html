@@ -1,234 +1,66 @@
 <!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Proven Results - Editorial Design</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&amp;family=Oswald:wght@500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<script>
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        primary: "#0ea5e9", // Sky blue variant for accents
-                        "background-light": "#f8fafc",
-                        "background-dark": "#0a0a0a", // Deep charcoal
-                    },
-                    fontFamily: {
-                        display: ["Oswald", "sans-serif"],
-                        body: ["Inter", "sans-serif"],
-                    },
-                    borderRadius: {
-                        DEFAULT: "0.5rem",
-                    },
-                },
-            },
-        };
-    </script>
-<style>
-        .editorial-text {
-            line-height: 0.85;
-            letter-spacing: -0.05em;
-        }
-        .text-outline {
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-            color: transparent;
-        }
-        .cinematic-mask {
-            mask-image: linear-gradient(to right, transparent, black 40%, black 60%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 40%, black 60%, transparent);
-        }
-        .red-gradient-footer {
-            background: linear-gradient(to bottom, transparent, #7f1d1d, #000);
-        }
-        .stat-divider {
-            height: 150px;
-            width: 1px;
-            background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1), transparent);
-        }
-    </style>
-</head>
-<body class="bg-background-light dark:bg-background-dark font-body transition-colors duration-300 overflow-x-hidden">
-<button class="fixed top-6 right-6 z-50 p-2 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 shadow-xl" onclick="document.documentElement.classList.toggle('dark')">
-<span class="material-symbols-outlined">contrast</span>
-</button>
-<main class="relative min-h-screen flex flex-col justify-center items-center py-24">
-<div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-<img alt="Cinematic clinic interior" class="absolute right-[-10%] top-1/2 -translate-y-1/2 w-2/3 h-[80vh] object-cover opacity-20 dark:opacity-10 grayscale mix-blend-luminosity rounded-3xl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiycac0axjOEQkkb_UBAMgAAi2bKuIhE-pxRJX-UEpNcnpJcnXvlsKJHUtTMv-6EjqOtyTRORnjdrVXFQ59AxSAs2G_I9oNXRoHR5wfkOlTncIiGmYgJw8q40vEDYzYbOFrevk9pzw07tuKksz59wyyn03hccU7k8Ub8NysSEo5K5Oksj03su9chRoRk3qAlsWoGccmwMF5G_OBYcupqODn8Dgeeqa0s3uY3Hd88Oh7PGjGzAz7rNe6YNSDqXPmRMH7Mu8Ms2HD9If"/>
-<div class="absolute top-1/4 left-[-5%] font-display text-[20vw] font-bold text-outline uppercase select-none leading-none opacity-20 dark:opacity-10">
-                Precision
-            </div>
-</div>
-<div class="container mx-auto px-6 relative z-10">
-<header class="max-w-4xl mb-32">
-<div class="flex items-center gap-4 mb-8">
-<span class="h-[1px] w-12 bg-primary"></span>
-<span class="text-xs font-bold tracking-[0.4em] uppercase text-zinc-500 dark:text-zinc-400">By The Numbers</span>
-</div>
-<h1 class="font-display text-7xl md:text-9xl font-bold text-zinc-900 dark:text-white uppercase editorial-text mb-8">
-                    Proven<br/>Results.
-                </h1>
-<p class="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 max-w-xl leading-relaxed font-light">
-                    We are the leading clinic in the industry with years of experience and thousands of successful operations.
-                </p>
-</header>
-<div class="relative grid grid-cols-1 md:grid-cols-3 gap-12 items-end">
-<div class="group">
-<div class="flex items-baseline gap-2 mb-2">
-<span class="material-symbols-outlined text-primary text-sm">groups</span>
-<span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 dark:text-zinc-500">Happy Patients</span>
-</div>
-<div class="flex items-start">
-<h2 class="font-display text-8xl md:text-[10rem] font-bold text-zinc-900 dark:text-white editorial-text tracking-tighter">
-                            5,000<span class="text-primary">+</span>
-</h2>
-</div>
-<p class="mt-4 text-xs font-medium text-zinc-500 dark:text-zinc-500 uppercase tracking-widest max-w-[200px]">
-                        Global patients from over 45 countries worldwide.
-                    </p>
-</div>
-<div class="group relative md:border-l border-zinc-200 dark:border-zinc-800 md:pl-12">
-<div class="flex items-baseline gap-2 mb-2">
-<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
-<span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 dark:text-zinc-500">Success Rate</span>
-</div>
-<div class="flex items-start">
-<h2 class="font-display text-8xl md:text-[10rem] font-bold text-zinc-900 dark:text-white editorial-text tracking-tighter">
-                            98<span class="text-primary">%</span>
-</h2>
-</div>
-<p class="mt-4 text-xs font-medium text-zinc-500 dark:text-zinc-500 uppercase tracking-widest">
-                        Proven clinical outcomes based on audited results.
-                    </p>
-</div>
-<div class="group relative md:border-l border-zinc-200 dark:border-zinc-800 md:pl-12">
-<div class="flex items-baseline gap-2 mb-2">
-<span class="material-symbols-outlined text-primary text-sm">schedule</span>
-<span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 dark:text-zinc-500">Industry Leader</span>
-</div>
-<div class="flex items-start">
-<h2 class="font-display text-8xl md:text-[10rem] font-bold text-zinc-900 dark:text-white editorial-text tracking-tighter">
-                            15<span class="text-primary">+</span>
-</h2>
-</div>
-<p class="mt-4 text-xs font-medium text-zinc-500 dark:text-zinc-500 uppercase tracking-widest">
-                        Years of excellence in restorative surgery.
-                    </p>
-</div>
-</div>
-<div class="mt-24 md:mt-48 flex flex-col md:flex-row gap-20 items-start md:items-center">
-<div class="relative">
-<div class="absolute -top-12 -left-4 text-zinc-100 dark:text-zinc-900 font-display text-[15rem] -z-10 select-none pointer-events-none opacity-50 dark:opacity-20">
-                        100
-                    </div>
-<div class="pt-12">
-<div class="flex items-baseline gap-2 mb-2">
-<span class="material-symbols-outlined text-primary text-sm">favorite</span>
-<span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 dark:text-zinc-500">Client Satisfaction</span>
-</div>
-<h3 class="font-display text-7xl md:text-9xl font-bold text-zinc-900 dark:text-white editorial-text">
-                            100%
-                        </h3>
-<p class="text-zinc-500 dark:text-zinc-400 text-sm mt-2 max-w-[280px]">
-                            Consistently rated as the most caring support network in the industry.
-                        </p>
-</div>
-</div>
-<div class="flex-grow h-[1px] bg-zinc-200 dark:bg-zinc-800 hidden md:block"></div>
-<div class="relative">
-<div class="flex items-baseline gap-2 mb-2">
-<span class="material-symbols-outlined text-primary text-sm">trending_up</span>
-<span class="text-[10px] uppercase tracking-widest font-bold text-zinc-400 dark:text-zinc-500">Technical Density</span>
-</div>
-<h3 class="font-display text-7xl md:text-9xl font-bold text-zinc-900 dark:text-white editorial-text">
-                        4,500<span class="text-primary text-6xl md:text-8xl">+</span>
-</h3>
-<p class="text-zinc-500 dark:text-zinc-400 text-sm mt-2">
-                        Average Grafts Per Session. Maximum Efficiency.
-                    </p>
-</div>
-</div>
-</div>
-</main>
-<footer class="w-full h-64 red-gradient-footer flex items-end justify-center pb-12">
-<div class="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
-<div class="flex items-center gap-3">
-<div class="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-<span class="material-symbols-outlined text-black font-bold">medical_services</span>
-</div>
-<span class="text-white font-display text-xl font-bold tracking-widest uppercase">Clinic Elite</span>
-</div>
-<div class="flex gap-8 text-zinc-400 text-xs uppercase tracking-widest">
-<a class="hover:text-white transition-colors" href="#">Safety Protocols</a>
-<a class="hover:text-white transition-colors" href="#">Medical Team</a>
-<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
-</div>
-<div class="text-zinc-500 text-[10px] uppercase tracking-widest">
-                © 2024 VISION AGENCY DESIGN
-            </div>
-</div>
-</footer>
-
-
-
-
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Infinite Marquee</title>
 
 <style>
-    .card h2 {
-        color: blue
+
+body{
+    margin:0;
+    font-family:sans-serif;
+}
+
+.marquee {
+    width:100%;
+    overflow:hidden;
+    background:#111;
+    color:#fff;
+    padding:20px 0;
+    position:relative;
+}
+
+.marquee_track{
+    white-space:nowrap;
+    display:inline-block;
+    animation:scroll 15s linear infinite;
+}
+
+.marquee span{
+    margin-right:80px;
+    font-size:24px;
+}
+
+@keyframes scroll{
+    from{
+        transform:translateX(0);
     }
-    .container:has(input:checked) + .card h2{
-    color:red;
-
-
-
-.tab_btn:has(input[type="checkbox"]:checked) + .content_wrap .first_velue{
-    display: none;
+    to{
+        transform:translateX(-50%);
+    }
 }
 
-.tab_btn:not(:has(input[type="checkbox"]:checked)) + .content_wrap .secend_velue{
-    display: none;
-}
-
-.tab_btn:has(input[type="checkbox"]:checked) + .content_wrap .secend_velue{
-    display: block !important;
-}
-
-}
 </style>
+</head>
 
-<div class="container">
-    <label for="checkbox1">
-        <input type="checkbox" id="checkbox1">
-    </label>
-</div>
-<div class="card">
-    <div class="box">
-        <div class="wrapper">
-            <h2>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Assumenda, libero!</h2>
-        </div>
+<body>
+
+<div class="marquee">
+    <div class="marquee_track" id="track">
+        <span>🚀 Web Development</span>
+        <span>🔥 WordPress</span>
+        <span>⚡ JavaScript</span>
+        <span>💻 React</span>
+        <span>🌐 Next.js</span>
     </div>
 </div>
 
+<script>
 
+const track = document.getElementById("track");
+track.innerHTML += track.innerHTML; // duplicate for seamless loop
 
+</script>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</body></html>
+</body>
+</html>

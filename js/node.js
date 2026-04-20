@@ -351,3 +351,6 @@ document.addEventListener('click', (event) => {
     document.querySelectorAll('.years').forEach(item => item.classList.remove('active'));
   }
 });
+
+
+
