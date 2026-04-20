@@ -18334,4 +18334,20 @@ options.forEach((option, index) => {
     });
 });
 
-
+//---------------------------------------------------top bar button
+const topBar = document.querySelectorAll('.topBar_drpdown');
+topBar.forEach(bar => {
+    if (bar.querySelector('a')) {
+        bar.addEventListener('click', (e) => {
+            e.preventDefault();
+        });
+    }
+    bar.addEventListener('click', () => {
+        bar.classList.toggle('active');
+    });
+    document.addEventListener('click', (e) => {
+        if (!bar.contains(e.target)) {
+            bar.classList.remove('active');
+        }
+    });
+});
