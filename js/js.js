@@ -18194,3 +18194,13 @@ window.addEventListener("scroll", () => {
 });
 
 
+
+// ----------------------------------------------------------- menu colapse when scroll
+const menu = document.querySelector('._desktop-menu');
+document.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+        menu.classList.add('collapse');
+    } else {
+        menu.classList.remove('collapse');
+    }
+});
