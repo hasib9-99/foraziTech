@@ -18204,3 +18204,103 @@ document.addEventListener('scroll', () => {
         menu.classList.remove('collapse');
     }
 });
+
+
+
+// -----------------------------------------------------------mega me hover animation
+
+const menuItems = document.querySelectorAll('._menu .menu-item');
+const dropdownCon = document.querySelector('._desktop-dropdown');
+const dropdownInner = dropdownCon.querySelector('._inner');
+const dropdowns = dropdownInner.querySelectorAll('._dropdown');
+let dropdownOpened = false;
+let activeIndex = -1;
+let timers = [];
+
+
+// MENU HOVER
+menuItems.forEach((item, index) => {
+    item.addEventListener('mouseenter', () => {
+
+        if (activeIndex === index) return;
+        activeIndex = index;
+
+        if (!dropdownOpened) {
+
+            dropdownCon.classList.add('active');
+
+            setTimeout(() => {
+                dropdownInner.classList.add('active');
+            }, 20);
+
+            dropdownOpened = true;
+
+            dropdownInner.addEventListener('transitionend', () => {
+                animateContent(index);
+            }, { once: true });
+
+        } else {
+            animateContent(index);
+        }
+
+    });
+});
+
+
+// CONTENT ANIMATION
+function animateContent(index) {
+
+    // clear previous timers
+    timers.forEach(timer => clearTimeout(timer));
+    timers = [];
+
+    const dropdown = dropdowns[index];
+    const cards = dropdown.querySelectorAll('._card');
+    const lists = dropdown.querySelectorAll('._lists li');
+
+    // reset previous active
+    dropdowns.forEach(d => {
+        d.querySelectorAll('._card').forEach(el => el.classList.remove('active'));
+        d.querySelectorAll('._lists li').forEach(el => el.classList.remove('active'));
+    });
+
+    // cards stagger
+    cards.forEach((card, i) => {
+        const timer = setTimeout(() => {
+            card.classList.add('active');
+        }, 120 * i);
+        timers.push(timer);
+    });
+
+    // lists stagger
+    lists.forEach((list, i) => {
+        const timer = setTimeout(() => {
+            list.classList.add('active');
+        }, 120 * i);
+        timers.push(timer);
+    });
+}
+
+
+// CLOSE DROPDOWN
+dropdownInner.addEventListener('mouseleave', () => {
+
+    dropdownInner.classList.remove('active');
+
+    dropdownInner.addEventListener('transitionend', () => {
+
+        dropdownCon.classList.remove('active');
+        dropdownOpened = false;
+        activeIndex = -1;
+
+        timers.forEach(timer => clearTimeout(timer));
+        timers = [];
+
+        dropdowns.forEach(dropdown => {
+            dropdown.querySelectorAll('._card').forEach(el => el.classList.remove('active'));
+            dropdown.querySelectorAll('._lists li').forEach(el => el.classList.remove('active'));
+        });
+
+    }, { once: true });
+
+});
