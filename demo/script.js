@@ -25,7 +25,7 @@ fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("http://rpsandb
       building.href = `${address}?id=${p.id?.['#text'] || ''}`;
 
       buildingWrap.appendChild(building);
-      
+
     });
 
     template.remove(); // remove template after use
@@ -71,3 +71,95 @@ function xmlToJson(xml) {
 
   return obj;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const customHeader = document.querySelector(".the_header");
+const menuBtn = document.querySelector(".show_custom_menu");
+const customMenu = document.querySelector("._menu-popup");
+const customPopup = document.querySelector(".custom_popup");
+const lineContainer = document.querySelector(".line-container");
+
+const menuDropdown = document.querySelector(".menu_dropdown");
+const cards = document.querySelectorAll(".menu_dropdown ._card");
+
+const bottmCard = document.querySelector("._bottom_card");
+const menuList = document.querySelectorAll(".menu_list");
+
+
+let lastScroll = 0;
+let menuOpen = false;
+
+
+// HEADER SCROLL BEHAVIOR
+window.addEventListener("scroll", () => {
+
+  if (menuOpen) return; // prevent header hide when menu is open
+
+  const currentScroll = window.pageYOffset;
+
+  // Hide / Show header
+  if (currentScroll > lastScroll && currentScroll > 80) {
+    customHeader.style.transform = "translateY(-100%)";
+  } else {
+    customHeader.style.transform = "translateY(0)";
+  }
+
+  // Background change
+  if (currentScroll > 100) {
+    customHeader.classList.add("scrolled");
+  } else {
+    customHeader.classList.remove("scrolled");
+  }
+
+  lastScroll = currentScroll;
+});
+
+
+// MENU TOGGLE
+menuBtn?.addEventListener("click", () => {
+
+  customMenu.classList.toggle("active");
+  customPopup.classList.toggle("active");
+  lineContainer.classList.toggle("active");
+
+  menuOpen = customMenu.classList.contains("active");
+
+  if (menuOpen) {
+    document.body.style.overflow = "hidden";
+    customHeader.style.transform = "translateY(0)";
+  } else {
+    document.body.style.overflow = "";
+  }
+
+});
+
+
+// DROPDOWN CARD
+cards.forEach(card => {
+  card.addEventListener("click", () => {
+
+    card.classList.toggle("active");
+    menuDropdown.classList.toggle("collapsed");
+
+  });
+});
+
+bottmCard.addEventListener("click", () => {
+  bottmCard.classList.toggle("active");
+  menuDropdown.classList.toggle("collapsed");
+  menuList.forEach(list => list.classList.toggle("hide"));
+});
